@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro Médico | AmorSaúde</title>
+  <link rel="stylesheet" href="../css/home.css?v=20260528-doctor-pro-page2">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(86,174,187,.22), transparent 22rem),
+        radial-gradient(circle at 92% 15%, rgba(238,49,36,.09), transparent 17rem),
+        radial-gradient(circle at 50% 100%, rgba(86,174,187,.12), transparent 20rem),
+        linear-gradient(180deg, #eef7f9 0%, #f9fcfd 54%, #ffffff 100%);
+      color: var(--texto);
+    }
+
+    .doctor-register-page {
+      min-height: 100vh;
+      padding: 34px 0 54px;
+    }
+
+    .doctor-register-shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .doctor-register-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+
+    .doctor-register-brand img {
+      height: 82px;
+      width: auto;
+      filter: drop-shadow(0 16px 24px rgba(16,72,85,.14));
+    }
+
+    .doctor-register-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      border: 1px solid rgba(86,174,187,.16);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 28px 90px rgba(15,45,58,.14);
+      backdrop-filter: blur(10px);
+    }
+
+    .doctor-register-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, rgba(255,255,255,.12), transparent 35%),
+        radial-gradient(circle at top right, rgba(86,174,187,.08), transparent 20rem);
+      pointer-events: none;
+    }
+
+    .doctor-register-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      min-height: 720px;
+    }
+
+    .doctor-register-aside {
+      padding: 34px 30px;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 12rem),
+        linear-gradient(155deg, #56aebb 0%, #2f8793 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .doctor-tag {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.22);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .doctor-register-aside h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.04;
+      margin-top: 4px;
+    }
+
+    .doctor-register-aside p {
+      color: rgba(255,255,255,.90);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .doctor-process,
+    .doctor-contacts {
+      display: grid;
+      gap: 12px;
+    }
+
+    .doctor-process-item,
+    .doctor-contact-item {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    .doctor-process-item i,
+    .doctor-contact-item i {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      background: rgba(255,255,255,.18);
+      color: #fff;
+    }
+
+    .doctor-process-item strong,
+    .doctor-contact-item strong {
+      display: block;
+      font-size: .98rem;
+      margin-bottom: 4px;
+    }
+
+    .doctor-process-item span,
+    .doctor-contact-item span {
+      display: block;
+      line-height: 1.55;
+      color: rgba(255,255,255,.88);
+      font-size: .93rem;
+    }
+
+    .doctor-disclaimer {
+      margin-top: auto;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(9,34,46,.18);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
+      line-height: 1.65;
+      font-size: .93rem;
+    }
+
+    .doctor-form-panel {
+      padding: 34px;
+      background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.98));
+    }
+
+    .doctor-form-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(86,174,187,.16);
+    }
+
+    .doctor-form-heading h2 {
+      font-size: 1.55rem;
+      color: #143347;
+      margin-bottom: 8px;
+    }
+
+    .doctor-form-heading p {
+      color: var(--texto-suave);
+      line-height: 1.7;
+      max-width: 700px;
+    }
+
+    .doctor-form-security {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #f2fbfd;
+      border: 1px solid rgba(86,174,187,.18);
+      color: var(--azul-escuro);
+      font-size: .88rem;
+      font-weight: 900;
+    }
+
+    .doctor-register-form {
+      display: grid;
+      gap: 24px;
+    }
+
+    .doctor-form-section {
+      display: grid;
+      gap: 16px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(86,174,187,.16);
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdfe 100%);
+      box-shadow: 0 14px 32px rgba(17,57,74,.05);
+    }
+
+    .doctor-form-section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .doctor-form-section-header i {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(86,174,187,.18), rgba(86,174,187,.10));
+      color: var(--azul-escuro);
+      font-size: 1rem;
+    }
+
+    .doctor-form-section-header strong {
+      display: block;
+      color: #143347;
+      font-size: 1.02rem;
+      margin-bottom: 2px;
+    }
+
+    .doctor-form-section-header span {
+      color: var(--texto-suave);
+      font-size: .92rem;
+      line-height: 1.55;
+    }
+
+    .doctor-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .doctor-register-form label {
+      display: grid;
+      gap: 8px;
+      color: var(--texto);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .doctor-register-form small {
+      display: block;
+      color: var(--texto-suave);
+      font-size: .82rem;
+      line-height: 1.45;
+      font-weight: 700;
+      margin-top: -2px;
+    }
+
+    .doctor-register-form input,
+    .doctor-register-form select,
+    .doctor-register-form textarea {
+      width: 100%;
+      border: 1px solid rgba(86,174,187,.22) !important;
+      border-radius: 16px;
+      padding: 14px 15px;
+      background: #f8fcfd !important;
+      color: var(--texto) !important;
+      font: inherit;
+      font-weight: 800;
+      outline: none;
+      transition: .22s ease;
+    }
+
+    .doctor-register-form input::placeholder,
+    .doctor-register-form textarea::placeholder {
+      color: #8ba0ad;
+      font-weight: 700;
+    }
+
+    .doctor-register-form textarea {
+      min-height: 132px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .doctor-register-form input:hover,
+    .doctor-register-form select:hover,
+    .doctor-register-form textarea:hover {
+      border-color: rgba(86,174,187,.38) !important;
+      background: #ffffff !important;
+    }
+
+    .doctor-register-form input:focus,
+    .doctor-register-form select:focus,
+    .doctor-register-form textarea:focus {
+      background: #ffffff !important;
+      border-color: var(--azul) !important;
+      box-shadow: 0 0 0 4px rgba(86,174,187,.14) !important;
+    }
+
+    .doctor-full {
+      grid-column: 1 / -1;
+    }
+
+    .doctor-register-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 2px;
+    }
+
+    .doctor-register-actions button,
+    .doctor-register-actions a {
+      min-height: 50px;
+      border: 0;
+      border-radius: 16px;
+      padding: 0 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      font-weight: 950;
+      cursor: pointer;
+      text-decoration: none;
+      transition: .22s ease;
+    }
+
+    .doctor-submit {
+      background: linear-gradient(135deg, #ee3124, #d8291d);
+      color: #ffffff;
+      box-shadow: 0 16px 30px rgba(238,49,36,.22);
+    }
+
+    .doctor-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 34px rgba(238,49,36,.28);
+    }
+
+    .doctor-submit:disabled {
+      opacity: .82;
+      cursor: wait;
+      transform: none;
+    }
+
+    .doctor-back {
+      background: #eaf8fb;
+      color: var(--azul-escuro);
+      border: 1px solid rgba(86,174,187,.14) !important;
+    }
+
+    .doctor-back:hover {
+      transform: translateY(-2px);
+      background: #ffffff;
+    }
+
+    .doctor-success {
+      display: none;
+      margin-top: 8px;
+      padding: 18px;
+      border-radius: 20px;
+      background: #e9fbf3;
+      border: 1px solid #b9efd8;
+      color: #126c45;
+      font-weight: 850;
+      line-height: 1.6;
+    }
+
+    .doctor-success.active {
+      display: block;
+    }
+
+    @media (max-width: 980px) {
+      .doctor-register-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .doctor-register-aside {
+        padding: 28px 24px;
+      }
+
+      .doctor-form-panel {
+        padding: 28px 24px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .doctor-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .doctor-form-heading {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .doctor-register-card {
+        border-radius: 26px;
+      }
+
+      .doctor-form-section {
+        padding: 20px;
+        border-radius: 20px;
+      }
+
+      .doctor-register-actions button,
+      .doctor-register-actions a {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="doctor-register-page">
+    <div class="doctor-register-shell">
+      <a class="doctor-register-brand" href="home.html" aria-label="Voltar para home">
+        <img src="../assets/images/logo_funcionarios.png" alt="Logo AmorSaúde Funcionários">
+      </a>
+
+      <section class="doctor-register-card">
+        <div class="doctor-register-grid">
+          <aside class="doctor-register-aside">
+            <span class="doctor-tag"><i class="fa-solid fa-user-doctor"></i> Cadastro profissional</span>
+            <div>
+              <h1>Trabalhe com a equipe AmorSaúde</h1>
+              <p>Preencha sua ficha profissional para participar do processo de análise da clínica. Seus dados serão avaliados pelas áreas administrativa e financeira.</p>
+            </div>
+
+            <div class="doctor-process">
+              <div class="doctor-process-item">
+                <i class="fa-solid fa-file-lines"></i>
+                <div>
+                  <strong>1. Envie sua ficha</strong>
+                  <span>Informe seus dados, CRM, especialidade, cidade de interesse e experiência profissional.</span>
+                </div>
+              </div>
+
+              <div class="doctor-process-item">
+                <i class="fa-solid fa-magnifying-glass-chart"></i>
+                <div>
+                  <strong>2. Análise interna</strong>
+                  <span>Admin e financeiro visualizam os cadastros recebidos e validam perfil, disponibilidade e documentos.</span>
+                </div>
+              </div>
+
+              <div class="doctor-process-item">
+                <i class="fa-solid fa-handshake"></i>
+                <div>
+                  <strong>3. Retorno da clínica</strong>
+                  <span>Se houver interesse, a equipe entra em contato para continuidade do processo e alinhamento contratual.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="doctor-contacts">
+              <div class="doctor-contact-item">
+                <i class="fa-solid fa-shield-heart"></i>
+                <div>
+                  <strong>Mais segurança</strong>
+                  <span>Os dados ficam disponíveis apenas para os responsáveis autorizados na plataforma da clínica.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="doctor-disclaimer">
+              <strong style="display:block; margin-bottom:6px;">Dica para um cadastro mais forte</strong>
+              Informe sua disponibilidade com clareza, inclua um link de currículo ou portfólio e detalhe convênios, exames ou diferenciais de atendimento quando houver.
+            </div>
+          </aside>
+
+          <div class="doctor-form-panel">
+            <div class="doctor-form-heading">
+              <div>
+                <h2>Ficha para médicos interessados em trabalhar na clínica</h2>
+                <p>Preencha os campos abaixo com atenção. Quanto mais completo estiver o cadastro, melhor para a avaliação do seu perfil profissional.</p>
+              </div>
+              <div class="doctor-form-security"><i class="fa-solid fa-lock"></i> Uso interno da clínica</div>
+            </div>
+
+            <form class="doctor-register-form" id="doctorApplicationForm">
+              <section class="doctor-form-section">
+                <div class="doctor-form-section-header">
+                  <i class="fa-solid fa-id-card"></i>
+                  <div>
+                    <strong>Dados profissionais</strong>
+                    <span>Preencha as informações principais para identificação e contato.</span>
+                  </div>
+                </div>
+
+                <div class="doctor-form-grid">
+                  <label>
+                    Nome completo
+                    <input type="text" id="doctorName" required placeholder="Nome completo do médico">
+                  </label>
+
+                  <label>
+                    CRM
+                    <input type="text" id="doctorCrm" required placeholder="Ex: 123456/SP">
+                  </label>
+
+                  <label>
+                    E-mail
+                    <input type="email" id="doctorEmail" required placeholder="email@exemplo.com">
+                  </label>
+
+                  <label>
+                    Telefone / WhatsApp
+                    <input type="tel" id="doctorPhone" required placeholder="(15) 99999-9999">
+                  </label>
+                </div>
+              </section>
+
+              <section class="doctor-form-section">
+                <div class="doctor-form-section-header">
+                  <i class="fa-solid fa-stethoscope"></i>
+                  <div>
+                    <strong>Atuação e disponibilidade</strong>
+                    <span>Conte para a clínica onde deseja atuar e como prefere organizar seu atendimento.</span>
+                  </div>
+                </div>
+
+                <div class="doctor-form-grid">
+                  <label>
+                    Cidade de interesse
+                    <select id="doctorCity" required>
+                      <option value="">Selecione</option>
+                      <option value="Cerquilho">Cerquilho</option>
+                      <option value="Tatui">Tatui</option>
+                      <option value="Itapeva">Itapeva</option>
+                      <option value="Embu das Artes">Embu das Artes</option>
+                      <option value="Outra">Outra</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Especialidade principal
+                    <select id="doctorSpecialty" required>
+                      <option value="">Selecione</option>
+                      <option value="Clínico geral">Clínico geral</option>
+                      <option value="Ginecologista">Ginecologista</option>
+                      <option value="Oftalmologista">Oftalmologista</option>
+                      <option value="Fisioterapeuta">Fisioterapeuta</option>
+                      <option value="Geriatra">Geriatra</option>
+                      <option value="Reumatologista">Reumatologista</option>
+                      <option value="Pediatra">Pediatra</option>
+                      <option value="Dermatologista">Dermatologista</option>
+                      <option value="Neurologista">Neurologista</option>
+                      <option value="Urologista">Urologista</option>
+                      <option value="Endocrinologista">Endocrinologista</option>
+                      <option value="Psicólogo">Psicólogo</option>
+                      <option value="Outra">Outra</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Dias disponíveis
+                    <input type="text" id="doctorAvailability" placeholder="Ex: segunda, quarta e sexta pela manhã">
+                    <small>Se quiser, informe também períodos, quantidade de dias e horários.</small>
+                  </label>
+
+                  <label>
+                    Valor pretendido / formato
+                    <input type="text" id="doctorPayment" placeholder="Ex: por agenda, período ou consulta">
+                    <small>Esse campo ajuda no alinhamento interno e na análise de viabilidade.</small>
+                  </label>
+                </div>
+              </section>
+
+              <section class="doctor-form-section">
+                <div class="doctor-form-section-header">
+                  <i class="fa-solid fa-folder-open"></i>
+                  <div>
+                    <strong>Documentos e observações</strong>
+                    <span>Adicione links úteis e detalhes que fortaleçam sua candidatura.</span>
+                  </div>
+                </div>
+
+                <div class="doctor-form-grid">
+                  <label class="doctor-full">
+                    Link do currículo, portfólio ou documentos
+                    <input type="url" id="doctorDocuments" placeholder="https://...">
+                    <small>Você pode enviar link do currículo online, portfólio, Lattes, Drive ou documentos profissionais.</small>
+                  </label>
+
+                  <label class="doctor-full">
+                    Experiência e observações
+                    <textarea id="doctorExperience" placeholder="Conte sobre experiência, locais onde já atendeu, convênios, exames realizados, disponibilidade e diferenciais."></textarea>
+                  </label>
+                </div>
+              </section>
+
+              <div class="doctor-register-actions">
+                <button type="submit" class="doctor-submit"><i class="fa-solid fa-paper-plane"></i> Enviar cadastro</button>
+                <a href="home.html" class="doctor-back"><i class="fa-solid fa-arrow-left"></i> Voltar para home</a>
+              </div>
+
+              <div class="doctor-success" id="doctorSuccessMessage">
+                Cadastro enviado com sucesso. A clínica poderá analisar suas informações pelo painel de médicos cadastrados.
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module">
+    import { db } from "../js/firebase-config.js";
+    import {
+      addDoc,
+      collection,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("doctorApplicationForm");
+      const success = document.getElementById("doctorSuccessMessage");
+      const submitButton = form?.querySelector(".doctor-submit");
+
+      function setSuccess(message, isError = false) {
+        if (!success) return;
+        success.textContent = message;
+        success.classList.add("active");
+        success.style.background = isError ? "#fff1f0" : "#e9fbf3";
+        success.style.borderColor = isError ? "#ffd0cc" : "#b9efd8";
+        success.style.color = isError ? "#b8261c" : "#126c45";
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const candidate = {
+          name: document.getElementById("doctorName").value.trim(),
+          crm: document.getElementById("doctorCrm").value.trim(),
+          email: document.getElementById("doctorEmail").value.trim(),
+          phone: document.getElementById("doctorPhone").value.trim(),
+          city: document.getElementById("doctorCity").value,
+          specialty: document.getElementById("doctorSpecialty").value,
+          availability: document.getElementById("doctorAvailability").value.trim(),
+          payment: document.getElementById("doctorPayment").value.trim(),
+          documents: document.getElementById("doctorDocuments").value.trim(),
+          experience: document.getElementById("doctorExperience").value.trim(),
+          status: "novo",
+          createdAtISO: new Date().toISOString()
+        };
+
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+
+        try {
+          await addDoc(collection(db, "candidatosMedicos"), {
+            ...candidate,
+            createdAt: serverTimestamp()
+          });
+
+          form.reset();
+          setSuccess("Cadastro enviado com sucesso. A clínica poderá analisar suas informações pelo painel de médicos cadastrados.");
+          success.scrollIntoView({ behavior: "smooth", block: "center" });
+        } catch (error) {
+          console.error("Erro ao enviar cadastro médico:", error);
+          setSuccess("Não foi possível enviar agora. Peça para a clínica publicar as regras do Firestore em docs/REGRAS-FIRESTORE.txt e tente novamente.", true);
+        } finally {
+          submitButton.disabled = false;
+          submitButton.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar cadastro';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
