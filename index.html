@@ -3,10 +3,572 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Amor Saúde</title>
-  <meta http-equiv="refresh" content="0; url=pages/login.html" />
+  <title>Amor Saúde | Home</title>
+
+  <script>
+    (function protegerHomeCloudflare() {
+      const token = localStorage.getItem("amor_token");
+      const usuario =
+        localStorage.getItem("amor_usuario") ||
+        localStorage.getItem("amorSaudeUsuario") ||
+        localStorage.getItem("usuarioLogado");
+
+      if (!token || !usuario) {
+        localStorage.setItem("amorSaudeRedirectAfterLogin", "/index.html");
+        window.location.replace("/pages/login");
+        return;
+      }
+
+      try {
+        window.usuarioAtualCloudflare = JSON.parse(usuario);
+      } catch {
+        localStorage.removeItem("amor_usuario");
+        localStorage.removeItem("amorSaudeUsuario");
+        localStorage.removeItem("usuarioLogado");
+        localStorage.removeItem("amor_token");
+        window.location.replace("/pages/login");
+      }
+    })();
+  </script>
+
+  <style>
+    :root {
+      --azul-principal: #22aeb8;
+      --azul-claro: #dff8ff;
+      --azul-bebe: #eefcff;
+      --vermelho: #ff3838;
+      --texto: #102a43;
+      --branco: #ffffff;
+      --cinza: #6b7c93;
+      --sombra: 0 22px 55px rgba(16, 42, 67, 0.14);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(58, 211, 225, 0.22), transparent 28%),
+        radial-gradient(circle at 95% 90%, rgba(129, 224, 255, 0.35), transparent 25%),
+        linear-gradient(135deg, #f7feff, var(--azul-bebe));
+      color: var(--texto);
+    }
+
+    .topbar {
+      width: 100%;
+      min-height: 86px;
+      padding: 18px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: var(--azul-principal);
+      color: white;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 150px;
+      max-width: 42vw;
+      height: auto;
+      padding: 8px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 19px;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-text span {
+      display: block;
+      font-size: 12px;
+      opacity: 0.86;
+      margin-top: 2px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .user-pill {
+      padding: 11px 15px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .logout-btn {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--vermelho);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(255, 56, 56, 0.25);
+      transition: 0.2s ease;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(0.96);
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 38px 0 56px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .hero-card,
+    .session-card,
+    .module-card {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: var(--radius);
+      box-shadow: var(--sombra);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-card {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      bottom: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      background: rgba(34, 174, 184, 0.13);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--azul-claro);
+      color: #00788a;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .hero-card h1 {
+      margin: 0;
+      max-width: 780px;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.02;
+      letter-spacing: -1.8px;
+      color: var(--texto);
+    }
+
+    .hero-card p {
+      margin: 18px 0 0;
+      max-width: 720px;
+      color: var(--cinza);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    .session-card {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .session-card h2 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--azul-principal);
+    }
+
+    .info-line {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #f4fdff;
+      color: var(--texto);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .info-line span {
+      display: block;
+      margin-top: 4px;
+      color: var(--cinza);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .module-card {
+      min-height: 178px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 70px rgba(16, 42, 67, 0.18);
+    }
+
+    .module-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: var(--azul-claro);
+      color: #00788a;
+      font-size: 23px;
+      margin-bottom: 18px;
+    }
+
+    .module-card h3 {
+      margin: 0 0 8px;
+      color: var(--texto);
+      font-size: 19px;
+    }
+
+    .module-card p {
+      margin: 0;
+      color: var(--cinza);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .module-card.admin {
+      border: 1px solid rgba(255, 56, 56, 0.18);
+    }
+
+    .module-card.admin .module-icon {
+      background: rgba(255, 56, 56, 0.1);
+      color: var(--vermelho);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 920px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        padding: 15px 18px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      main {
+        width: min(100% - 22px, 1180px);
+        padding-top: 24px;
+      }
+
+      .hero-card,
+      .session-card,
+      .module-card {
+        border-radius: 20px;
+      }
+
+      .hero-card {
+        padding: 24px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <p>Redirecionando para o login... <a href="pages/login.html">Clique aqui</a>.</p>
+  <header class="topbar">
+    <div class="brand">
+      <img
+        class="brand-logo"
+        src="/assets/logo-amorsaude.png"
+        alt="Amor Saúde"
+        onerror="this.style.display='none'"
+      />
+
+      <div class="brand-text">
+        <strong>Amor Saúde</strong>
+        <span>Painel interno conectado ao Cloudflare</span>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <div class="user-pill" id="usuarioResumo">Carregando...</div>
+      <button class="logout-btn" id="logoutBtn" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-card">
+        <div class="tag">💙 ÁREA DO COLABORADOR</div>
+        <h1 id="tituloBoasVindas">Bem-vindo ao Amor Saúde</h1>
+        <p>
+          Login validado pelo Cloudflare D1. A partir daqui o site pode usar a nova API
+          para módulos, permissões, pacientes, controladoria, indicadores e dados médicos.
+        </p>
+      </div>
+
+      <aside class="session-card">
+        <h2>Sessão ativa</h2>
+
+        <div class="info-line">
+          Usuário
+          <span id="infoUsuario">Carregando...</span>
+        </div>
+
+        <div class="info-line">
+          Acesso
+          <span id="infoAcesso">Carregando...</span>
+        </div>
+
+        <div class="info-line">
+          Cidade
+          <span id="infoCidade">Carregando...</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <a class="module-card" href="/pages/perfil.html">
+        <div class="module-icon">👤</div>
+        <h3>Perfil</h3>
+        <p>Dados do colaborador, foto, capa, cidade e informações internas.</p>
+      </a>
+
+      <a class="module-card" href="/pages/treinamentos.html">
+        <div class="module-icon">🎓</div>
+        <h3>Treinamentos</h3>
+        <p>Cursos, aulas, progresso e capacitação dos colaboradores.</p>
+      </a>
+
+      <a class="module-card" href="/pages/noticias.html">
+        <div class="module-icon">📰</div>
+        <h3>Notícias</h3>
+        <p>Comunicados internos, avisos e atualizações da clínica.</p>
+      </a>
+
+      <a class="module-card" href="/pages/dados-medicos.html">
+        <div class="module-icon">🩺</div>
+        <h3>Dados Médicos</h3>
+        <p>Médicos, especialidades, exames, horários e informações clínicas.</p>
+      </a>
+
+      <a class="module-card" href="/modules/controle-pacientes/controle-pacientes.html">
+        <div class="module-icon">📊</div>
+        <h3>Controle de Pacientes</h3>
+        <p>Painel de atendimentos, metas, indicadores e acompanhamento da equipe.</p>
+      </a>
+
+      <a class="module-card admin" data-admin-card href="/pages/controladoria.html">
+        <div class="module-icon">📁</div>
+        <h3>Controladoria</h3>
+        <p>Documentos, termos, valores médicos e área administrativa.</p>
+      </a>
+    </section>
+  </main>
+
+  <script>
+    const API_URL = "https://little-fog-b415amorsaude-api.snakerr77.workers.dev";
+
+    function pegarUsuarioLocal() {
+      const raw =
+        localStorage.getItem("amor_usuario") ||
+        localStorage.getItem("amorSaudeUsuario") ||
+        localStorage.getItem("usuarioLogado");
+
+      if (!raw) return null;
+
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    }
+
+    function limparSessao() {
+      localStorage.removeItem("amor_token");
+      localStorage.removeItem("amor_token_expira_em");
+      localStorage.removeItem("amor_email");
+      localStorage.removeItem("usuarioEmail");
+      localStorage.removeItem("amor_usuario");
+      localStorage.removeItem("amorSaudeUsuario");
+      localStorage.removeItem("usuarioLogado");
+      localStorage.removeItem("amor_nivel_acesso");
+      localStorage.removeItem("nivelAcesso");
+      localStorage.removeItem("amorSaudeLogado");
+      localStorage.removeItem("isLoggedIn");
+
+      sessionStorage.removeItem("amorSaudeSessaoAtiva");
+    }
+
+    function redirecionarLogin() {
+      localStorage.setItem("amorSaudeRedirectAfterLogin", "/index.html");
+      window.location.replace("/pages/login");
+    }
+
+    function preencherTela(usuario) {
+      const nome = usuario.nome || usuario.nome_completo || usuario.email || "Colaborador";
+      const nivel = usuario.nivel_acesso || usuario.nivelAcesso || "colaborador";
+      const cidade =
+        usuario.cidade ||
+        localStorage.getItem("amorSaudeCidadeSelecionada") ||
+        localStorage.getItem("amor_cidade") ||
+        "Cerquilho";
+
+      document.getElementById("usuarioResumo").textContent = `${nome} • ${nivel}`;
+      document.getElementById("tituloBoasVindas").textContent = `Bem-vindo, ${nome}`;
+      document.getElementById("infoUsuario").textContent = usuario.email || nome;
+      document.getElementById("infoAcesso").textContent = nivel;
+      document.getElementById("infoCidade").textContent = cidade;
+
+      localStorage.setItem("amor_usuario", JSON.stringify(usuario));
+      localStorage.setItem("amorSaudeUsuario", JSON.stringify(usuario));
+      localStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+      localStorage.setItem("amor_nivel_acesso", nivel);
+      localStorage.setItem("nivelAcesso", nivel);
+      localStorage.setItem("amor_cidade", cidade);
+      localStorage.setItem("amorSaudeCidadeSelecionada", cidade);
+
+      const cardsAdmin = document.querySelectorAll("[data-admin-card]");
+      const podeVerAdmin = ["admin", "financeiro", "gerencia"].includes(nivel);
+
+      cardsAdmin.forEach((card) => {
+        card.classList.toggle("hidden", !podeVerAdmin);
+      });
+    }
+
+    async function validarSessaoCloudflare() {
+      const token = localStorage.getItem("amor_token") || "";
+      const email =
+        localStorage.getItem("amor_email") ||
+        localStorage.getItem("usuarioEmail") ||
+        "";
+
+      if (!token) {
+        limparSessao();
+        redirecionarLogin();
+        return;
+      }
+
+      const usuarioLocal = pegarUsuarioLocal();
+
+      if (usuarioLocal) {
+        preencherTela(usuarioLocal);
+      }
+
+      try {
+        const resposta = await fetch(`${API_URL}/api/me`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "x-user-email": email
+          }
+        });
+
+        const data = await resposta.json();
+
+        if (!resposta.ok || !data.ok || !data.usuario) {
+          limparSessao();
+          redirecionarLogin();
+          return;
+        }
+
+        preencherTela(data.usuario);
+
+      } catch (erro) {
+        console.error("Erro ao validar sessão:", erro);
+        limparSessao();
+        redirecionarLogin();
+      }
+    }
+
+    async function sair() {
+      const token = localStorage.getItem("amor_token") || "";
+
+      try {
+        await fetch(`${API_URL}/api/auth/logout`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+      } catch (erro) {
+        console.warn("Não foi possível encerrar sessão no servidor:", erro);
+      }
+
+      limparSessao();
+      window.location.replace("/pages/login");
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", sair);
+
+    validarSessaoCloudflare();
+  </script>
 </body>
 </html>
