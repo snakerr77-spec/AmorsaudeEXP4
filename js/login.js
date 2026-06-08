@@ -9,7 +9,7 @@ const loginCidadeSelect = document.getElementById("loginCidadeSelect");
 
 const API_URL = "https://little-fog-b415amorsaude-api.snakerr77.workers.dev";
 const PAGINA_APOS_LOGIN = "/index.html";
-const PAGINA_LOGIN = "/pages/login";
+const PAGINA_LOGIN = "/pages/login.html";
 
 const CIDADES_LOGIN = [
   "Embu das Artes",
