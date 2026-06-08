@@ -8,7 +8,8 @@ const authMessage = document.getElementById("authMessage");
 const loginCidadeSelect = document.getElementById("loginCidadeSelect");
 
 const API_URL = "https://little-fog-b415amorsaude-api.snakerr77.workers.dev";
-const PAGINA_APOS_LOGIN = "../index.html";
+const PAGINA_APOS_LOGIN = "/index.html";
+const PAGINA_LOGIN = "/pages/login";
 
 const CIDADES_LOGIN = [
   "Embu das Artes",
@@ -29,6 +30,7 @@ function getCidadeLogin() {
   return normalizarCidadeLogin(
     loginCidadeSelect?.value ||
     localStorage.getItem("amorSaudeCidadeSelecionada") ||
+    localStorage.getItem("amor_cidade") ||
     "Cerquilho"
   );
 }
@@ -37,14 +39,19 @@ function prepararCidadeLogin() {
   if (!loginCidadeSelect) return;
 
   const cidadeSalva = normalizarCidadeLogin(
-    localStorage.getItem("amorSaudeCidadeSelecionada") || "Cerquilho"
+    localStorage.getItem("amorSaudeCidadeSelecionada") ||
+    localStorage.getItem("amor_cidade") ||
+    "Cerquilho"
   );
 
   loginCidadeSelect.value = cidadeSalva;
   localStorage.setItem("amorSaudeCidadeSelecionada", cidadeSalva);
+  localStorage.setItem("amor_cidade", cidadeSalva);
 
   loginCidadeSelect.addEventListener("change", () => {
-    localStorage.setItem("amorSaudeCidadeSelecionada", getCidadeLogin());
+    const cidade = getCidadeLogin();
+    localStorage.setItem("amorSaudeCidadeSelecionada", cidade);
+    localStorage.setItem("amor_cidade", cidade);
   });
 }
 
@@ -90,6 +97,26 @@ function setCarregandoLogin(carregando) {
   }
 }
 
+function limparSessaoAntiga() {
+  localStorage.removeItem("firebaseUser");
+  localStorage.removeItem("firebaseAuth");
+  localStorage.removeItem("firebaseUID");
+
+  localStorage.removeItem("amor_token");
+  localStorage.removeItem("amor_token_expira_em");
+  localStorage.removeItem("amor_email");
+  localStorage.removeItem("usuarioEmail");
+  localStorage.removeItem("amor_usuario");
+  localStorage.removeItem("amorSaudeUsuario");
+  localStorage.removeItem("usuarioLogado");
+  localStorage.removeItem("amor_nivel_acesso");
+  localStorage.removeItem("nivelAcesso");
+  localStorage.removeItem("amorSaudeLogado");
+  localStorage.removeItem("isLoggedIn");
+
+  sessionStorage.removeItem("amorSaudeSessaoAtiva");
+}
+
 async function fazerLoginCloudflare(email, senha) {
   const emailNormalizado = normalizarEmail(email);
 
@@ -113,7 +140,11 @@ async function fazerLoginCloudflare(email, senha) {
   }
 
   if (!resposta.ok) {
-    throw new Error(data.erro || data.detalhe || "Não foi possível fazer login.");
+    throw new Error(
+      data.erro ||
+      data.detalhe ||
+      "Não foi possível fazer login."
+    );
   }
 
   if (!data.token || !data.usuario) {
@@ -148,8 +179,8 @@ function salvarSessaoCloudflare(data, cidadeSelecionada) {
   localStorage.setItem("amor_token", data.token);
   localStorage.setItem("amor_token_expira_em", data.expira_em || "");
 
-  localStorage.setItem("amor_email", usuario.email);
-  localStorage.setItem("usuarioEmail", usuario.email);
+  localStorage.setItem("amor_email", usuario.email || "");
+  localStorage.setItem("usuarioEmail", usuario.email || "");
 
   localStorage.setItem("amor_usuario", JSON.stringify(usuarioSessao));
   localStorage.setItem("amorSaudeUsuario", JSON.stringify(usuarioSessao));
@@ -174,35 +205,29 @@ function salvarSessaoCloudflare(data, cidadeSelecionada) {
   sessionStorage.setItem("amorSaudeSessaoAtiva", "true");
 }
 
-function limparSessaoAntiga() {
-  localStorage.removeItem("firebaseUser");
-  localStorage.removeItem("firebaseAuth");
-  localStorage.removeItem("firebaseUID");
-
-  localStorage.removeItem("amor_token");
-  localStorage.removeItem("amor_token_expira_em");
-  localStorage.removeItem("amor_usuario");
-  localStorage.removeItem("amorSaudeUsuario");
-  localStorage.removeItem("usuarioLogado");
-  localStorage.removeItem("amorSaudeLogado");
-  localStorage.removeItem("isLoggedIn");
-
-  sessionStorage.removeItem("amorSaudeSessaoAtiva");
-}
-
 function redirecionarAposLogin() {
   const params = new URLSearchParams(window.location.search);
 
-  const redirect =
+  let redirect =
     params.get("redirect") ||
     localStorage.getItem("amorSaudeRedirectAfterLogin") ||
     PAGINA_APOS_LOGIN;
 
   localStorage.removeItem("amorSaudeRedirectAfterLogin");
 
+  if (
+    !redirect ||
+    redirect.includes("login.html") ||
+    redirect.includes("/pages/login")
+  ) {
+    redirect = PAGINA_APOS_LOGIN;
+  }
+
+  mostrarMensagem("Login realizado com sucesso. Abrindo painel...", "sucesso");
+
   setTimeout(() => {
-    window.location.href = redirect;
-  }, 450);
+    window.location.replace(redirect);
+  }, 500);
 }
 
 async function apiFetch(path, options = {}) {
@@ -231,10 +256,39 @@ async function apiFetch(path, options = {}) {
   }
 
   if (!resposta.ok) {
-    throw new Error(data.erro || data.detalhe || "Erro na API Cloudflare.");
+    throw new Error(
+      data.erro ||
+      data.detalhe ||
+      "Erro na API Cloudflare."
+    );
   }
 
   return data;
+}
+
+async function verificarSessaoJaAtiva() {
+  const token = localStorage.getItem("amor_token");
+
+  if (!token) return;
+
+  try {
+    const data = await apiFetch("/api/me");
+
+    if (data?.ok && data?.usuario) {
+      const usuarioLocal = {
+        ...data.usuario,
+        nivelAcesso: data.usuario.nivel_acesso || data.usuario.nivelAcesso || "colaborador"
+      };
+
+      localStorage.setItem("amor_usuario", JSON.stringify(usuarioLocal));
+      localStorage.setItem("amorSaudeUsuario", JSON.stringify(usuarioLocal));
+      localStorage.setItem("usuarioLogado", JSON.stringify(usuarioLocal));
+
+      window.location.replace(PAGINA_APOS_LOGIN);
+    }
+  } catch {
+    limparSessaoAntiga();
+  }
 }
 
 if (togglePassword && password) {
@@ -272,8 +326,6 @@ if (loginForm) {
 
       salvarSessaoCloudflare(dataLogin, cidade);
 
-      mostrarMensagem("Login realizado com sucesso. Redirecionando...", "sucesso");
-
       redirecionarAposLogin();
 
     } catch (erro) {
@@ -299,7 +351,7 @@ if (forgotPassword) {
     );
 
     alert(
-      "Para redefinir senha, o administrador precisa gerar um token no painel/API. Depois criaremos uma tela bonita para isso."
+      "Para redefinir senha, o administrador precisa gerar um token de senha na API. Depois criaremos uma tela própria para isso."
     );
   });
 }
@@ -350,20 +402,10 @@ window.AmorSaudeAPI = {
       console.warn("Não foi possível encerrar sessão no servidor:", erro);
     }
 
-    localStorage.removeItem("amor_token");
-    localStorage.removeItem("amor_token_expira_em");
-    localStorage.removeItem("amor_email");
-    localStorage.removeItem("usuarioEmail");
-    localStorage.removeItem("amor_usuario");
-    localStorage.removeItem("amorSaudeUsuario");
-    localStorage.removeItem("usuarioLogado");
-    localStorage.removeItem("amor_nivel_acesso");
-    localStorage.removeItem("nivelAcesso");
-    localStorage.removeItem("amorSaudeLogado");
-    localStorage.removeItem("isLoggedIn");
+    limparSessaoAntiga();
 
-    sessionStorage.removeItem("amorSaudeSessaoAtiva");
-
-    window.location.href = "./login.html";
+    window.location.href = PAGINA_LOGIN;
   }
 };
+
+verificarSessaoJaAtiva();
