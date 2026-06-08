@@ -45,11 +45,13 @@ function prepararCidadeLogin() {
   );
 
   loginCidadeSelect.value = cidadeSalva;
+
   localStorage.setItem("amorSaudeCidadeSelecionada", cidadeSalva);
   localStorage.setItem("amor_cidade", cidadeSalva);
 
   loginCidadeSelect.addEventListener("change", () => {
     const cidade = getCidadeLogin();
+
     localStorage.setItem("amorSaudeCidadeSelecionada", cidade);
     localStorage.setItem("amor_cidade", cidade);
   });
@@ -277,7 +279,10 @@ async function verificarSessaoJaAtiva() {
     if (data?.ok && data?.usuario) {
       const usuarioLocal = {
         ...data.usuario,
-        nivelAcesso: data.usuario.nivel_acesso || data.usuario.nivelAcesso || "colaborador"
+        nivelAcesso:
+          data.usuario.nivel_acesso ||
+          data.usuario.nivelAcesso ||
+          "colaborador"
       };
 
       localStorage.setItem("amor_usuario", JSON.stringify(usuarioLocal));
