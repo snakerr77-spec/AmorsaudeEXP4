@@ -2,18 +2,11 @@ const API_URL_CLOUD = "https://little-fog-b415amorsaude-api.snakerr77.workers.de
 const LOGIN_URL_CLOUD = "/pages/login.html";
 const HOME_URL_CLOUD = "/pages/home.html";
 
-const CIDADES_CLOUD = [
-  "Embu das Artes",
-  "Itapeva",
-  "Tatui",
-  "Cerquilho"
-];
+const CIDADES_CLOUD = ["Embu das Artes", "Itapeva", "Tatui", "Cerquilho"];
 
 function normalizarCidadeCloud(cidade) {
   const valor = String(cidade || "").trim();
-
   if (valor === "Tatuí") return "Tatui";
-
   return CIDADES_CLOUD.includes(valor) ? valor : "Cerquilho";
 }
 
@@ -28,12 +21,15 @@ function normalizarNivelCloud(nivel) {
   const aliases = {
     admin: "admin",
     administrador: "admin",
+    administradora: "admin",
     adm: "admin",
+    master: "admin",
     financeiro: "financeiro",
     financa: "financeiro",
     financas: "financeiro",
     gerencia: "gerencia",
     gerente: "gerencia",
+    gerencial: "gerencia",
     cdt: "cdt",
     recepcao: "recepcao",
     recepcionista: "recepcao",
@@ -117,27 +113,30 @@ function salvarUsuarioCloudLocal(usuario) {
   }
 
   window.usuarioLogado = sessao;
-
   return sessao;
 }
 
 function limparSessaoCloud() {
-  localStorage.removeItem("amor_token");
-  localStorage.removeItem("amor_token_expira_em");
-  localStorage.removeItem("amor_email");
-  localStorage.removeItem("usuarioEmail");
-  localStorage.removeItem("amor_usuario");
-  localStorage.removeItem("amorSaudeUsuario");
-  localStorage.removeItem("usuarioLogado");
-  localStorage.removeItem("amor_nivel_acesso");
-  localStorage.removeItem("nivelAcesso");
-  localStorage.removeItem("amor_cidade");
-  localStorage.removeItem("cidadeSelecionada");
-  localStorage.removeItem("amorSaudeLogado");
-  localStorage.removeItem("isLoggedIn");
+  [
+    "firebaseUser",
+    "firebaseAuth",
+    "firebaseUID",
+    "amor_token",
+    "amor_token_expira_em",
+    "amor_email",
+    "usuarioEmail",
+    "amor_usuario",
+    "amorSaudeUsuario",
+    "usuarioLogado",
+    "amor_nivel_acesso",
+    "nivelAcesso",
+    "amor_cidade",
+    "cidadeSelecionada",
+    "amorSaudeLogado",
+    "isLoggedIn"
+  ].forEach((chave) => localStorage.removeItem(chave));
 
   sessionStorage.removeItem("amorSaudeSessaoAtiva");
-
   window.usuarioLogado = null;
 }
 
@@ -244,14 +243,10 @@ function preencherUsuarioNaTela(usuario) {
 
 async function validarSessaoCloudflare() {
   const token = localStorage.getItem("amor_token");
-
   if (!token) return null;
 
   const data = await cloudFetch("/api/me");
-
-  if (!data?.ok || !data?.usuario) {
-    return null;
-  }
+  if (!data?.ok || !data?.usuario) return null;
 
   return salvarUsuarioCloudLocal(data.usuario);
 }
@@ -283,10 +278,8 @@ async function protegerPaginaCloud() {
     window.dispatchEvent(new CustomEvent("usuario-carregado", {
       detail: usuario
     }));
-
   } catch (erro) {
     console.error("Erro ao proteger página com Cloudflare:", erro);
-
     limparSessaoCloud();
     localStorage.setItem("amorSaudeRedirectAfterLogin", path + window.location.search);
     window.location.href = LOGIN_URL_CLOUD;
