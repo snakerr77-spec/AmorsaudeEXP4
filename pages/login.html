@@ -5,491 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | Amor Saúde</title>
 
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-
-  <style>
-    :root {
-      --azul: #27aeb8;
-      --azul-escuro: #007f8f;
-      --azul-claro: #dff8ff;
-      --azul-bebe: #eefcff;
-      --vermelho: #ff3838;
-      --texto: #102a43;
-      --cinza: #60758c;
-      --branco: #ffffff;
-      --sombra: 0 24px 70px rgba(16, 42, 67, 0.14);
-      --radius: 28px;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--texto);
-      background:
-        radial-gradient(circle at 8% 10%, rgba(39, 174, 184, 0.24), transparent 28%),
-        radial-gradient(circle at 95% 92%, rgba(100, 222, 255, 0.34), transparent 28%),
-        linear-gradient(135deg, #f7feff, var(--azul-bebe));
-      overflow-x: hidden;
-    }
-
-    .topbar {
-      width: 100%;
-      min-height: 88px;
-      padding: 18px 7%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      background: var(--azul);
-      color: white;
-      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
-    }
-
-    .logo-box { display: flex; align-items: center; gap: 12px; }
-
-    .logo-img {
-      width: 150px;
-      max-width: 44vw;
-      padding: 8px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
-    }
-
-    .logo-fallback { display: none; font-size: 22px; font-weight: 900; }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .nav a {
-      text-decoration: none;
-      color: white;
-      font-weight: 800;
-      font-size: 14px;
-      padding: 11px 16px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.13);
-      transition: 0.2s ease;
-    }
-
-    .nav a:hover {
-      background: rgba(255, 255, 255, 0.24);
-      transform: translateY(-1px);
-    }
-
-    .page {
-      width: min(1220px, calc(100% - 32px));
-      margin: 0 auto;
-      min-height: calc(100vh - 88px);
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 34px;
-      align-items: center;
-      padding: 42px 0 60px;
-    }
-
-    .intro { position: relative; padding: 20px 0; }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 12px 18px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.86);
-      color: var(--azul-escuro);
-      font-weight: 900;
-      box-shadow: 0 14px 35px rgba(16, 42, 67, 0.08);
-      margin-bottom: 24px;
-    }
-
-    .intro h1 {
-      margin: 0;
-      max-width: 650px;
-      font-size: clamp(40px, 6vw, 70px);
-      line-height: 1.02;
-      letter-spacing: -2.2px;
-      color: var(--texto);
-    }
-
-    .intro p {
-      margin: 24px 0 0;
-      max-width: 560px;
-      color: var(--cinza);
-      line-height: 1.7;
-      font-size: 17px;
-    }
-
-    .quick-links {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 34px;
-    }
-
-    .quick-links a {
-      text-decoration: none;
-      color: var(--azul-escuro);
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(39, 174, 184, 0.16);
-      padding: 13px 18px;
-      border-radius: 999px;
-      font-weight: 900;
-      box-shadow: 0 12px 28px rgba(16, 42, 67, 0.08);
-      transition: 0.2s ease;
-    }
-
-    .quick-links a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 38px rgba(16, 42, 67, 0.12);
-    }
-
-    .login-area { display: flex; justify-content: center; position: relative; }
-
-    .floating-icon {
-      position: absolute;
-      width: 74px;
-      height: 74px;
-      display: grid;
-      place-items: center;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.88);
-      color: var(--azul);
-      box-shadow: 0 18px 42px rgba(16, 42, 67, 0.12);
-      font-size: 25px;
-      z-index: 0;
-    }
-
-    .floating-icon.one { top: 42px; left: 4%; }
-    .floating-icon.two { bottom: 70px; right: 2%; }
-
-    .login-card {
-      width: min(420px, 100%);
-      background: rgba(255, 255, 255, 0.92);
-      border-radius: var(--radius);
-      box-shadow: var(--sombra);
-      padding: 34px;
-      position: relative;
-      z-index: 1;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(16px);
-    }
-
-    .login-avatar {
-      width: 74px;
-      height: 74px;
-      display: grid;
-      place-items: center;
-      border-radius: 999px;
-      background: white;
-      color: var(--azul);
-      font-size: 27px;
-      box-shadow: 0 16px 38px rgba(16, 42, 67, 0.12);
-      margin: -70px auto 22px;
-    }
-
-    .login-card h2 {
-      margin: 0 0 8px;
-      font-size: 31px;
-      letter-spacing: -0.8px;
-      color: var(--texto);
-    }
-
-    .login-card .subtitle { margin: 0 0 24px; color: var(--cinza); font-size: 15px; }
-    .field-group { margin-bottom: 17px; }
-    .field-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 900; color: var(--texto); }
-    .input-wrap { position: relative; }
-
-    .input-wrap i {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--azul);
-      pointer-events: none;
-    }
-
-    .input-wrap input,
-    .input-wrap select {
-      width: 100%;
-      min-height: 54px;
-      border: 1px solid rgba(39, 174, 184, 0.22);
-      border-radius: 16px;
-      padding: 0 16px 0 46px;
-      outline: none;
-      color: var(--texto);
-      background: #f7fdff;
-      font-size: 15px;
-      font-weight: 600;
-      transition: 0.2s ease;
-    }
-
-    .input-wrap select { appearance: none; cursor: pointer; }
-
-    .input-wrap input:focus,
-    .input-wrap select:focus {
-      border-color: var(--azul);
-      box-shadow: 0 0 0 4px rgba(39, 174, 184, 0.12);
-      background: white;
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 38px;
-      height: 38px;
-      border: none;
-      border-radius: 12px;
-      background: transparent;
-      color: var(--azul);
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .password-toggle i { position: static; transform: none; pointer-events: auto; }
-
-    .small-note {
-      display: block;
-      margin-top: 8px;
-      color: var(--cinza);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .form-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin: 4px 0 18px;
-      flex-wrap: wrap;
-    }
-
-    .remember { display: inline-flex; align-items: center; gap: 7px; color: var(--texto); font-size: 13px; font-weight: 700; }
-    .remember input { accent-color: var(--azul); }
-
-    .forgot {
-      border: none;
-      background: transparent;
-      color: var(--azul-escuro);
-      font-weight: 800;
-      cursor: pointer;
-      padding: 0;
-      font-size: 13px;
-    }
-
-    .submit-btn {
-      width: 100%;
-      min-height: 56px;
-      border: none;
-      border-radius: 17px;
-      background: var(--vermelho);
-      color: white;
-      font-weight: 900;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 18px 38px rgba(255, 56, 56, 0.28);
-      transition: 0.2s ease;
-    }
-
-    .submit-btn:hover { transform: translateY(-2px); filter: brightness(0.98); }
-    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-
-    .google-btn {
-      width: 48px;
-      height: 48px;
-      display: grid;
-      place-items: center;
-      margin: 18px auto 0;
-      border: none;
-      border-radius: 999px;
-      background: white;
-      box-shadow: 0 12px 28px rgba(16, 42, 67, 0.12);
-      cursor: pointer;
-      color: #4285f4;
-      font-size: 20px;
-    }
-
-    .auth-message {
-      min-height: 20px;
-      margin: 16px 0 0;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--cinza);
-    }
-
-    .auth-message.erro { color: #d82626; }
-    .auth-message.sucesso { color: #008f57; }
-    .auth-message.aviso { color: #bf7a00; }
-
-    .mascot {
-      position: absolute;
-      right: -44px;
-      bottom: 28px;
-      width: 72px;
-      height: 92px;
-      border-radius: 22px;
-      background: linear-gradient(180deg, #3bd4e2, #11a7b3);
-      box-shadow: 0 20px 42px rgba(17, 167, 179, 0.3);
-      display: grid;
-      place-items: center;
-      color: white;
-      font-size: 31px;
-    }
-
-    .mascot::before {
-      content: "+";
-      position: absolute;
-      top: -12px;
-      right: 9px;
-      width: 27px;
-      height: 27px;
-      display: grid;
-      place-items: center;
-      border-radius: 999px;
-      background: var(--vermelho);
-      border: 3px solid white;
-      font-weight: 900;
-      font-size: 17px;
-    }
-
-    @media (max-width: 940px) {
-      .page { grid-template-columns: 1fr; padding-top: 34px; }
-      .intro { text-align: center; }
-      .intro p { margin-left: auto; margin-right: auto; }
-      .quick-links { justify-content: center; }
-      .floating-icon, .mascot { display: none; }
-      .login-card { margin-top: 28px; }
-    }
-
-    @media (max-width: 620px) {
-      .topbar { align-items: flex-start; flex-direction: column; padding: 16px 20px; }
-      .nav { justify-content: flex-start; }
-      .page { width: min(100% - 22px, 1220px); }
-      .login-card { padding: 28px 20px; }
-      .login-avatar { margin-top: -58px; }
-      .quick-links a { flex: 1; text-align: center; }
-    }
-  </style>
+  <link rel="stylesheet" href="../css/login.css?v=login-exp3-cloud" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
 </head>
 
-<body>
-  <header class="topbar">
-    <div class="logo-box">
-      <img
-        class="logo-img"
-        src="/assets/images/logo_funcionarios.png"
-        alt="Amor Saúde"
-        onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block';"
-      />
-      <div class="logo-fallback">Amor Saúde</div>
-    </div>
+<body class="login-page">
+  <div class="animated-bg" aria-hidden="true">
+    <span class="bg-orb orb-a"></span>
+    <span class="bg-orb orb-b"></span>
+    <span class="bg-orb orb-c"></span>
+    <span class="bg-orb orb-d"></span>
+    <span class="bg-pulse pulse-a"></span>
+    <span class="bg-pulse pulse-b"></span>
+    <div class="bg-grid"></div>
+    <div class="bg-ribbon ribbon-a"></div>
+    <div class="bg-ribbon ribbon-b"></div>
+  </div>
 
-    <nav class="nav">
-      <a href="#inicio">Início</a>
-      <a href="#beneficios">Benefícios</a>
-      <a href="#contato">Contato</a>
+  <header class="topbar">
+    <a class="logo" href="/index.html" aria-label="Amor Saúde">
+      <img
+        src="../assets/images/logo_funcionarios.png"
+        alt="Logo Amor Saúde"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      />
+      <strong class="logo-text">Amor Saúde</strong>
+    </a>
+
+    <nav class="topnav" aria-label="Navegação rápida">
+      <a href="/index.html">Início</a>
+      <a href="#beneficios-login">Benefícios</a>
+      <a href="#contato-login">Contato</a>
     </nav>
   </header>
 
-  <main class="page" id="inicio">
-    <section class="intro">
-      <div class="badge">
+  <main class="login-container" id="inicio-login">
+    <section class="left-side">
+      <div class="tag">
         <i class="fa-solid fa-heart-pulse"></i>
         ÁREA DO COLABORADOR
       </div>
 
-      <h1>Bem-vindo ao Amor Saúde</h1>
+      <h1>
+        Bem-vindo ao
+        <span>Amor Saúde</span>
+      </h1>
 
       <p>
-        Entre na plataforma para acessar treinamentos, benefícios, agenda médica
-        e informações importantes.
+        Entre na plataforma para acessar treinamentos, benefícios, agenda médica,
+        notícias internas e ferramentas da equipe em um ambiente seguro pela Cloudflare.
       </p>
 
-      <div class="quick-links" id="beneficios">
-        <a href="#beneficios">Benefícios</a>
-        <a href="#treinamentos">Treinamentos</a>
-        <a href="#cursos">Cursos</a>
+      <div class="mini-boxes" id="beneficios-login">
+        <div><i class="fa-solid fa-heart"></i> Benefícios</div>
+        <div><i class="fa-solid fa-graduation-cap"></i> Treinamentos</div>
+        <div><i class="fa-solid fa-book-open"></i> Cursos</div>
       </div>
     </section>
 
-    <section class="login-area">
-      <div class="floating-icon one"><i class="fa-solid fa-user-doctor"></i></div>
-      <div class="floating-icon two"><i class="fa-solid fa-heart"></i></div>
+    <section class="right-side" aria-label="Área de login">
+      <div class="orbit orbit-one"></div>
+      <div class="orbit orbit-two"></div>
 
-      <form class="login-card" id="loginForm">
-        <div class="login-avatar"><i class="fa-solid fa-user-doctor"></i></div>
+      <div class="floating-icon icon-1">
+        <i class="fa-solid fa-user-doctor"></i>
+      </div>
+
+      <div class="floating-icon icon-2">
+        <i class="fa-solid fa-shield-heart"></i>
+      </div>
+
+      <div class="floating-icon icon-3">
+        <i class="fa-solid fa-cloud"></i>
+      </div>
+
+      <div class="platform"></div>
+
+      <img
+        class="mascot"
+        src="../assets/images/mascote_hero.png"
+        alt="Mascote Amor Saúde"
+        onerror="this.style.display='none';"
+      />
+
+      <form class="login-card" id="loginForm" autocomplete="on">
+        <div class="card-shine"></div>
+
+        <img
+          class="card-logo"
+          src="../assets/images/logo_funcionarios.png"
+          alt="Amor Saúde"
+          onerror="this.style.display='none';"
+        />
 
         <h2>Entrar</h2>
         <p class="subtitle">Faça login para continuar</p>
 
-        <div class="field-group">
-          <label for="loginCidadeSelect">Unidade / Cidade</label>
-          <div class="input-wrap">
-            <i class="fa-solid fa-location-dot"></i>
-            <select id="loginCidadeSelect" name="cidade">
-              <option value="Cerquilho">Cerquilho</option>
-              <option value="Tatui">Tatui</option>
-              <option value="Itapeva">Itapeva</option>
-              <option value="Embu das Artes">Embu das Artes</option>
-            </select>
-          </div>
-          <span class="small-note">Essa cidade será aplicada ao colaborador após o login.</span>
+        <label for="loginCidadeSelect">Unidade / Cidade</label>
+        <div class="input-box city-login-box">
+          <i class="fa-solid fa-location-dot"></i>
+          <select id="loginCidadeSelect" name="cidade">
+            <option value="Embu das Artes">Embu das Artes</option>
+            <option value="Itapeva">Itapeva</option>
+            <option value="Tatui">Tatui</option>
+            <option value="Cerquilho">Cerquilho</option>
+          </select>
+        </div>
+        <p class="city-login-hint">Essa cidade será aplicada ao colaborador após o login.</p>
+
+        <label for="email">E-mail</label>
+        <div class="input-box">
+          <i class="fa-solid fa-envelope"></i>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Digite seu e-mail"
+            autocomplete="email"
+            required
+          />
         </div>
 
-        <div class="field-group">
-          <label for="email">E-mail</label>
-          <div class="input-wrap">
-            <i class="fa-solid fa-envelope"></i>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="Digite seu e-mail" required />
-          </div>
+        <label for="password">Senha</label>
+        <div class="input-box">
+          <i class="fa-solid fa-lock"></i>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Digite sua senha"
+            autocomplete="current-password"
+            required
+          />
+
+          <button id="togglePassword" type="button" aria-label="Mostrar ou ocultar senha">
+            <i class="fa-solid fa-eye"></i>
+          </button>
         </div>
 
-        <div class="field-group">
-          <label for="password">Senha</label>
-          <div class="input-wrap">
-            <i class="fa-solid fa-lock"></i>
-            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required />
-            <button class="password-toggle" id="togglePassword" type="button" aria-label="Mostrar ou ocultar senha">
-              <i class="fa-solid fa-eye"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <label class="remember">
-            <input type="checkbox" id="rememberAccess" />
+        <div class="options">
+          <label class="remember" for="rememberAccess">
+            <input id="rememberAccess" type="checkbox" />
             Lembrar acesso
           </label>
-          <button class="forgot" id="forgotPassword" type="button">Esqueci minha senha</button>
+
+          <button class="forgot-password" id="forgotPassword" type="button">
+            Esqueci minha senha
+          </button>
         </div>
 
-        <button class="submit-btn" type="submit">Entrar</button>
-
-        <button class="google-btn" id="googleLoginBtn" type="button" title="Login com Google">
-          <i class="fa-brands fa-google"></i>
+        <button class="login-btn" type="submit">
+          <span>Entrar</span>
+          <i class="fa-solid fa-arrow-right-to-bracket"></i>
         </button>
 
-        <div class="auth-message" id="authMessage"></div>
+        <div class="social-login">
+          <button class="google-icon-btn" id="googleLoginBtn" type="button" title="Login com Google">
+            <i class="fa-brands fa-google"></i>
+          </button>
+        </div>
 
-        <div class="mascot"><i class="fa-solid fa-face-smile"></i></div>
+        <div class="auth-message" id="authMessage"></div>
       </form>
     </section>
   </main>
 
-  <script src="/js/login.js?v=cloud-final-sem-firebase"></script>
+  <footer class="login-footer" id="contato-login">
+    <span>© 2026 Amor Saúde Funcionários</span>
+    <span>Cloudflare D1 conectado</span>
+  </footer>
+
+  <script src="/js/login.js?v=login-exp3-cloud"></script>
 </body>
 </html>
