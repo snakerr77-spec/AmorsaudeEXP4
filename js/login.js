@@ -306,7 +306,9 @@ if (loginForm) {
 if (forgotPassword) {
   forgotPassword.addEventListener("click", (event) => {
     event.preventDefault();
+
     mostrarMensagem("Recuperação de senha será feita pelo administrador por enquanto.", "aviso");
+
     alert("Para redefinir senha, o administrador precisa gerar um token de senha na API.");
   });
 }
