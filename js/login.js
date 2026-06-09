@@ -20,9 +20,7 @@ const CIDADES_LOGIN = [
 
 function normalizarCidadeLogin(cidade) {
   const valor = String(cidade || "").trim();
-
   if (valor === "Tatuí") return "Tatui";
-
   return CIDADES_LOGIN.includes(valor) ? valor : "Cerquilho";
 }
 
@@ -50,7 +48,6 @@ function prepararCidadeLogin() {
 
   loginCidadeSelect.addEventListener("change", () => {
     const cidade = getCidadeLogin();
-
     localStorage.setItem("amorSaudeCidadeSelecionada", cidade);
     localStorage.setItem("amor_cidade", cidade);
   });
@@ -64,9 +61,7 @@ function mostrarMensagem(texto, tipo = "") {
   authMessage.textContent = texto || "";
   authMessage.classList.remove("erro", "sucesso", "aviso");
 
-  if (tipo) {
-    authMessage.classList.add(tipo);
-  }
+  if (tipo) authMessage.classList.add(tipo);
 }
 
 function normalizarEmail(email) {
@@ -88,9 +83,7 @@ function setCarregandoLogin(carregando) {
       : botaoEntrar.dataset.textoOriginal;
   }
 
-  if (googleLoginBtn) {
-    googleLoginBtn.disabled = carregando;
-  }
+  if (googleLoginBtn) googleLoginBtn.disabled = carregando;
 
   if (forgotPassword) {
     forgotPassword.style.pointerEvents = carregando ? "none" : "";
