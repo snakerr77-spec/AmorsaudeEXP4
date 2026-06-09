@@ -5,179 +5,138 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | Amor Saúde</title>
 
-  <link rel="stylesheet" href="../css/login.css?v=login-exp3-cloud" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/css/login.css?v=login-luxo-cloud-1" />
 </head>
 
-<body class="login-page">
-  <div class="animated-bg" aria-hidden="true">
-    <span class="bg-orb orb-a"></span>
-    <span class="bg-orb orb-b"></span>
-    <span class="bg-orb orb-c"></span>
-    <span class="bg-orb orb-d"></span>
-    <span class="bg-pulse pulse-a"></span>
-    <span class="bg-pulse pulse-b"></span>
-    <div class="bg-grid"></div>
-    <div class="bg-ribbon ribbon-a"></div>
-    <div class="bg-ribbon ribbon-b"></div>
+<body>
+  <div class="login-bg" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+    <span class="ring ring-1"></span>
+    <span class="ring ring-2"></span>
+    <span class="grid-light"></span>
   </div>
 
-  <header class="topbar">
-    <a class="logo" href="/index.html" aria-label="Amor Saúde">
-      <img
-        src="../assets/images/logo_funcionarios.png"
-        alt="Logo Amor Saúde"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-      />
-      <strong class="logo-text">Amor Saúde</strong>
+  <header class="login-header">
+    <a class="brand" href="/pages/login.html" aria-label="Amor Saúde Funcionários">
+      <img src="/assets/images/logo_funcionarios.png" alt="Amor Saúde Funcionários" />
+      <span>portal interno</span>
     </a>
 
-    <nav class="topnav" aria-label="Navegação rápida">
-      <a href="/index.html">Início</a>
-      <a href="#beneficios-login">Benefícios</a>
-      <a href="#contato-login">Contato</a>
+    <nav class="login-nav" aria-label="Navegação rápida">
+      <a href="#inicio">Início</a>
+      <a href="#beneficios">Benefícios</a>
+      <a href="#contato">Contato</a>
     </nav>
   </header>
 
-  <main class="login-container" id="inicio-login">
-    <section class="left-side">
-      <div class="tag">
+  <main class="login-page" id="inicio">
+    <section class="hero-copy">
+      <div class="eyebrow">
         <i class="fa-solid fa-heart-pulse"></i>
-        ÁREA DO COLABORADOR
+        Área do colaborador
       </div>
 
-      <h1>
-        Bem-vindo ao
-        <span>Amor Saúde</span>
-      </h1>
+      <h1>Seu painel Amor Saúde, agora na nuvem.</h1>
 
       <p>
-        Entre na plataforma para acessar treinamentos, benefícios, agenda médica,
-        notícias internas e ferramentas da equipe em um ambiente seguro pela Cloudflare.
+        Acesse treinamentos, notícias internas, ferramentas da equipe e informações da clínica com uma experiência mais leve, segura e conectada ao Cloudflare.
       </p>
 
-      <div class="mini-boxes" id="beneficios-login">
-        <div><i class="fa-solid fa-heart"></i> Benefícios</div>
-        <div><i class="fa-solid fa-graduation-cap"></i> Treinamentos</div>
-        <div><i class="fa-solid fa-book-open"></i> Cursos</div>
+      <div class="hero-chips" id="beneficios">
+        <span><i class="fa-solid fa-shield-heart"></i> Cloudflare D1</span>
+        <span><i class="fa-solid fa-graduation-cap"></i> Treinamentos</span>
+        <span><i class="fa-solid fa-bell"></i> Notícias</span>
       </div>
     </section>
 
-    <section class="right-side" aria-label="Área de login">
-      <div class="orbit orbit-one"></div>
-      <div class="orbit orbit-two"></div>
+    <section class="login-stage" aria-label="Formulário de login">
+      <div class="orbit-icon icon-doctor"><i class="fa-solid fa-user-doctor"></i></div>
+      <div class="orbit-icon icon-heart"><i class="fa-solid fa-heart"></i></div>
+      <div class="orbit-icon icon-cloud"><i class="fa-solid fa-cloud"></i></div>
 
-      <div class="floating-icon icon-1">
-        <i class="fa-solid fa-user-doctor"></i>
-      </div>
+      <form class="login-card" id="loginForm">
+        <div class="card-glow" aria-hidden="true"></div>
 
-      <div class="floating-icon icon-2">
-        <i class="fa-solid fa-shield-heart"></i>
-      </div>
-
-      <div class="floating-icon icon-3">
-        <i class="fa-solid fa-cloud"></i>
-      </div>
-
-      <div class="platform"></div>
-
-      <img
-        class="mascot"
-        src="../assets/images/mascote_hero.png"
-        alt="Mascote Amor Saúde"
-        onerror="this.style.display='none';"
-      />
-
-      <form class="login-card" id="loginForm" autocomplete="on">
-        <div class="card-shine"></div>
-
-        <img
-          class="card-logo"
-          src="../assets/images/logo_funcionarios.png"
-          alt="Amor Saúde"
-          onerror="this.style.display='none';"
-        />
-
-        <h2>Entrar</h2>
-        <p class="subtitle">Faça login para continuar</p>
-
-        <label for="loginCidadeSelect">Unidade / Cidade</label>
-        <div class="input-box city-login-box">
-          <i class="fa-solid fa-location-dot"></i>
-          <select id="loginCidadeSelect" name="cidade">
-            <option value="Embu das Artes">Embu das Artes</option>
-            <option value="Itapeva">Itapeva</option>
-            <option value="Tatui">Tatui</option>
-            <option value="Cerquilho">Cerquilho</option>
-          </select>
-        </div>
-        <p class="city-login-hint">Essa cidade será aplicada ao colaborador após o login.</p>
-
-        <label for="email">E-mail</label>
-        <div class="input-box">
-          <i class="fa-solid fa-envelope"></i>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            placeholder="Digite seu e-mail"
-            autocomplete="email"
-            required
-          />
+        <div class="login-card-head">
+          <div class="logo-mini">
+            <img src="/assets/images/logo_funcionarios.png" alt="Amor Saúde" />
+          </div>
+          <div>
+            <span class="secure-pill"><i class="fa-solid fa-lock"></i> acesso seguro</span>
+            <h2>Entrar</h2>
+            <p>Faça login para continuar</p>
+          </div>
         </div>
 
-        <label for="password">Senha</label>
-        <div class="input-box">
-          <i class="fa-solid fa-lock"></i>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Digite sua senha"
-            autocomplete="current-password"
-            required
-          />
-
-          <button id="togglePassword" type="button" aria-label="Mostrar ou ocultar senha">
-            <i class="fa-solid fa-eye"></i>
-          </button>
+        <div class="field-group">
+          <label for="loginCidadeSelect">Unidade / Cidade</label>
+          <div class="input-wrap select-wrap">
+            <i class="fa-solid fa-location-dot"></i>
+            <select id="loginCidadeSelect" name="cidade">
+              <option value="Cerquilho">Cerquilho</option>
+              <option value="Tatui">Tatui</option>
+              <option value="Itapeva">Itapeva</option>
+              <option value="Embu das Artes">Embu das Artes</option>
+            </select>
+            <span class="select-arrow"><i class="fa-solid fa-chevron-down"></i></span>
+          </div>
         </div>
 
-        <div class="options">
-          <label class="remember" for="rememberAccess">
-            <input id="rememberAccess" type="checkbox" />
-            Lembrar acesso
+        <div class="field-group">
+          <label for="email">E-mail</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="Digite seu e-mail" required />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="password">Senha</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-key"></i>
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required />
+            <button class="password-toggle" id="togglePassword" type="button" aria-label="Mostrar ou ocultar senha">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="remember">
+            <input type="checkbox" id="rememberAccess" />
+            <span>Lembrar acesso</span>
           </label>
 
-          <button class="forgot-password" id="forgotPassword" type="button">
-            Esqueci minha senha
-          </button>
+          <button class="forgot" id="forgotPassword" type="button">Esqueci minha senha</button>
         </div>
 
-        <button class="login-btn" type="submit">
-          <span>Entrar</span>
-          <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        <button class="submit-btn" type="submit">
+          <span>Entrar no painel</span>
+          <i class="fa-solid fa-arrow-right"></i>
         </button>
 
-        <div class="social-login">
-          <button class="google-icon-btn" id="googleLoginBtn" type="button" title="Login com Google">
-            <i class="fa-brands fa-google"></i>
-          </button>
-        </div>
+        <button class="google-btn" id="googleLoginBtn" type="button" title="Login com Google">
+          <i class="fa-brands fa-google"></i>
+        </button>
 
         <div class="auth-message" id="authMessage"></div>
       </form>
+
+      <div class="mascot-card" aria-hidden="true">
+        <img src="/assets/images/mascote_hero.png" alt="" />
+      </div>
     </section>
   </main>
 
-  <footer class="login-footer" id="contato-login">
+  <footer class="login-footer" id="contato">
     <span>© 2026 Amor Saúde Funcionários</span>
     <span>Cloudflare D1 conectado</span>
   </footer>
 
-  <script src="/js/login.js?v=login-exp3-cloud"></script>
+  <script src="/js/login.js?v=login-luxo-cloud-1"></script>
 </body>
 </html>
