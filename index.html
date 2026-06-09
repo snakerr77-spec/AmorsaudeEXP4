@@ -64,7 +64,6 @@
       localStorage.removeItem("cidadeSelecionada");
       localStorage.removeItem("amorSaudeLogado");
       localStorage.removeItem("isLoggedIn");
-
       sessionStorage.removeItem("amorSaudeSessaoAtiva");
     }
 
@@ -125,7 +124,6 @@
 
       } catch (erro) {
         console.error("Erro ao validar sessão Cloudflare:", erro);
-
         limparSessaoCloud();
         localStorage.setItem("amorSaudeRedirectAfterLogin", HOME_URL);
         window.location.replace(LOGIN_URL);
