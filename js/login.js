@@ -56,9 +56,7 @@ function mostrarMensagem(texto, tipo = "") {
   authMessage.textContent = texto || "";
   authMessage.classList.remove("erro", "sucesso", "aviso");
 
-  if (tipo) {
-    authMessage.classList.add(tipo);
-  }
+  if (tipo) authMessage.classList.add(tipo);
 }
 
 function normalizarEmail(email) {
@@ -87,7 +85,7 @@ function setCarregandoLogin(carregando) {
 }
 
 function limparSessaoCloud() {
-  const chaves = [
+  [
     "firebaseUser",
     "firebaseAuth",
     "firebaseUID",
@@ -104,9 +102,8 @@ function limparSessaoCloud() {
     "cidadeSelecionada",
     "amorSaudeLogado",
     "isLoggedIn"
-  ];
+  ].forEach((chave) => localStorage.removeItem(chave));
 
-  chaves.forEach((chave) => localStorage.removeItem(chave));
   sessionStorage.removeItem("amorSaudeSessaoAtiva");
 }
 
@@ -148,6 +145,7 @@ function salvarSessaoCloudflare(data, cidadeSelecionada) {
 
   const usuarioSessao = {
     ...usuario,
+    uid: usuario.uid || usuario.id || usuario.email || "cloud-user",
     nivelAcesso,
     nivel_acesso: nivelAcesso,
     cidade: cidadeFinal,
@@ -233,31 +231,6 @@ async function apiFetch(path, options = {}) {
   return data;
 }
 
-async function verificarSessaoJaAtiva() {
-  const token = localStorage.getItem("amor_token");
-
-  if (!token) return;
-
-  try {
-    const data = await apiFetch("/api/me");
-
-    if (data?.ok && data?.usuario) {
-      salvarSessaoCloudflare(
-        {
-          token,
-          expira_em: localStorage.getItem("amor_token_expira_em") || "",
-          usuario: data.usuario
-        },
-        data.usuario.cidade
-      );
-
-      window.location.replace(PAGINA_APOS_LOGIN);
-    }
-  } catch {
-    limparSessaoCloud();
-  }
-}
-
 if (togglePassword && password) {
   togglePassword.addEventListener("click", () => {
     if (password.type === "password") {
@@ -304,9 +277,7 @@ if (loginForm) {
 if (forgotPassword) {
   forgotPassword.addEventListener("click", (event) => {
     event.preventDefault();
-
     mostrarMensagem("Recuperação de senha será feita pelo administrador por enquanto.", "aviso");
-
     alert("Para redefinir senha, o administrador precisa gerar um token de senha na API.");
   });
 }
@@ -350,9 +321,7 @@ window.AmorSaudeAPI = {
 
   async sair() {
     try {
-      await apiFetch("/api/auth/logout", {
-        method: "POST"
-      });
+      await apiFetch("/api/auth/logout", { method: "POST" });
     } catch (erro) {
       console.warn("Não foi possível encerrar sessão no servidor:", erro);
     }
@@ -361,5 +330,3 @@ window.AmorSaudeAPI = {
     window.location.href = PAGINA_LOGIN;
   }
 };
-
-verificarSessaoJaAtiva();
