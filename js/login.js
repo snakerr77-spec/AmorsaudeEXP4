@@ -56,7 +56,9 @@ function mostrarMensagem(texto, tipo = "") {
   authMessage.textContent = texto || "";
   authMessage.classList.remove("erro", "sucesso", "aviso");
 
-  if (tipo) authMessage.classList.add(tipo);
+  if (tipo) {
+    authMessage.classList.add(tipo);
+  }
 }
 
 function normalizarEmail(email) {
@@ -70,10 +72,12 @@ function setCarregandoLogin(carregando) {
     botaoEntrar.disabled = carregando;
 
     if (!botaoEntrar.dataset.textoOriginal) {
-      botaoEntrar.dataset.textoOriginal = botaoEntrar.textContent;
+      botaoEntrar.dataset.textoOriginal = botaoEntrar.innerHTML;
     }
 
-    botaoEntrar.textContent = carregando ? "Entrando..." : botaoEntrar.dataset.textoOriginal;
+    botaoEntrar.innerHTML = carregando
+      ? '<span>Entrando...</span><i class="fa-solid fa-spinner fa-spin"></i>'
+      : botaoEntrar.dataset.textoOriginal;
   }
 
   if (googleLoginBtn) googleLoginBtn.disabled = carregando;
@@ -85,7 +89,7 @@ function setCarregandoLogin(carregando) {
 }
 
 function limparSessaoCloud() {
-  [
+  const chaves = [
     "firebaseUser",
     "firebaseAuth",
     "firebaseUID",
@@ -102,8 +106,9 @@ function limparSessaoCloud() {
     "cidadeSelecionada",
     "amorSaudeLogado",
     "isLoggedIn"
-  ].forEach((chave) => localStorage.removeItem(chave));
+  ];
 
+  chaves.forEach((chave) => localStorage.removeItem(chave));
   sessionStorage.removeItem("amorSaudeSessaoAtiva");
 }
 
@@ -145,7 +150,6 @@ function salvarSessaoCloudflare(data, cidadeSelecionada) {
 
   const usuarioSessao = {
     ...usuario,
-    uid: usuario.uid || usuario.id || usuario.email || "cloud-user",
     nivelAcesso,
     nivel_acesso: nivelAcesso,
     cidade: cidadeFinal,
@@ -229,6 +233,31 @@ async function apiFetch(path, options = {}) {
   }
 
   return data;
+}
+
+async function verificarSessaoJaAtiva() {
+  const token = localStorage.getItem("amor_token");
+
+  if (!token) return;
+
+  try {
+    const data = await apiFetch("/api/me");
+
+    if (data?.ok && data?.usuario) {
+      salvarSessaoCloudflare(
+        {
+          token,
+          expira_em: localStorage.getItem("amor_token_expira_em") || "",
+          usuario: data.usuario
+        },
+        data.usuario.cidade
+      );
+
+      window.location.replace(PAGINA_APOS_LOGIN);
+    }
+  } catch {
+    limparSessaoCloud();
+  }
 }
 
 if (togglePassword && password) {
@@ -321,7 +350,9 @@ window.AmorSaudeAPI = {
 
   async sair() {
     try {
-      await apiFetch("/api/auth/logout", { method: "POST" });
+      await apiFetch("/api/auth/logout", {
+        method: "POST"
+      });
     } catch (erro) {
       console.warn("Não foi possível encerrar sessão no servidor:", erro);
     }
@@ -330,3 +361,5 @@ window.AmorSaudeAPI = {
     window.location.href = PAGINA_LOGIN;
   }
 };
+
+verificarSessaoJaAtiva();
