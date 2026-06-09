@@ -3,14 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Login | Amor Saúde</title>
 
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
   <style>
     :root {
@@ -26,9 +22,7 @@
       --radius: 28px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -55,11 +49,7 @@
       box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
     }
 
-    .logo-box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .logo-box { display: flex; align-items: center; gap: 12px; }
 
     .logo-img {
       width: 150px;
@@ -70,11 +60,7 @@
       box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
     }
 
-    .logo-fallback {
-      display: none;
-      font-size: 22px;
-      font-weight: 900;
-    }
+    .logo-fallback { display: none; font-size: 22px; font-weight: 900; }
 
     .nav {
       display: flex;
@@ -111,10 +97,7 @@
       padding: 42px 0 60px;
     }
 
-    .intro {
-      position: relative;
-      padding: 20px 0;
-    }
+    .intro { position: relative; padding: 20px 0; }
 
     .badge {
       display: inline-flex;
@@ -171,11 +154,7 @@
       box-shadow: 0 18px 38px rgba(16, 42, 67, 0.12);
     }
 
-    .login-area {
-      display: flex;
-      justify-content: center;
-      position: relative;
-    }
+    .login-area { display: flex; justify-content: center; position: relative; }
 
     .floating-icon {
       position: absolute;
@@ -191,15 +170,8 @@
       z-index: 0;
     }
 
-    .floating-icon.one {
-      top: 42px;
-      left: 4%;
-    }
-
-    .floating-icon.two {
-      bottom: 70px;
-      right: 2%;
-    }
+    .floating-icon.one { top: 42px; left: 4%; }
+    .floating-icon.two { bottom: 70px; right: 2%; }
 
     .login-card {
       width: min(420px, 100%);
@@ -233,27 +205,10 @@
       color: var(--texto);
     }
 
-    .login-card .subtitle {
-      margin: 0 0 24px;
-      color: var(--cinza);
-      font-size: 15px;
-    }
-
-    .field-group {
-      margin-bottom: 17px;
-    }
-
-    .field-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--texto);
-    }
-
-    .input-wrap {
-      position: relative;
-    }
+    .login-card .subtitle { margin: 0 0 24px; color: var(--cinza); font-size: 15px; }
+    .field-group { margin-bottom: 17px; }
+    .field-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 900; color: var(--texto); }
+    .input-wrap { position: relative; }
 
     .input-wrap i {
       position: absolute;
@@ -279,10 +234,7 @@
       transition: 0.2s ease;
     }
 
-    .input-wrap select {
-      appearance: none;
-      cursor: pointer;
-    }
+    .input-wrap select { appearance: none; cursor: pointer; }
 
     .input-wrap input:focus,
     .input-wrap select:focus {
@@ -306,11 +258,7 @@
       font-size: 16px;
     }
 
-    .password-toggle i {
-      position: static;
-      transform: none;
-      pointer-events: auto;
-    }
+    .password-toggle i { position: static; transform: none; pointer-events: auto; }
 
     .small-note {
       display: block;
@@ -329,18 +277,8 @@
       flex-wrap: wrap;
     }
 
-    .remember {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      color: var(--texto);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .remember input {
-      accent-color: var(--azul);
-    }
+    .remember { display: inline-flex; align-items: center; gap: 7px; color: var(--texto); font-size: 13px; font-weight: 700; }
+    .remember input { accent-color: var(--azul); }
 
     .forgot {
       border: none;
@@ -366,16 +304,8 @@
       transition: 0.2s ease;
     }
 
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      filter: brightness(0.98);
-    }
-
-    .submit-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .submit-btn:hover { transform: translateY(-2px); filter: brightness(0.98); }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
     .google-btn {
       width: 48px;
@@ -401,17 +331,9 @@
       color: var(--cinza);
     }
 
-    .auth-message.erro {
-      color: #d82626;
-    }
-
-    .auth-message.sucesso {
-      color: #008f57;
-    }
-
-    .auth-message.aviso {
-      color: #bf7a00;
-    }
+    .auth-message.erro { color: #d82626; }
+    .auth-message.sucesso { color: #008f57; }
+    .auth-message.aviso { color: #bf7a00; }
 
     .mascot {
       position: absolute;
@@ -445,61 +367,21 @@
     }
 
     @media (max-width: 940px) {
-      .page {
-        grid-template-columns: 1fr;
-        padding-top: 34px;
-      }
-
-      .intro {
-        text-align: center;
-      }
-
-      .intro p {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .quick-links {
-        justify-content: center;
-      }
-
-      .floating-icon,
-      .mascot {
-        display: none;
-      }
-
-      .login-card {
-        margin-top: 28px;
-      }
+      .page { grid-template-columns: 1fr; padding-top: 34px; }
+      .intro { text-align: center; }
+      .intro p { margin-left: auto; margin-right: auto; }
+      .quick-links { justify-content: center; }
+      .floating-icon, .mascot { display: none; }
+      .login-card { margin-top: 28px; }
     }
 
     @media (max-width: 620px) {
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 16px 20px;
-      }
-
-      .nav {
-        justify-content: flex-start;
-      }
-
-      .page {
-        width: min(100% - 22px, 1220px);
-      }
-
-      .login-card {
-        padding: 28px 20px;
-      }
-
-      .login-avatar {
-        margin-top: -58px;
-      }
-
-      .quick-links a {
-        flex: 1;
-        text-align: center;
-      }
+      .topbar { align-items: flex-start; flex-direction: column; padding: 16px 20px; }
+      .nav { justify-content: flex-start; }
+      .page { width: min(100% - 22px, 1220px); }
+      .login-card { padding: 28px 20px; }
+      .login-avatar { margin-top: -58px; }
+      .quick-links a { flex: 1; text-align: center; }
     }
   </style>
 </head>
@@ -509,7 +391,7 @@
     <div class="logo-box">
       <img
         class="logo-img"
-        src="/assets/logo-amorsaude.png"
+        src="/assets/images/logo_funcionarios.png"
         alt="Amor Saúde"
         onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block';"
       />
@@ -545,18 +427,11 @@
     </section>
 
     <section class="login-area">
-      <div class="floating-icon one">
-        <i class="fa-solid fa-user-doctor"></i>
-      </div>
-
-      <div class="floating-icon two">
-        <i class="fa-solid fa-heart"></i>
-      </div>
+      <div class="floating-icon one"><i class="fa-solid fa-user-doctor"></i></div>
+      <div class="floating-icon two"><i class="fa-solid fa-heart"></i></div>
 
       <form class="login-card" id="loginForm">
-        <div class="login-avatar">
-          <i class="fa-solid fa-user-doctor"></i>
-        </div>
+        <div class="login-avatar"><i class="fa-solid fa-user-doctor"></i></div>
 
         <h2>Entrar</h2>
         <p class="subtitle">Faça login para continuar</p>
@@ -579,14 +454,7 @@
           <label for="email">E-mail</label>
           <div class="input-wrap">
             <i class="fa-solid fa-envelope"></i>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              placeholder="Digite seu e-mail"
-              required
-            />
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="Digite seu e-mail" required />
           </div>
         </div>
 
@@ -594,21 +462,8 @@
           <label for="password">Senha</label>
           <div class="input-wrap">
             <i class="fa-solid fa-lock"></i>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autocomplete="current-password"
-              placeholder="Digite sua senha"
-              required
-            />
-
-            <button
-              class="password-toggle"
-              id="togglePassword"
-              type="button"
-              aria-label="Mostrar ou ocultar senha"
-            >
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required />
+            <button class="password-toggle" id="togglePassword" type="button" aria-label="Mostrar ou ocultar senha">
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
@@ -619,10 +474,7 @@
             <input type="checkbox" id="rememberAccess" />
             Lembrar acesso
           </label>
-
-          <button class="forgot" id="forgotPassword" type="button">
-            Esqueci minha senha
-          </button>
+          <button class="forgot" id="forgotPassword" type="button">Esqueci minha senha</button>
         </div>
 
         <button class="submit-btn" type="submit">Entrar</button>
@@ -633,13 +485,11 @@
 
         <div class="auth-message" id="authMessage"></div>
 
-        <div class="mascot">
-          <i class="fa-solid fa-face-smile"></i>
-        </div>
+        <div class="mascot"><i class="fa-solid fa-face-smile"></i></div>
       </form>
     </section>
   </main>
 
-<script src="/js/login.js?v=cloud-corrigido-exp4"></script>
+  <script src="/js/login.js?v=cloud-final-sem-firebase"></script>
 </body>
 </html>
