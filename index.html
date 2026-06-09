@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Amor Saúde</title>
-
   <style>
     body {
       margin: 0;
@@ -16,7 +14,6 @@
       background: #eefdff;
       color: #102a43;
     }
-
     .box {
       background: #ffffff;
       padding: 28px 34px;
@@ -24,21 +21,18 @@
       box-shadow: 0 20px 55px rgba(16, 42, 67, 0.14);
       text-align: center;
     }
-
     .box strong {
       display: block;
       font-size: 20px;
       margin-bottom: 8px;
       color: #27aeb8;
     }
-
     .box p {
       margin: 0;
       color: #60758c;
     }
   </style>
 </head>
-
 <body>
   <div class="box">
     <strong>Amor Saúde</strong>
@@ -51,19 +45,25 @@
     const LOGIN_URL = "/pages/login.html";
 
     function limparSessaoCloud() {
-      localStorage.removeItem("amor_token");
-      localStorage.removeItem("amor_token_expira_em");
-      localStorage.removeItem("amor_email");
-      localStorage.removeItem("usuarioEmail");
-      localStorage.removeItem("amor_usuario");
-      localStorage.removeItem("amorSaudeUsuario");
-      localStorage.removeItem("usuarioLogado");
-      localStorage.removeItem("amor_nivel_acesso");
-      localStorage.removeItem("nivelAcesso");
-      localStorage.removeItem("amor_cidade");
-      localStorage.removeItem("cidadeSelecionada");
-      localStorage.removeItem("amorSaudeLogado");
-      localStorage.removeItem("isLoggedIn");
+      [
+        "amor_token",
+        "amor_token_expira_em",
+        "amor_email",
+        "usuarioEmail",
+        "amor_usuario",
+        "amorSaudeUsuario",
+        "usuarioLogado",
+        "amor_nivel_acesso",
+        "nivelAcesso",
+        "amor_cidade",
+        "cidadeSelecionada",
+        "amorSaudeLogado",
+        "isLoggedIn",
+        "firebaseUser",
+        "firebaseAuth",
+        "firebaseUID"
+      ].forEach((chave) => localStorage.removeItem(chave));
+
       sessionStorage.removeItem("amorSaudeSessaoAtiva");
     }
 
@@ -102,10 +102,12 @@
         const cidade =
           usuario.cidade ||
           localStorage.getItem("amorSaudeCidadeSelecionada") ||
+          localStorage.getItem("amor_cidade") ||
           "Cerquilho";
 
         const usuarioSessao = {
           ...usuario,
+          uid: usuario.uid || usuario.id || usuario.email || "cloud-user",
           nivelAcesso: nivel,
           nivel_acesso: nivel,
           cidade,
@@ -118,10 +120,10 @@
         localStorage.setItem("amor_nivel_acesso", nivel);
         localStorage.setItem("nivelAcesso", nivel);
         localStorage.setItem("amor_cidade", cidade);
+        localStorage.setItem("cidadeSelecionada", cidade);
         localStorage.setItem("amorSaudeCidadeSelecionada", cidade);
 
         window.location.replace(HOME_URL);
-
       } catch (erro) {
         console.error("Erro ao validar sessão Cloudflare:", erro);
         limparSessaoCloud();
