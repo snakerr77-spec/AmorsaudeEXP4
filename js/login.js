@@ -11,12 +11,7 @@ const API_URL = "https://little-fog-b415amorsaude-api.snakerr77.workers.dev";
 const PAGINA_APOS_LOGIN = "/pages/home.html";
 const PAGINA_LOGIN = "/pages/login.html";
 
-const CIDADES_LOGIN = [
-  "Embu das Artes",
-  "Itapeva",
-  "Tatui",
-  "Cerquilho"
-];
+const CIDADES_LOGIN = ["Embu das Artes", "Itapeva", "Tatui", "Cerquilho"];
 
 function normalizarCidadeLogin(cidade) {
   const valor = String(cidade || "").trim();
@@ -61,7 +56,9 @@ function mostrarMensagem(texto, tipo = "") {
   authMessage.textContent = texto || "";
   authMessage.classList.remove("erro", "sucesso", "aviso");
 
-  if (tipo) authMessage.classList.add(tipo);
+  if (tipo) {
+    authMessage.classList.add(tipo);
+  }
 }
 
 function normalizarEmail(email) {
@@ -78,9 +75,7 @@ function setCarregandoLogin(carregando) {
       botaoEntrar.dataset.textoOriginal = botaoEntrar.textContent;
     }
 
-    botaoEntrar.textContent = carregando
-      ? "Entrando..."
-      : botaoEntrar.dataset.textoOriginal;
+    botaoEntrar.textContent = carregando ? "Entrando..." : botaoEntrar.dataset.textoOriginal;
   }
 
   if (googleLoginBtn) googleLoginBtn.disabled = carregando;
@@ -92,38 +87,38 @@ function setCarregandoLogin(carregando) {
 }
 
 function limparSessaoCloud() {
-  localStorage.removeItem("firebaseUser");
-  localStorage.removeItem("firebaseAuth");
-  localStorage.removeItem("firebaseUID");
+  const chaves = [
+    "firebaseUser",
+    "firebaseAuth",
+    "firebaseUID",
+    "amor_token",
+    "amor_token_expira_em",
+    "amor_email",
+    "usuarioEmail",
+    "amor_usuario",
+    "amorSaudeUsuario",
+    "usuarioLogado",
+    "amor_nivel_acesso",
+    "nivelAcesso",
+    "amor_cidade",
+    "cidadeSelecionada",
+    "amorSaudeLogado",
+    "isLoggedIn"
+  ];
 
-  localStorage.removeItem("amor_token");
-  localStorage.removeItem("amor_token_expira_em");
-  localStorage.removeItem("amor_email");
-  localStorage.removeItem("usuarioEmail");
-  localStorage.removeItem("amor_usuario");
-  localStorage.removeItem("amorSaudeUsuario");
-  localStorage.removeItem("usuarioLogado");
-  localStorage.removeItem("amor_nivel_acesso");
-  localStorage.removeItem("nivelAcesso");
-  localStorage.removeItem("amor_cidade");
-  localStorage.removeItem("cidadeSelecionada");
-  localStorage.removeItem("amorSaudeLogado");
-  localStorage.removeItem("isLoggedIn");
-
+  chaves.forEach((chave) => localStorage.removeItem(chave));
   sessionStorage.removeItem("amorSaudeSessaoAtiva");
 }
 
 async function fazerLoginCloudflare(email, senha) {
-  const emailNormalizado = normalizarEmail(email);
-
   const resposta = await fetch(`${API_URL}/api/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      email: emailNormalizado,
-      senha
+      email: normalizarEmail(email),
+      senha: String(senha || "")
     })
   });
 
@@ -136,11 +131,7 @@ async function fazerLoginCloudflare(email, senha) {
   }
 
   if (!resposta.ok) {
-    throw new Error(
-      data.erro ||
-      data.detalhe ||
-      "Não foi possível fazer login."
-    );
+    throw new Error(data.erro || data.detalhe || "Não foi possível fazer login.");
   }
 
   if (!data.token || !data.usuario) {
@@ -151,18 +142,9 @@ async function fazerLoginCloudflare(email, senha) {
 }
 
 function salvarSessaoCloudflare(data, cidadeSelecionada) {
-  const usuario = data.usuario;
-
-  const cidadeFinal = normalizarCidadeLogin(
-    cidadeSelecionada ||
-    usuario.cidade ||
-    "Cerquilho"
-  );
-
-  const nivelAcesso =
-    usuario.nivel_acesso ||
-    usuario.nivelAcesso ||
-    "colaborador";
+  const usuario = data.usuario || {};
+  const cidadeFinal = normalizarCidadeLogin(cidadeSelecionada || usuario.cidade || "Cerquilho");
+  const nivelAcesso = usuario.nivel_acesso || usuario.nivelAcesso || "colaborador";
 
   const usuarioSessao = {
     ...usuario,
@@ -211,11 +193,7 @@ function redirecionarAposLogin() {
 
   localStorage.removeItem("amorSaudeRedirectAfterLogin");
 
-  if (
-    !redirect ||
-    redirect.includes("login.html") ||
-    redirect.includes("/pages/login")
-  ) {
+  if (!redirect || redirect.includes("login.html") || redirect.includes("/pages/login")) {
     redirect = PAGINA_APOS_LOGIN;
   }
 
@@ -228,10 +206,7 @@ function redirecionarAposLogin() {
 
 async function apiFetch(path, options = {}) {
   const token = localStorage.getItem("amor_token") || "";
-  const emailSalvo =
-    localStorage.getItem("amor_email") ||
-    localStorage.getItem("usuarioEmail") ||
-    "";
+  const emailSalvo = localStorage.getItem("amor_email") || localStorage.getItem("usuarioEmail") || "";
 
   const resposta = await fetch(`${API_URL}${path}`, {
     ...options,
@@ -252,11 +227,7 @@ async function apiFetch(path, options = {}) {
   }
 
   if (!resposta.ok) {
-    throw new Error(
-      data.erro ||
-      data.detalhe ||
-      "Erro na API Cloudflare."
-    );
+    throw new Error(data.erro || data.detalhe || "Erro na API Cloudflare.");
   }
 
   return data;
@@ -271,21 +242,14 @@ async function verificarSessaoJaAtiva() {
     const data = await apiFetch("/api/me");
 
     if (data?.ok && data?.usuario) {
-      const usuario = data.usuario;
-      const nivel = usuario.nivel_acesso || usuario.nivelAcesso || "colaborador";
-
-      const usuarioSessao = {
-        ...usuario,
-        nivelAcesso: nivel,
-        nivel_acesso: nivel,
-        authProvider: "cloudflare-d1"
-      };
-
-      localStorage.setItem("amor_usuario", JSON.stringify(usuarioSessao));
-      localStorage.setItem("amorSaudeUsuario", JSON.stringify(usuarioSessao));
-      localStorage.setItem("usuarioLogado", JSON.stringify(usuarioSessao));
-      localStorage.setItem("amor_nivel_acesso", nivel);
-      localStorage.setItem("nivelAcesso", nivel);
+      salvarSessaoCloudflare(
+        {
+          token,
+          expira_em: localStorage.getItem("amor_token_expira_em") || "",
+          usuario: data.usuario
+        },
+        data.usuario.cidade
+      );
 
       window.location.replace(PAGINA_APOS_LOGIN);
     }
@@ -328,34 +292,22 @@ if (loginForm) {
       const dataLogin = await fazerLoginCloudflare(email, senha);
 
       salvarSessaoCloudflare(dataLogin, cidade);
-
       redirecionarAposLogin();
-
     } catch (erro) {
       console.error("Erro no login Cloudflare:", erro);
-
-      mostrarMensagem(
-        erro.message || "Não foi possível entrar. Verifique e-mail e senha.",
-        "erro"
-      );
-
+      mostrarMensagem(erro.message || "Não foi possível entrar. Verifique e-mail e senha.", "erro");
       setCarregandoLogin(false);
     }
   });
 }
 
 if (forgotPassword) {
-  forgotPassword.addEventListener("click", async (event) => {
+  forgotPassword.addEventListener("click", (event) => {
     event.preventDefault();
 
-    mostrarMensagem(
-      "Recuperação de senha será feita pelo administrador por enquanto.",
-      "aviso"
-    );
+    mostrarMensagem("Recuperação de senha será feita pelo administrador por enquanto.", "aviso");
 
-    alert(
-      "Para redefinir senha, o administrador precisa gerar um token de senha na API. Depois criaremos uma tela própria para isso."
-    );
+    alert("Para redefinir senha, o administrador precisa gerar um token de senha na API.");
   });
 }
 
@@ -406,7 +358,6 @@ window.AmorSaudeAPI = {
     }
 
     limparSessaoCloud();
-
     window.location.href = PAGINA_LOGIN;
   }
 };
