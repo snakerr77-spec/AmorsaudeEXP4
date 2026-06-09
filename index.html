@@ -50,7 +50,7 @@
     const HOME_URL = "/pages/home.html";
     const LOGIN_URL = "/pages/login.html";
 
-    function limparSessao() {
+    function limparSessaoCloud() {
       localStorage.removeItem("amor_token");
       localStorage.removeItem("amor_token_expira_em");
       localStorage.removeItem("amor_email");
@@ -60,6 +60,8 @@
       localStorage.removeItem("usuarioLogado");
       localStorage.removeItem("amor_nivel_acesso");
       localStorage.removeItem("nivelAcesso");
+      localStorage.removeItem("amor_cidade");
+      localStorage.removeItem("cidadeSelecionada");
       localStorage.removeItem("amorSaudeLogado");
       localStorage.removeItem("isLoggedIn");
 
@@ -90,7 +92,7 @@
         const data = await resposta.json();
 
         if (!resposta.ok || !data.ok || !data.usuario) {
-          limparSessao();
+          limparSessaoCloud();
           localStorage.setItem("amorSaudeRedirectAfterLogin", HOME_URL);
           window.location.replace(LOGIN_URL);
           return;
@@ -98,11 +100,16 @@
 
         const usuario = data.usuario;
         const nivel = usuario.nivel_acesso || usuario.nivelAcesso || "colaborador";
+        const cidade =
+          usuario.cidade ||
+          localStorage.getItem("amorSaudeCidadeSelecionada") ||
+          "Cerquilho";
 
         const usuarioSessao = {
           ...usuario,
           nivelAcesso: nivel,
           nivel_acesso: nivel,
+          cidade,
           authProvider: "cloudflare-d1"
         };
 
@@ -111,12 +118,15 @@
         localStorage.setItem("usuarioLogado", JSON.stringify(usuarioSessao));
         localStorage.setItem("amor_nivel_acesso", nivel);
         localStorage.setItem("nivelAcesso", nivel);
+        localStorage.setItem("amor_cidade", cidade);
+        localStorage.setItem("amorSaudeCidadeSelecionada", cidade);
 
         window.location.replace(HOME_URL);
 
       } catch (erro) {
-        console.error("Erro ao validar sessão:", erro);
-        limparSessao();
+        console.error("Erro ao validar sessão Cloudflare:", erro);
+
+        limparSessaoCloud();
         localStorage.setItem("amorSaudeRedirectAfterLogin", HOME_URL);
         window.location.replace(LOGIN_URL);
       }
