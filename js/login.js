@@ -45,7 +45,6 @@ function prepararCidadeLogin() {
   );
 
   loginCidadeSelect.value = cidadeSalva;
-
   localStorage.setItem("amorSaudeCidadeSelecionada", cidadeSalva);
   localStorage.setItem("amor_cidade", cidadeSalva);
 
@@ -99,7 +98,7 @@ function setCarregandoLogin(carregando) {
   }
 }
 
-function limparSessaoAntiga() {
+function limparSessaoCloud() {
   localStorage.removeItem("firebaseUser");
   localStorage.removeItem("firebaseAuth");
   localStorage.removeItem("firebaseUID");
@@ -113,6 +112,8 @@ function limparSessaoAntiga() {
   localStorage.removeItem("usuarioLogado");
   localStorage.removeItem("amor_nivel_acesso");
   localStorage.removeItem("nivelAcesso");
+  localStorage.removeItem("amor_cidade");
+  localStorage.removeItem("cidadeSelecionada");
   localStorage.removeItem("amorSaudeLogado");
   localStorage.removeItem("isLoggedIn");
 
@@ -277,22 +278,26 @@ async function verificarSessaoJaAtiva() {
     const data = await apiFetch("/api/me");
 
     if (data?.ok && data?.usuario) {
-      const usuarioLocal = {
-        ...data.usuario,
-        nivelAcesso:
-          data.usuario.nivel_acesso ||
-          data.usuario.nivelAcesso ||
-          "colaborador"
+      const usuario = data.usuario;
+      const nivel = usuario.nivel_acesso || usuario.nivelAcesso || "colaborador";
+
+      const usuarioSessao = {
+        ...usuario,
+        nivelAcesso: nivel,
+        nivel_acesso: nivel,
+        authProvider: "cloudflare-d1"
       };
 
-      localStorage.setItem("amor_usuario", JSON.stringify(usuarioLocal));
-      localStorage.setItem("amorSaudeUsuario", JSON.stringify(usuarioLocal));
-      localStorage.setItem("usuarioLogado", JSON.stringify(usuarioLocal));
+      localStorage.setItem("amor_usuario", JSON.stringify(usuarioSessao));
+      localStorage.setItem("amorSaudeUsuario", JSON.stringify(usuarioSessao));
+      localStorage.setItem("usuarioLogado", JSON.stringify(usuarioSessao));
+      localStorage.setItem("amor_nivel_acesso", nivel);
+      localStorage.setItem("nivelAcesso", nivel);
 
       window.location.replace(PAGINA_APOS_LOGIN);
     }
   } catch {
-    limparSessaoAntiga();
+    limparSessaoCloud();
   }
 }
 
@@ -325,7 +330,7 @@ if (loginForm) {
       setCarregandoLogin(true);
       mostrarMensagem("Entrando com Cloudflare...", "");
 
-      limparSessaoAntiga();
+      limparSessaoCloud();
 
       const dataLogin = await fazerLoginCloudflare(email, senha);
 
@@ -407,7 +412,7 @@ window.AmorSaudeAPI = {
       console.warn("Não foi possível encerrar sessão no servidor:", erro);
     }
 
-    limparSessaoAntiga();
+    limparSessaoCloud();
 
     window.location.href = PAGINA_LOGIN;
   }
