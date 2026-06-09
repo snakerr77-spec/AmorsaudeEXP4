@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function toggleMenu(event) {
     event?.stopPropagation();
-
     if (!sideDrawer || !menuToggle) return;
 
     const isOpen = !sideDrawer.classList.contains("active");
@@ -54,19 +53,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function closeNotifications() {
     if (!notifyPanel || !notifyToggle) return;
-
     notifyPanel.classList.remove("active");
     notifyPanel.setAttribute("aria-hidden", "true");
     notifyToggle.setAttribute("aria-expanded", "false");
   }
 
   function toggleNotifications(event) {
-    event.stopPropagation();
-
+    event?.stopPropagation();
     if (!notifyPanel || !notifyToggle) return;
 
     const isOpen = notifyPanel.classList.toggle("active");
-
     notifyPanel.setAttribute("aria-hidden", String(!isOpen));
     notifyToggle.setAttribute("aria-expanded", String(isOpen));
 
@@ -78,19 +74,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function closeProfile() {
     if (!profilePanel || !profileToggle) return;
-
     profilePanel.classList.remove("active");
     profilePanel.setAttribute("aria-hidden", "true");
     profileToggle.setAttribute("aria-expanded", "false");
   }
 
   function toggleProfile(event) {
-    event.stopPropagation();
-
+    event?.stopPropagation();
     if (!profilePanel || !profileToggle) return;
 
     const isOpen = profilePanel.classList.toggle("active");
-
     profilePanel.setAttribute("aria-hidden", String(!isOpen));
     profileToggle.setAttribute("aria-expanded", String(isOpen));
 
@@ -102,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function dateMillis(value) {
     if (!value) return 0;
-
     if (typeof value === "number") return value;
 
     if (typeof value === "object") {
@@ -112,13 +104,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const date = new Date(value);
-
     return Number.isNaN(date.getTime()) ? 0 : date.getTime();
   }
 
   function formatCommunicationDate(value) {
     const millis = dateMillis(value);
-
     if (!millis) return "Agora";
 
     const date = new Date(millis);
@@ -139,7 +129,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getReadKey() {
-    const userId = window.usuarioLogado?.uid || window.usuarioLogado?.email || "geral";
+    const userId =
+      window.usuarioLogado?.uid ||
+      window.usuarioLogado?.id ||
+      window.usuarioLogado?.email ||
+      "geral";
+
     return `amorSaudeNotificacoesLidas_${userId}`;
   }
 
@@ -158,7 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setNotificationCount(total) {
     if (!notifyCount) return;
-
     notifyCount.textContent = String(total);
     notifyCount.style.display = total > 0 ? "grid" : "none";
   }
@@ -166,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateNotificationCount() {
     const readSet = getReadSet();
     const unreadTotal = homeNotifications.filter((item) => !readSet.has(item.id)).length;
-
     setNotificationCount(unreadTotal);
   }
 
@@ -197,7 +190,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     article.addEventListener("click", () => {
       const currentReadSet = getReadSet();
-
       currentReadSet.add(item.id);
       saveReadSet(currentReadSet);
       article.classList.remove("unread");
@@ -211,8 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!notificationList) return;
 
     notificationList.innerHTML = "";
-
-    homeNotifications = items.filter((item) => item.ativo !== false && item.ativo !== 0);
+    homeNotifications = items.filter((item) => item.ativo !== false && item.ativo !== 0 && item.ativo !== "0");
 
     if (!homeNotifications.length) {
       notificationList.innerHTML = "<p>Nenhuma notificação nova por enquanto.</p>";
@@ -233,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderNews(items) {
     if (!newsGrid) return;
 
-    const activeNews = items.filter((item) => item.ativo !== false && item.ativo !== 0);
+    const activeNews = items.filter((item) => item.ativo !== false && item.ativo !== 0 && item.ativo !== "0");
 
     if (!activeNews.length) {
       newsGrid.innerHTML = defaultNewsHTML;
@@ -241,7 +232,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     newsGrid.innerHTML = "";
-
     const fragment = document.createDocumentFragment();
 
     activeNews.forEach((item, index) => {
@@ -250,7 +240,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const tag = document.createElement("span");
       tag.className = "news-tag";
-      tag.textContent = item.importante ? `${item.categoria || "Aviso"} importante` : item.categoria || "Aviso";
+      tag.textContent = item.importante
+        ? `${item.categoria || "Aviso"} importante`
+        : item.categoria || "Aviso";
 
       const title = document.createElement("h3");
       title.textContent = item.titulo;
@@ -268,15 +260,28 @@ document.addEventListener("DOMContentLoaded", () => {
     newsGrid.appendChild(fragment);
   }
 
+  function gerarIdTemporario() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+      return window.crypto.randomUUID();
+    }
+    return `temp_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+  }
+
   function normalizeCommunication(item = {}) {
     return {
-      id: item.id || item.doc_id || crypto.randomUUID(),
+      id: item.id || item.doc_id || item.uuid || gerarIdTemporario(),
       titulo: item.titulo || item.title || "Aviso",
       mensagem: item.mensagem || item.texto || item.descricao || "",
       categoria: item.categoria || item.tag || "Aviso",
-      importante: item.importante === true || item.importante === 1,
-      ativo: item.ativo !== false && item.ativo !== 0,
-      createdAt: item.createdAt || item.criado_em || item.criadoEm || item.data || item.atualizado_em || ""
+      importante: item.importante === true || item.importante === 1 || item.importante === "1",
+      ativo: item.ativo !== false && item.ativo !== 0 && item.ativo !== "0",
+      createdAt:
+        item.createdAt ||
+        item.criado_em ||
+        item.criadoEm ||
+        item.data ||
+        item.atualizado_em ||
+        ""
     };
   }
 
@@ -295,12 +300,12 @@ document.addEventListener("DOMContentLoaded", () => {
         window.AmorSaudeAPI.listar("noticias")
       ]);
 
-      const notificacoes = (notificacoesResp.dados || [])
+      const notificacoes = (notificacoesResp.dados || notificacoesResp.items || [])
         .map(normalizeCommunication)
         .sort((a, b) => dateMillis(b.createdAt) - dateMillis(a.createdAt))
         .slice(0, 12);
 
-      const noticias = (noticiasResp.dados || [])
+      const noticias = (noticiasResp.dados || noticiasResp.items || [])
         .map(normalizeCommunication)
         .sort((a, b) => dateMillis(b.createdAt) - dateMillis(a.createdAt))
         .slice(0, 6);
@@ -342,7 +347,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   markAllRead?.addEventListener("click", () => {
     const readSet = getReadSet();
-
     homeNotifications.forEach((item) => readSet.add(item.id));
     saveReadSet(readSet);
 
@@ -356,15 +360,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", function (event) {
       const targetId = this.getAttribute("href");
-
       if (!targetId || targetId === "#") return;
 
       const target = document.querySelector(targetId);
-
       if (!target) return;
 
       event.preventDefault();
-
       closeMenu();
       closeNotifications();
       closeProfile();
@@ -382,7 +383,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const targetId = item.dataset.scrollTarget;
       const target = targetId ? document.querySelector(targetId) : null;
-
       if (!target) return;
 
       closeMenu();
@@ -401,10 +401,15 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.target.closest("a, button, input, select, textarea")) return;
 
       const url = item.dataset.openUrl;
+      if (url) window.location.href = url;
+    });
 
-      if (url) {
-        window.location.href = url;
-      }
+    item.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+
+      const url = item.dataset.openUrl;
+      if (url) window.location.href = url;
     });
   });
 
@@ -428,21 +433,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateBackToTop() {
     if (!backToTop) return;
-
     backToTop.classList.toggle("show", window.scrollY > 420);
   }
 
-  window.addEventListener("scroll", updateBackToTop, {
-    passive: true
-  });
-
+  window.addEventListener("scroll", updateBackToTop, { passive: true });
   updateBackToTop();
 
   backToTop?.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   window.addEventListener("usuario-carregado", carregarComunicadosHome);
