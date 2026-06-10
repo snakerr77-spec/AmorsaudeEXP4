@@ -1,0 +1,129 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userPath() {
+      return /databases/$(database)/documents/usuarios/$(request.auth.uid);
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function userExists() {
+      return signedIn() && exists(userPath());
+    }
+
+    function userData() {
+      return get(userPath()).data;
+    }
+
+    function isActive() {
+      return userExists() && userData().ativo == true;
+    }
+
+    function hasRole(roles) {
+      return isActive() && userData().nivelAcesso in roles;
+    }
+
+    match /usuarios/{userId} {
+      allow read: if isOwner(userId) || hasRole(["admin"]);
+
+      allow create: if isOwner(userId)
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.nivelAcesso == "colaborador"
+        && request.resource.data.ativo == false;
+
+      allow update: if hasRole(["admin"])
+        || (
+          isOwner(userId)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["ultimoLogin"])
+        );
+
+      allow delete: if hasRole(["admin"]);
+    }
+
+    match /medicos/{docId} {
+      allow read: if isActive();
+      allow create, update, delete: if hasRole(["admin", "financeiro"]);
+    }
+
+    match /dadosMedicos/{docId} {
+      allow read: if isActive();
+      allow create, update, delete: if hasRole(["admin", "financeiro"]);
+    }
+
+    match /especialidades/{docId} {
+      allow read: if isActive();
+      allow create, update, delete: if hasRole(["admin", "financeiro"]);
+    }
+
+    match /horariosConsulta/{docId} {
+      allow read: if isActive();
+      allow create, update, delete: if hasRole(["admin", "financeiro"]);
+    }
+
+    match /exames/{docId} {
+      allow read: if isActive();
+      allow create, update, delete: if hasRole(["admin", "financeiro"]);
+    }
+
+    match /noticias/{docId} {
+      allow read: if isActive();
+      allow create, update, delete: if hasRole(["admin"]);
+    }
+
+    match /notificacoes/{docId} {
+      allow read: if isActive();
+      allow create, update, delete: if hasRole(["admin"]);
+    }
+
+    match /financeiro/{docId} {
+      allow read, create, update, delete: if hasRole(["admin", "financeiro"]);
+    }
+
+    match /auditoria/{docId} {
+      allow create: if isActive();
+      allow read: if hasRole(["admin"]);
+      allow update, delete: if false;
+    }
+
+    /*
+      ÁREA NOVA: CANDIDATOS MÉDICOS
+      Página pública pode enviar cadastro.
+      Somente admin e financeiro podem ver, editar, aprovar ou excluir.
+    */
+    match /candidatosMedicos/{docId} {
+      allow create: if true;
+      allow read, update, delete: if hasRole(["admin", "financeiro"]);
+    }
+
+    /*
+      ÁREA NOVA: PRONTUÁRIOS MÉDICOS
+      Admin, financeiro e médico conseguem acessar.
+      Colaborador comum não consegue.
+    */
+    match /prontuariosMedicos/{docId} {
+      allow read, create, update: if hasRole(["admin", "financeiro", "medico"]);
+      allow delete: if hasRole(["admin", "financeiro"]);
+    }
+
+    /*
+      ÁREA NOVA: PACIENTES DO PRONTUÁRIO
+      Usado para salvar pacientes atendidos no dia e no mês.
+    */
+    match /pacientesProntuario/{docId} {
+      allow read, create, update: if hasRole(["admin", "financeiro", "medico"]);
+      allow delete: if hasRole(["admin", "financeiro"]);
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

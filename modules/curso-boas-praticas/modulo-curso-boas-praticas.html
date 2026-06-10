@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boas Práticas de Atendimento - LAG Controller</title>
+  <link rel="stylesheet" href="modulo-curso-boas-praticas.css?v=20260526-search-baby1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/lag-global.css?v=lag-controller-20260609">
+</head>
+<body id="topo" data-protected-page="true">
+  <nav class="curso-nav">
+    <a href="../../pages/home.html">← Home</a>
+    <a href="../treinamentos/treinamentos.html">Treinamentos</a>
+    <a href="../lag-controller/index.html" data-lag-only hidden>LAG Controller</a>
+  </nav>
+
+  <main class="curso-page">
+    <div class="container">
+      <header class="topo-curso">
+        <div>
+          <span class="tag-curso">Via C-Vortex</span>
+          <h1>Boas Práticas de Atendimento</h1>
+          <p>Desenvolva um atendimento mais humanizado, claro e acolhedor em cada etapa do contato com o paciente.</p>
+        </div>
+
+        <div class="progresso-geral-box">
+          <span class="progresso-label">Conclusão do curso</span>
+          <div class="barra-geral">
+            <div class="barra-geral-fill" id="barraGeralFill" style="width: 0%;"></div>
+          </div>
+          <strong id="porcentagemCurso">0%</strong>
+        </div>
+      </header>
+
+      <section class="curso-layout">
+        <aside class="sidebar-modulos">
+          <h2>Módulos do curso</h2>
+
+          <button class="modulo-item active" data-modulo="0">
+            <span class="modulo-num">01</span>
+            <div>
+              <strong>Apresentação do curso</strong>
+              <small>Introdução</small>
+            </div>
+            <span class="status pendente">•</span>
+          </button>
+
+          <button class="modulo-item" data-modulo="1">
+            <span class="modulo-num">02</span>
+            <div>
+              <strong>Recepção e primeiro contato</strong>
+              <small>Via C-Vortex</small>
+            </div>
+            <span class="status pendente">•</span>
+          </button>
+
+          <button class="modulo-item" data-modulo="2">
+            <span class="modulo-num">03</span>
+            <div>
+              <strong>Comunicação humanizada</strong>
+              <small>Via C-Vortex</small>
+            </div>
+            <span class="status pendente">•</span>
+          </button>
+
+          <button class="modulo-item" data-modulo="3">
+            <span class="modulo-num">04</span>
+            <div>
+              <strong>Organização e postura</strong>
+              <small>Via C-Vortex</small>
+            </div>
+            <span class="status pendente">•</span>
+          </button>
+
+          <button class="modulo-item" data-modulo="4">
+            <span class="modulo-num">05</span>
+            <div>
+              <strong>Quiz final</strong>
+              <small>Avaliação</small>
+            </div>
+            <span class="status pendente">•</span>
+          </button>
+        </aside>
+
+        <section class="conteudo-modulo">
+          <div class="video-card">
+            <div class="video-topo">
+              <div>
+                <span class="mini-tag" id="tipoConteudo">Vídeo</span>
+                <h2 id="tituloModulo">Apresentação do curso</h2>
+                <p id="descricaoModulo">Entenda a importância das boas práticas de atendimento e como elas impactam a experiência do paciente.</p>
+              </div>
+
+              <button class="btn-concluir" id="btnConcluirAula">Concluir aula</button>
+            </div>
+
+            <div class="video-box" id="areaConteudo">
+              <iframe
+                id="videoFrame"
+                src="https://www.youtube.com/embed/ysz5S6PUM-U"
+                title="Vídeo do curso"
+                frameborder="0"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+
+          <div class="quiz-card hidden" id="quizCard">
+            <div class="quiz-head">
+              <span class="mini-tag quiz-tag">Quiz</span>
+              <h3>Pergunta do módulo</h3>
+              <p>Selecione a alternativa correta.</p>
+            </div>
+
+            <div class="quiz-pergunta">
+              <p id="perguntaQuiz">Qual atitude demonstra uma boa prática de atendimento ao paciente?</p>
+            </div>
+
+            <div class="quiz-opcoes" id="quizOpcoes"></div>
+
+            <div class="quiz-resultado" id="quizResultado"></div>
+          </div>
+ 
+            <div class="proximo-modulo-box hidden" id="proximoModuloBox">
+            <a href="../treinamentos/treinamentos.html" class="btn-proximo-modulo">Ir para o próximo módulo →</a>
+         </div>
+          
+          <div class="resumo-card">
+            <h3>Seu progresso</h3>
+
+            <div class="etapas">
+              <div class="etapa">
+                <span>Vídeos concluídos</span>
+                <strong id="videosConcluidos">0/4</strong>
+              </div>
+
+              <div class="etapa">
+                <span>Quiz concluído</span>
+                <strong id="quizConcluido">0/1</strong>
+              </div>
+
+              <div class="etapa">
+                <span>Status</span>
+                <strong id="statusCurso">Em andamento</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script src="modulo-curso-boas-praticas.js"></script>
+  <button class="curso-back-top" id="cursoBackToTop" type="button" aria-label="Voltar ao topo">↑</button>
+  <script type="module" src="../../js/firebase-config.js?v=20260601-adminfix1"></script>
+</body>
+</html>
