@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contratação Médica | LAG Controller</title>
+  <link rel="stylesheet" href="../../css/home.css?v=20260528-contratacao-medicos1">
+  <link rel="stylesheet" href="contratacao-medicos.css?v=20260528-contratacao-medicos1">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/lag-global.css?v=lag-controller-20260609">
+</head>
+<body data-protected-page="true" data-allowed-roles="admin,financeiro,gerencia">
+  <header class="hiring-topbar">
+    <div class="container hiring-nav">
+      <a class="hiring-brand" href="../../pages/home.html" aria-label="Voltar para home">
+        <img src="../../assets/images/logo-lag.png" alt="Logo LAG Controller">
+      </a>
+
+      <nav>
+        <a href="../../pages/home.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="../../pages/perfil.html"><i class="fa-regular fa-user"></i> Perfil</a>
+        <a href="../../modules/prontuario-medico/prontuario-medico.html" data-medical-only hidden><i class="fa-solid fa-file-medical"></i> Área médica</a>
+        <button type="button" onclick="sairDaConta()"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="hiring-main">
+    <section class="hiring-hero">
+      <div class="container hiring-hero-grid">
+        <div>
+          <span class="hiring-eyebrow"><i class="fa-solid fa-user-doctor"></i> Admin e financeiro</span>
+          <h1>Contratação médica</h1>
+          <p>Área separada da medicina para copiar o link de cadastro, acompanhar médicos interessados e aprovar profissionais para a coleção de médicos da clínica.</p>
+        </div>
+        <div class="hiring-hero-card">
+          <strong>Permissão da página</strong>
+          <span>Somente usuários com nível <b>admin</b> ou <b>financeiro</b> conseguem acessar.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="container hiring-shell">
+      <div class="hiring-status" id="hiringStatusMessage"></div>
+
+      <div class="hiring-grid">
+        <article class="hiring-card link-card">
+          <div class="hiring-card-head">
+            <i class="fa-solid fa-link"></i>
+            <div>
+              <span>Link público</span>
+              <h2>Enviar ficha para médicos</h2>
+            </div>
+          </div>
+          <p>Copie este link e envie para médicos pelo WhatsApp, e-mail ou redes sociais. A ficha fica em uma página pública separada, fora da Área Médica.</p>
+
+          <div class="hiring-copy-box">
+            <input type="text" id="hiringPublicLink" readonly value="" aria-label="Link público de cadastro médico">
+            <button type="button" id="copyHiringPublicLink"><i class="fa-regular fa-copy"></i> Copiar</button>
+          </div>
+
+          <div class="hiring-actions-line">
+            <a class="hiring-primary-link" id="openHiringPublicPage" href="../../pages/cadastro-medico.html" target="_blank" rel="noopener">
+              Abrir ficha pública <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+            <a class="hiring-soft-link" href="../../pages/perfil.html">
+              Voltar ao perfil
+            </a>
+          </div>
+        </article>
+
+        <article class="hiring-card stats-card">
+          <div class="hiring-card-head">
+            <i class="fa-solid fa-chart-simple"></i>
+            <div>
+              <span>Resumo</span>
+              <h2>Cadastros recebidos</h2>
+            </div>
+          </div>
+          <div class="hiring-stats">
+            <div>
+              <strong id="candidateTotalCount">0</strong>
+              <span>Total</span>
+            </div>
+            <div>
+              <strong id="candidateNewCount">0</strong>
+              <span>Novos</span>
+            </div>
+            <div>
+              <strong id="candidateApprovedCount">0</strong>
+              <span>Aprovados</span>
+            </div>
+          </div>
+          <button type="button" class="hiring-refresh" id="refreshCandidates"><i class="fa-solid fa-rotate"></i> Atualizar lista</button>
+        </article>
+      </div>
+
+      <section class="hiring-card candidates-card">
+        <div class="candidates-head">
+          <div>
+            <span>Processo seletivo</span>
+            <h2>Médicos interessados em trabalhar na clínica</h2>
+            <p>Veja as fichas enviadas, marque o status de análise e aprove médicos para salvar na coleção <b>medicos</b>.</p>
+          </div>
+          <div class="candidates-filter">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="search" id="candidateSearch" placeholder="Buscar por nome, CRM, cidade ou especialidade">
+          </div>
+        </div>
+        <div class="candidate-list" id="candidateList"></div>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="../../js/firebase-config.js?v=20260601-adminfix1"></script>
+  <script type="module" src="contratacao-medicos.js?v=20260528-contratacao-medicos1"></script>
+</body>
+</html>
