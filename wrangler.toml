@@ -1,0 +1,21 @@
+name = "amorsaudeexp4"
+main = "src/worker.js"
+compatibility_date = "2026-06-29"
+workers_dev = true
+keep_vars = true
+
+[observability]
+enabled = true
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/api"]
+not_found_handling = "404-page"
+
+# D1 do LAG Controller.
+# Esse formato sem database_id usa provisionamento automático do Wrangler/Cloudflare.
+# Se seu deploy reclamar pedindo database_id, use o arquivo wrangler.manual.toml como modelo.
+[[d1_databases]]
+binding = "DB"
+database_name = "amorsaudeexp4-db"
