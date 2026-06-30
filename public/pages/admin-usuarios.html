@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin | LAG Controller</title>
+  <link rel="stylesheet" href="../css/admin-usuarios.css?v=20260601-acessos1" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css?v=20260526-search-baby1" rel="stylesheet">
+  <link rel="stylesheet" href="/css/lag-global.css?v=lag-controller-20260609">
+</head>
+<body data-protected-page="true" data-required-role="admin">
+  <header class="admin-topbar">
+    <a class="brand" href="home.html">
+      <img src="../assets/images/logo-lag.png" alt="LAG Controller" />
+      <span>Painel Admin</span>
+    </a>
+    <nav>
+      <a class="admin-nav-link" href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a class="admin-nav-link" href="perfil.html"><i class="fa-regular fa-user"></i> Meu perfil</a>
+      <button class="admin-nav-link admin-logout" type="button" onclick="sairDaConta()"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <section class="hero-admin">
+      <div>
+        <span class="eyebrow">Controle de acesso</span>
+        <h1>Usuários cadastrados</h1>
+        <p>Gerencie acessos, bloqueie contas e organize permissões com uma experiência mais limpa e profissional.</p>
+      </div>
+      <div class="admin-stats">
+        <article>
+          <strong id="statTotal">0</strong>
+          <span>Total</span>
+        </article>
+        <article>
+          <strong id="statAtivos">0</strong>
+          <span>Ativos</span>
+        </article>
+        <article>
+          <strong id="statBloqueados">0</strong>
+          <span>Bloqueados</span>
+        </article>
+      </div>
+    </section>
+
+
+
+    <section class="admin-communication-center" id="adminCommunicationCenter">
+      <div class="communication-copy">
+        <span class="eyebrow">Comunicação interna</span>
+        <h2>Notificações e anúncios</h2>
+        <p>Crie avisos que aparecem para todos os colaboradores. Notificações entram no sininho da home; anúncios aparecem na área de notícias da clínica.</p>
+      </div>
+
+      <form class="communication-form" id="communicationForm">
+        <div class="form-grid">
+          <div class="field-row">
+            <label for="communicationType">Tipo de comunicado</label>
+            <select id="communicationType" required>
+              <option value="notificacao">Notificação no sininho</option>
+              <option value="anuncio">Anúncio / notícia na home</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <label for="communicationCategory">Categoria</label>
+            <select id="communicationCategory" required>
+              <option value="Aviso">Aviso</option>
+              <option value="Treinamento">Treinamento</option>
+              <option value="Médicos e exames">Médicos e exames</option>
+              <option value="Financeiro">Financeiro</option>
+              <option value="Sistema">Sistema</option>
+              <option value="Urgente">Urgente</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <label for="communicationTitle">Título</label>
+          <input id="communicationTitle" type="text" maxlength="80" placeholder="Ex: Nova escala disponível" required />
+        </div>
+
+        <div class="field-row">
+          <label for="communicationMessage">Mensagem</label>
+          <textarea id="communicationMessage" rows="4" maxlength="420" placeholder="Escreva o aviso que todos os colaboradores vão receber." required></textarea>
+        </div>
+
+        <div class="communication-actions">
+          <label class="communication-check">
+            <input id="communicationImportant" type="checkbox" />
+            <span>Marcar como importante</span>
+          </label>
+          <button class="publish-communication" id="publishCommunication" type="submit">
+            <i class="fa-solid fa-paper-plane"></i> Publicar para todos
+          </button>
+        </div>
+
+        <p class="admin-message communication-message" id="communicationMessageStatus">Preencha os campos para publicar um comunicado.</p>
+      </form>
+
+      <div class="communication-history">
+        <div class="communication-history-head">
+          <h3>Últimos comunicados</h3>
+          <button id="refreshCommunications" type="button"><i class="fa-solid fa-rotate"></i> Atualizar</button>
+        </div>
+        <div class="communication-list" id="communicationList">
+          <p class="empty-communication">Carregando comunicados...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <label class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="userSearch" type="search" placeholder="Buscar por nome ou e-mail" />
+      </label>
+      <button id="refreshUsers" class="refresh-users-btn" type="button"><i class="fa-solid fa-rotate"></i> Atualizar lista</button>
+    </section>
+
+    <p class="admin-message" id="adminMessage">Carregando usuários...</p>
+
+    <section class="users-grid" id="usersGrid"></section>
+  </main>
+
+  <template id="userCardTemplate">
+    <article class="user-card">
+      <div class="user-card-head">
+        <img class="avatar" src="../modules/lag-controller/assets/lobo-parado.png" alt="Foto do usuário" />
+        <div>
+          <h3 data-name>Usuário</h3>
+          <p data-email>email</p>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label>Status</label>
+        <select data-active>
+          <option value="true">Ativo</option>
+          <option value="false">Bloqueado</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <label>Nível de acesso</label>
+        <select data-role>
+          <option value="admin">Admin</option>
+          <option value="financeiro">Financeiro</option>
+          <option value="gerencia">Gerência</option>
+          <option value="cdt">CDT</option>
+          <option value="recepcao">Recepção</option>
+          <option value="medico">Médico</option>
+          <option value="colaborador">Colaborador</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <label>Cidade da unidade</label>
+        <select data-city>
+          <option value="Embu das Artes">Embu das Artes</option>
+          <option value="Itapeva">Itapeva</option>
+          <option value="Tatui">Tatui</option>
+          <option value="Cerquilho">Cerquilho</option>
+        </select>
+      </div>
+
+      <div class="user-meta">
+        <span data-created>Cadastro: --</span>
+        <span data-last-login>Último login: --</span>
+      </div>
+
+      <button class="save-user" type="button"><i class="fa-solid fa-floppy-disk"></i> Salvar alterações</button>
+    </article>
+  </template>
+
+
+
+  <template id="communicationCardTemplate">
+    <article class="communication-card">
+      <div class="communication-card-top">
+        <span data-communication-type>Notificação</span>
+        <button class="delete-communication" type="button" title="Excluir comunicado"><i class="fa-solid fa-trash-can"></i></button>
+      </div>
+      <h4 data-communication-title>Título</h4>
+      <p data-communication-text>Mensagem</p>
+      <div class="communication-card-foot">
+        <small data-communication-category>Aviso</small>
+        <small data-communication-date>Agora</small>
+      </div>
+    </article>
+  </template>
+
+  <script src="../js/cloud-auth.js?v=cloudflare-d1-corrigido"></script>
+  <script type="module" src="../js/firebase-config.js?v=compat-cloudflare-d1"></script>
+  <script type="module" src="../js/admin-usuarios.js?v=cloudflare-d1-corrigido"></script>
+</body>
+</html>
