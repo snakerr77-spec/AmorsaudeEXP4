@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light" data-accent="teal" data-density="comfortable">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f4f8fb" />
+  <title>Meu Perfil | LAG Controller</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: light;
+      --navy-950: #041a3a;
+      --navy-900: #08254c;
+      --navy-800: #10345f;
+      --navy-700: #244c72;
+      --navy-600: #526d87;
+      --teal-700: #087f82;
+      --teal-600: #00989b;
+      --teal-500: #10b8b9;
+      --teal-400: #40ced0;
+      --blue-600: #2a6de8;
+      --green-600: #19a968;
+      --orange-500: #f59e0b;
+      --red-500: #e34b59;
+      --page: #f4f8fb;
+      --page-2: #eef4f8;
+      --surface: rgba(255, 255, 255, .94);
+      --surface-solid: #ffffff;
+      --surface-soft: #f8fbfd;
+      --surface-strong: #edf4f7;
+      --text: var(--navy-950);
+      --muted: #6a7f94;
+      --line: #dce7ee;
+      --line-strong: #cbdbe5;
+      --shadow-sm: 0 8px 22px rgba(5, 35, 72, .06);
+      --shadow-md: 0 18px 48px rgba(5, 35, 72, .10);
+      --shadow-lg: 0 30px 80px rgba(4, 26, 58, .18);
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --accent: var(--teal-600);
+      --accent-strong: var(--teal-700);
+      --accent-soft: rgba(0, 152, 155, .11);
+      --accent-soft-2: rgba(16, 184, 185, .18);
+      --topbar-h: 72px;
+      --control-h: 46px;
+      --content-pad: 26px;
+    }
+
+    html[data-accent="blue"] {
+      --accent: #2876ea;
+      --accent-strong: #155dcc;
+      --accent-soft: rgba(40, 118, 234, .11);
+      --accent-soft-2: rgba(40, 118, 234, .18);
+    }
+
+    html[data-accent="violet"] {
+      --accent: #7558e8;
+      --accent-strong: #5e42cf;
+      --accent-soft: rgba(117, 88, 232, .11);
+      --accent-soft-2: rgba(117, 88, 232, .18);
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --page: #07111f;
+      --page-2: #0a1727;
+      --surface: rgba(12, 26, 43, .94);
+      --surface-solid: #0d1c2d;
+      --surface-soft: #112338;
+      --surface-strong: #142a42;
+      --text: #edf7ff;
+      --muted: #9bb0c5;
+      --line: #21374e;
+      --line-strong: #2a455f;
+      --shadow-sm: 0 8px 22px rgba(0, 0, 0, .20);
+      --shadow-md: 0 18px 48px rgba(0, 0, 0, .30);
+      --shadow-lg: 0 30px 80px rgba(0, 0, 0, .45);
+      --navy-950: #f0f8ff;
+      --navy-900: #d9edff;
+      --navy-800: #c8e4fb;
+      --navy-700: #b1cce3;
+      --navy-600: #91aac0;
+    }
+
+    html[data-density="compact"] {
+      --control-h: 40px;
+      --content-pad: 21px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% -8%, var(--accent-soft-2), transparent 28rem),
+        radial-gradient(circle at 92% 8%, rgba(42, 109, 232, .08), transparent 26rem),
+        linear-gradient(180deg, var(--page) 0%, var(--page-2) 100%);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+      transition: background .25s ease, color .25s ease;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+    button { color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; }
+    [hidden] { display: none !important; }
+
+    :focus-visible {
+      outline: 3px solid var(--accent-soft-2);
+      outline-offset: 2px;
+    }
+
+    .svg-sprite {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      display: flex;
+      min-height: var(--topbar-h);
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 0 30px;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 90%, transparent);
+      background: color-mix(in srgb, var(--surface-solid) 84%, transparent);
+      box-shadow: 0 4px 22px rgba(5, 35, 72, .035);
+      backdrop-filter: blur(18px) saturate(130%);
+    }
+
+    .brand {
+      display: inline-flex;
+      min-width: 212px;
+      align-items: center;
+      gap: 11px;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -.045em;
+      white-space: nowrap;
+    }
+
+    .brand strong { font-weight: 800; }
+    .brand-logo { width: 40px; height: 40px; flex: 0 0 40px; }
+
+    .topbar-center {
+      display: flex;
+      width: min(430px, 38vw);
+      align-items: center;
+    }
+
+    .global-search {
+      position: relative;
+      width: 100%;
+    }
+
+    .global-search .icon {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .global-search input {
+      width: 100%;
+      min-height: 42px;
+      padding: 0 44px 0 42px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      outline: none;
+      color: var(--text);
+      background: var(--surface-strong);
+      transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .global-search input:focus {
+      border-color: var(--accent);
+      background: var(--surface-solid);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .search-key {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      min-width: 25px;
+      padding: 3px 6px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--muted);
+      background: var(--surface-solid);
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+      transform: translateY(-50%);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .topbar-link,
+    .topbar-button,
+    .access-menu > summary {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: 11px;
+      color: var(--navy-800);
+      background: transparent;
+      font-size: 13px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .topbar-link:hover,
+    .topbar-button:hover,
+    .access-menu > summary:hover,
+    .access-menu[open] > summary {
+      color: var(--accent-strong);
+      background: var(--accent-soft);
+    }
+
+    .topbar-link:active, .topbar-button:active { transform: translateY(1px); }
+    .topbar-link.is-current { color: var(--accent-strong); }
+
+    .notification-button { position: relative; padding-inline: 10px; }
+    .notification-dot {
+      position: absolute;
+      top: 9px;
+      right: 8px;
+      width: 7px;
+      height: 7px;
+      border: 2px solid var(--surface-solid);
+      border-radius: 50%;
+      background: var(--red-500);
+    }
+
+    .access-menu { position: relative; }
+    .access-menu > summary { list-style: none; }
+    .access-menu > summary::-webkit-details-marker { display: none; }
+    .access-menu > summary::after { content: "⌄"; font-size: 13px; }
+
+    .access-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      display: grid;
+      width: 258px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--surface-solid);
+      box-shadow: var(--shadow-md);
+      animation: menu-in .16s ease-out;
+    }
+
+    .access-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .access-dropdown a:hover { color: var(--accent-strong); background: var(--accent-soft); }
+
+    .mobile-menu-button { display: none; }
+
+    .shell {
+      width: min(1460px, calc(100% - 44px));
+      margin: 0 auto;
+      padding: 17px 0 42px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      min-height: 28px;
+      align-items: center;
+      gap: 9px;
+      margin: 0 2px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 550;
+    }
+
+    .breadcrumb a:hover { color: var(--accent-strong); }
+
+    .layout {
+      display: grid;
+      align-items: start;
+      grid-template-columns: 220px minmax(0, 1fr) 292px;
+      grid-template-rows: auto 1fr;
+      gap: 17px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(12px);
+    }
+
+    .profile-hero {
+      position: relative;
+      min-height: 174px;
+      overflow: hidden;
+      grid-column: 1 / 3;
+      grid-row: 1;
+      border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(110deg, color-mix(in srgb, var(--surface-solid) 78%, var(--accent-soft)) 0%, color-mix(in srgb, var(--accent-soft) 65%, var(--surface-solid)) 100%);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .profile-cover {
+      position: absolute;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      opacity: .26;
+      transition: opacity .2s ease;
+      pointer-events: none;
+    }
+
+    .profile-hero::before,
+    .profile-hero::after {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--accent-soft-2);
+      content: "";
+      pointer-events: none;
+    }
+
+    .profile-hero::before { width: 260px; height: 260px; right: -54px; top: -122px; }
+    .profile-hero::after { width: 150px; height: 150px; right: 128px; bottom: -85px; opacity: .65; }
+
+    .profile-main {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      min-height: 174px;
+      align-items: center;
+      gap: 26px;
+      padding: 24px 32px;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      display: grid;
+      width: 112px;
+      height: 112px;
+      flex: 0 0 112px;
+      place-items: center;
+      overflow: visible;
+      border: 4px solid color-mix(in srgb, var(--surface-solid) 90%, transparent);
+      border-radius: 31px;
+      background: linear-gradient(145deg, #d9f4ef, #bce8df);
+      box-shadow: 0 15px 34px rgba(4, 78, 83, .16);
+      transform: rotate(-2deg);
+    }
+
+    .avatar-wrap::after {
+      position: absolute;
+      inset: 5px;
+      border: 1px solid rgba(255, 255, 255, .48);
+      border-radius: 24px;
+      content: "";
+      pointer-events: none;
+    }
+
+    .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      border-radius: 27px;
+      object-fit: cover;
+      transform: rotate(2deg);
+    }
+
+    .avatar-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 27px;
+      color: var(--teal-700);
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -.04em;
+      transform: rotate(2deg);
+    }
+
+    .avatar-change {
+      position: absolute;
+      right: -10px;
+      bottom: -9px;
+      z-index: 3;
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border: 4px solid var(--surface-solid);
+      border-radius: 14px;
+      color: var(--accent-strong);
+      background: var(--surface-solid);
+      box-shadow: 0 8px 18px rgba(5, 35, 72, .18);
+      cursor: pointer;
+      transform: rotate(2deg);
+      transition: transform .18s ease, color .18s ease;
+    }
+
+    .avatar-change:hover { color: var(--accent); transform: rotate(2deg) translateY(-2px); }
+    .avatar-change .icon { width: 17px; height: 17px; }
+
+    .profile-identity { min-width: 0; flex: 1; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 8px;
+      color: var(--accent-strong);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before { width: 22px; height: 2px; border-radius: 2px; background: var(--accent); content: ""; }
+
+    .profile-identity h1 {
+      overflow: hidden;
+      margin: 0;
+      color: var(--navy-950);
+      font-size: clamp(25px, 2.4vw, 34px);
+      font-weight: 800;
+      letter-spacing: -.045em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .profile-identity > p {
+      overflow: hidden;
+      margin: 6px 0 13px;
+      color: var(--muted);
+      font-size: 13px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .profile-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
+
+    .meta-pill {
+      display: inline-flex;
+      min-height: 29px;
+      align-items: center;
+      gap: 7px;
+      padding: 0 11px;
+      border: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+      border-radius: 999px;
+      color: var(--navy-700);
+      background: color-mix(in srgb, var(--surface-solid) 75%, transparent);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-600); box-shadow: 0 0 0 4px rgba(25, 169, 104, .10); }
+    .role-pill { color: var(--accent-strong); border-color: color-mix(in srgb, var(--accent) 23%, var(--line)); background: var(--accent-soft); text-transform: capitalize; }
+
+    .hero-completion {
+      position: relative;
+      display: grid;
+      width: 96px;
+      height: 96px;
+      flex: 0 0 96px;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent) var(--completion, 0%), color-mix(in srgb, var(--line) 75%, transparent) 0);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--surface-solid) 60%, transparent);
+    }
+
+    .hero-completion::before {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--surface-solid) 92%, transparent);
+      content: "";
+    }
+
+    .completion-copy { position: relative; z-index: 1; text-align: center; }
+    .completion-copy strong { display: block; font-size: 20px; letter-spacing: -.04em; }
+    .completion-copy span { color: var(--muted); font-size: 9px; font-weight: 700; text-transform: uppercase; }
+
+    .settings-nav {
+      position: sticky;
+      top: calc(var(--topbar-h) + 17px);
+      display: flex;
+      min-height: 570px;
+      flex-direction: column;
+      grid-column: 1;
+      grid-row: 2;
+      padding: 13px;
+    }
+
+    .settings-title {
+      margin: 5px 8px 13px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .settings-links { display: grid; gap: 5px; }
+
+    .settings-link {
+      position: relative;
+      display: flex;
+      width: 100%;
+      min-height: 48px;
+      align-items: center;
+      gap: 13px;
+      padding: 0 13px;
+      border: 0;
+      border-radius: 12px;
+      color: var(--navy-700);
+      background: transparent;
+      font-weight: 650;
+      text-align: left;
+      cursor: pointer;
+      transition: color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+
+    .settings-link:hover { color: var(--accent-strong); background: var(--accent-soft); transform: translateX(2px); }
+    .settings-link.is-active { color: #fff; background: linear-gradient(135deg, var(--accent-strong), var(--accent)); box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 26%, transparent); }
+    .settings-link.is-active::after { position: absolute; right: 12px; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.85); content: ""; }
+
+    .support-card {
+      margin-top: auto;
+      padding: 15px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(145deg, var(--surface-soft), var(--surface-solid));
+    }
+
+    .support-icon { display: grid; width: 34px; height: 34px; place-items: center; margin-bottom: 10px; border-radius: 11px; color: var(--accent-strong); background: var(--accent-soft); }
+    .support-card strong { display: block; margin-bottom: 5px; font-size: 12px; }
+    .support-card p { margin: 0 0 12px; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .support-card a { display: inline-flex; align-items: center; gap: 7px; color: var(--accent-strong); font-size: 10px; font-weight: 800; }
+
+    .content-card {
+      grid-column: 2;
+      grid-row: 2;
+      overflow: hidden;
+    }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 21px var(--content-pad);
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--surface-solid), color-mix(in srgb, var(--surface-soft) 70%, transparent));
+    }
+
+    .content-header h2 { margin: 0 0 4px; font-size: 18px; letter-spacing: -.025em; }
+    .content-header p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+
+    .unsaved-badge {
+      display: inline-flex;
+      min-height: 29px;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      border: 1px solid color-mix(in srgb, var(--orange-500) 28%, var(--line));
+      border-radius: 999px;
+      color: #a86600;
+      background: rgba(245, 158, 11, .10);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .unsaved-badge::before { width: 7px; height: 7px; border-radius: 50%; background: var(--orange-500); content: ""; }
+
+    .profile-form { display: block; }
+    .view-panel { padding: var(--content-pad); animation: panel-in .20s ease-out; }
+
+    .section + .section { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .section-heading-main { display: flex; align-items: flex-start; gap: 11px; }
+    .section-icon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border-radius: 11px; color: var(--accent-strong); background: var(--accent-soft); }
+    .section-icon .icon { width: 18px; height: 18px; }
+    .section-heading h3 { margin: 1px 0 4px; font-size: 15px; letter-spacing: -.02em; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px 18px; }
+    .full { grid-column: 1 / -1; }
+
+    .field { display: grid; gap: 7px; min-width: 0; }
+    .field-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--navy-700); font-size: 10px; font-weight: 750; }
+    .field-hint { color: var(--muted); font-size: 9px; font-weight: 500; }
+    .required { color: var(--red-500); }
+
+    .control-wrap { position: relative; min-width: 0; }
+
+    .control {
+      width: 100%;
+      min-width: 0;
+      min-height: var(--control-h);
+      padding: 0 13px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-sm);
+      outline: 0;
+      color: var(--text);
+      background: var(--surface-solid);
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    textarea.control { min-height: 92px; resize: vertical; padding: 12px 13px 28px; line-height: 1.55; }
+    select.control { appearance: none; padding-right: 40px; cursor: pointer; }
+    .control:hover { border-color: color-mix(in srgb, var(--accent) 38%, var(--line-strong)); }
+    .control:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+    .control[readonly] { color: var(--muted); background: var(--surface-strong); cursor: not-allowed; }
+    .control.is-invalid { border-color: var(--red-500); box-shadow: 0 0 0 4px rgba(227, 75, 89, .09); }
+    .select-chevron { position: absolute; top: 50%; right: 13px; width: 16px; height: 16px; color: var(--muted); transform: translateY(-50%); pointer-events: none; }
+    .char-count { position: absolute; right: 11px; bottom: 8px; color: var(--muted); font-size: 9px; font-weight: 650; pointer-events: none; }
+    .field-error { min-height: 0; color: var(--red-500); font-size: 9px; font-weight: 650; }
+    .field-error:empty { display: none; }
+
+    .upload-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+
+    .upload-card {
+      position: relative;
+      display: flex;
+      min-height: 130px;
+      align-items: center;
+      gap: 15px;
+      overflow: hidden;
+      padding: 15px;
+      border: 1px dashed color-mix(in srgb, var(--accent) 38%, var(--line));
+      border-radius: 15px;
+      background: linear-gradient(145deg, var(--surface-solid), var(--surface-soft));
+      transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+
+    .upload-card:hover { border-color: var(--accent); box-shadow: 0 12px 26px var(--accent-soft); transform: translateY(-1px); }
+
+    .avatar-mini {
+      position: relative;
+      display: grid;
+      width: 82px;
+      height: 82px;
+      flex: 0 0 82px;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--line));
+      border-radius: 24px;
+      color: var(--accent-strong);
+      background: var(--accent-soft);
+      font-size: 23px;
+      font-weight: 750;
+    }
+
+    .avatar-mini img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+    .cover-mini {
+      width: min(46%, 180px);
+      height: 82px;
+      flex: 0 0 min(46%, 180px);
+      border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--line));
+      border-radius: 13px;
+      background:
+        radial-gradient(circle at 74% 20%, rgba(255,255,255,.35) 0 20%, transparent 21%),
+        linear-gradient(140deg, color-mix(in srgb, var(--accent) 58%, #9ff0ea), var(--accent-strong));
+      background-position: center;
+      background-size: cover;
+    }
+
+    .upload-copy { min-width: 0; }
+    .upload-copy strong { display: block; margin-bottom: 5px; font-size: 11px; }
+    .upload-copy p { margin: 0 0 10px; color: var(--muted); font-size: 9px; line-height: 1.5; }
+
+    .upload-action,
+    .secondary-button,
+    .danger-button,
+    .primary-button {
+      display: inline-flex;
+      min-height: 38px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 13px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;
+    }
+
+    .upload-action, .secondary-button {
+      border: 1px solid color-mix(in srgb, var(--accent) 56%, var(--line));
+      color: var(--accent-strong);
+      background: var(--surface-solid);
+    }
+
+    .upload-action:hover, .secondary-button:hover { color: #fff; border-color: var(--accent); background: var(--accent); transform: translateY(-1px); }
+
+    .primary-button {
+      border: 1px solid var(--accent);
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+      box-shadow: 0 10px 22px color-mix(in srgb, var(--accent) 25%, transparent);
+    }
+
+    .primary-button:hover { filter: saturate(1.08); box-shadow: 0 14px 28px color-mix(in srgb, var(--accent) 31%, transparent); transform: translateY(-1px); }
+    .primary-button:disabled { opacity: .65; cursor: wait; transform: none; }
+
+    .danger-button { border: 1px solid rgba(227, 75, 89, .30); color: var(--red-500); background: rgba(227, 75, 89, .07); }
+    .danger-button:hover { color: #fff; border-color: var(--red-500); background: var(--red-500); transform: translateY(-1px); }
+
+    .file-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+    .save-bar {
+      position: sticky;
+      z-index: 8;
+      bottom: 0;
+      display: flex;
+      min-height: 72px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px var(--content-pad);
+      border-top: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface-solid) 90%, transparent);
+      backdrop-filter: blur(15px);
+    }
+
+    .save-note { display: flex; min-width: 0; align-items: center; gap: 10px; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .save-note .icon { color: var(--accent-strong); }
+    .save-actions { display: flex; align-items: center; gap: 9px; }
+    .save-actions .primary-button { min-width: 150px; }
+
+    .settings-info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+
+    .info-card {
+      min-height: 130px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: linear-gradient(145deg, var(--surface-solid), var(--surface-soft));
+    }
+
+    .info-card-head { display: flex; align-items: flex-start; gap: 11px; }
+    .info-card-icon { display: grid; width: 36px; height: 36px; flex: 0 0 36px; place-items: center; border-radius: 11px; color: var(--accent-strong); background: var(--accent-soft); }
+    .info-card h4 { margin: 2px 0 5px; font-size: 12px; }
+    .info-card p { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.55; }
+    .info-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 15px; }
+
+    .value-chip { display: inline-flex; min-height: 28px; align-items: center; padding: 0 10px; border-radius: 999px; color: var(--accent-strong); background: var(--accent-soft); font-size: 9px; font-weight: 800; text-transform: capitalize; }
+    .success-chip { color: var(--green-600); background: rgba(25,169,104,.10); }
+
+    .permission-list { display: grid; gap: 9px; margin-top: 18px; }
+    .permission-item { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 14px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-solid); }
+    .permission-copy { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .permission-copy .icon { color: var(--accent-strong); }
+    .permission-copy strong { display: block; margin-bottom: 2px; font-size: 10px; }
+    .permission-copy span { display: block; color: var(--muted); font-size: 9px; }
+
+    .switch-row { display: flex; min-height: 66px; align-items: center; justify-content: space-between; gap: 18px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .switch-row:last-child { border-bottom: 0; }
+    .switch-copy strong { display: block; margin-bottom: 4px; font-size: 11px; }
+    .switch-copy p { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
+
+    .switch { position: relative; display: inline-flex; width: 46px; height: 26px; flex: 0 0 46px; }
+    .switch input { position: absolute; opacity: 0; pointer-events: none; }
+    .switch-track { position: absolute; inset: 0; border-radius: 999px; background: var(--line-strong); cursor: pointer; transition: background .2s ease; }
+    .switch-track::after { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 2px 7px rgba(0,0,0,.18); content: ""; transition: transform .2s ease; }
+    .switch input:checked + .switch-track { background: var(--accent); }
+    .switch input:checked + .switch-track::after { transform: translateX(20px); }
+
+    .appearance-group + .appearance-group { margin-top: 23px; padding-top: 23px; border-top: 1px solid var(--line); }
+    .appearance-group h4 { margin: 0 0 4px; font-size: 12px; }
+    .appearance-group > p { margin: 0 0 13px; color: var(--muted); font-size: 9px; }
+
+    .choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11px; }
+    .choice-card { position: relative; display: grid; min-height: 102px; place-items: center; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-solid); text-align: center; cursor: pointer; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+    .choice-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .choice-card.is-selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .choice-card .icon { width: 24px; height: 24px; color: var(--accent-strong); }
+    .choice-card strong { font-size: 10px; }
+    .choice-card small { color: var(--muted); font-size: 8px; }
+    .choice-card input { position: absolute; opacity: 0; }
+
+    .accent-options { display: flex; flex-wrap: wrap; gap: 10px; }
+    .accent-option { position: relative; display: grid; width: 42px; height: 42px; place-items: center; border: 2px solid transparent; border-radius: 13px; background: var(--surface-strong); cursor: pointer; }
+    .accent-option::before { width: 22px; height: 22px; border-radius: 8px; background: var(--swatch); content: ""; }
+    .accent-option.is-selected { border-color: var(--swatch); box-shadow: 0 0 0 3px color-mix(in srgb, var(--swatch) 16%, transparent); }
+    .accent-option input { position: absolute; opacity: 0; }
+
+    .side-rail {
+      display: grid;
+      align-self: stretch;
+      grid-column: 3;
+      grid-row: 1 / 3;
+      align-content: start;
+      gap: 17px;
+    }
+
+    .side-card { padding: 20px; }
+    .side-card-head { display: flex; align-items: flex-start; gap: 12px; }
+    .side-card-icon { display: grid; width: 42px; height: 42px; flex: 0 0 42px; place-items: center; border-radius: 13px; color: var(--accent-strong); background: var(--accent-soft); }
+    .side-card h3 { margin: 2px 0 5px; font-size: 13px; letter-spacing: -.02em; }
+    .side-card p { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.55; }
+
+    .unit-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); }
+    .unit-summary strong { display: block; margin-bottom: 2px; font-size: 11px; }
+    .unit-summary span { color: var(--muted); font-size: 8px; }
+
+    .side-select { position: relative; margin-top: 12px; }
+    .side-select .control { min-height: 41px; font-size: 10px; font-weight: 700; }
+
+    .completion-list { display: grid; gap: 10px; margin-top: 16px; }
+    .completion-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 9px; }
+    .completion-label { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+    .mini-check { display: grid; width: 18px; height: 18px; place-items: center; border-radius: 50%; color: #fff; background: var(--green-600); }
+    .mini-check.pending { color: var(--muted); background: var(--surface-strong); }
+    .mini-check .icon { width: 11px; height: 11px; }
+
+    .progress-track { height: 7px; margin-top: 14px; overflow: hidden; border-radius: 99px; background: var(--surface-strong); }
+    .progress-fill { width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent-strong), var(--accent)); transition: width .35s ease; }
+
+    .contract-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
+    .contract-actions input { grid-column: 1 / -1; min-height: 38px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); background: var(--surface-strong); font-size: 8px; }
+    .contract-actions .secondary-button { min-height: 36px; padding-inline: 9px; font-size: 8px; }
+    .contract-actions .primary-button { grid-column: 1 / -1; min-height: 38px; font-size: 9px; }
+
+    .toast-region { position: fixed; z-index: 300; right: 22px; bottom: 22px; display: grid; width: min(360px, calc(100% - 30px)); gap: 10px; pointer-events: none; }
+    .toast { display: flex; align-items: flex-start; gap: 11px; padding: 14px 15px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-solid); box-shadow: var(--shadow-lg); animation: toast-in .24s ease-out; pointer-events: auto; }
+    .toast-icon { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border-radius: 10px; color: var(--accent-strong); background: var(--accent-soft); }
+    .toast.success .toast-icon { color: var(--green-600); background: rgba(25,169,104,.10); }
+    .toast.warning .toast-icon { color: #a86600; background: rgba(245,158,11,.12); }
+    .toast.error .toast-icon { color: var(--red-500); background: rgba(227,75,89,.10); }
+    .toast strong { display: block; margin: 1px 0 3px; font-size: 10px; }
+    .toast p { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.45; }
+
+    .modal-backdrop {
+      position: fixed;
+      z-index: 250;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(3, 15, 31, .52);
+      backdrop-filter: blur(7px);
+      animation: fade-in .18s ease-out;
+    }
+
+    .modal {
+      width: min(480px, 100%);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--surface-solid);
+      box-shadow: var(--shadow-lg);
+      animation: modal-in .22s ease-out;
+    }
+
+    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 21px; border-bottom: 1px solid var(--line); }
+    .modal-header h3 { margin: 0 0 4px; font-size: 16px; }
+    .modal-header p { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.45; }
+    .modal-close { display: grid; width: 34px; height: 34px; place-items: center; border: 0; border-radius: 10px; color: var(--muted); background: var(--surface-strong); cursor: pointer; }
+    .modal-body { display: grid; gap: 14px; padding: 20px 21px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 9px; padding: 14px 21px 20px; }
+
+    .mobile-drawer { display: none; }
+
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes panel-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toast-in { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes modal-in { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+    @media (max-width: 1220px) {
+      .layout { grid-template-columns: 210px minmax(0, 1fr); }
+      .profile-hero { grid-column: 1 / -1; }
+      .side-rail { grid-column: 1 / -1; grid-row: 3; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .side-card { min-height: 100%; }
+      .topbar-center { width: min(360px, 32vw); }
+    }
+
+    @media (max-width: 980px) {
+      .topbar-center { display: none; }
+      .shell { width: min(100% - 28px, 840px); }
+      .layout { display: flex; flex-direction: column; }
+      .profile-hero, .settings-nav, .content-card, .side-rail { width: 100%; }
+      .settings-nav { position: static; min-height: 0; padding: 9px; }
+      .settings-title, .support-card { display: none; }
+      .settings-links { display: flex; overflow-x: auto; gap: 5px; scrollbar-width: none; }
+      .settings-links::-webkit-scrollbar { display: none; }
+      .settings-link { width: auto; min-width: max-content; min-height: 42px; padding: 0 13px; }
+      .settings-link.is-active::after { display: none; }
+      .side-rail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .side-rail .side-card:last-child { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 760px) {
+      :root { --topbar-h: 64px; --content-pad: 17px; }
+      .topbar { padding: 0 14px; }
+      .brand { min-width: 0; font-size: 17px; }
+      .brand-logo { width: 34px; height: 34px; flex-basis: 34px; }
+      .topbar-actions > .topbar-link,
+      .topbar-actions > .access-menu,
+      .topbar-actions > .notification-button,
+      .topbar-actions > #logoutButton { display: none; }
+      .mobile-menu-button { display: inline-flex; }
+      .shell { width: min(100% - 20px, 620px); padding-top: 11px; }
+      .breadcrumb { margin-bottom: 8px; }
+      .profile-main { min-height: 236px; flex-direction: column; justify-content: center; gap: 12px; padding: 22px 18px; text-align: center; }
+      .profile-hero { min-height: 236px; }
+      .profile-meta { justify-content: center; }
+      .hero-completion { position: absolute; right: 16px; top: 16px; width: 70px; height: 70px; flex-basis: 70px; }
+      .hero-completion::before { inset: 6px; }
+      .completion-copy strong { font-size: 15px; }
+      .completion-copy span { font-size: 7px; }
+      .avatar-wrap { width: 92px; height: 92px; flex-basis: 92px; border-radius: 27px; }
+      .avatar-wrap img, .avatar-fallback { border-radius: 23px; }
+      .profile-identity h1 { font-size: 23px; }
+      .form-grid, .upload-grid, .settings-info-grid, .choice-grid, .side-rail { grid-template-columns: 1fr; }
+      .side-rail .side-card:last-child { grid-column: auto; }
+      .section-heading { align-items: flex-start; }
+      .save-bar { align-items: stretch; flex-direction: column; }
+      .save-actions { width: 100%; }
+      .save-actions button { flex: 1; }
+      .contract-actions { grid-template-columns: 1fr; }
+      .contract-actions input, .contract-actions .primary-button { grid-column: auto; }
+      .mobile-drawer {
+        position: fixed;
+        z-index: 220;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 18px;
+        background: var(--surface-solid);
+        animation: panel-in .18s ease-out;
+      }
+      .mobile-drawer-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+      .mobile-drawer-links { display: grid; gap: 8px; }
+      .mobile-drawer-links a, .mobile-drawer-links button { display: flex; min-height: 50px; align-items: center; gap: 12px; padding: 0 14px; border: 1px solid var(--line); border-radius: 13px; color: var(--navy-800); background: var(--surface-soft); font-weight: 700; }
+    }
+
+    @media (max-width: 420px) {
+      .brand span:last-child { display: none; }
+      .profile-identity > p { max-width: 260px; margin-inline: auto; }
+      .upload-card { align-items: flex-start; flex-direction: column; }
+      .cover-mini { width: 100%; flex-basis: 100px; }
+      .avatar-mini { width: 74px; height: 74px; flex-basis: 74px; }
+      .section-heading-main { gap: 9px; }
+      .secondary-button, .primary-button, .danger-button { padding-inline: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <defs>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8"></path><path d="M5.4 9.6V21h13.2V9.6"></path><path d="M9.3 21v-6.5h5.4V21"></path></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.3"></rect><rect x="14" y="3" width="7" height="7" rx="1.3"></rect><rect x="3" y="14" width="7" height="7" rx="1.3"></rect><rect x="14" y="14" width="7" height="7" rx="1.3"></rect></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M4.5 21c.4-5.2 2.9-7.7 7.5-7.7s7.1 2.5 7.5 7.7"></path></symbol>
+      <symbol id="i-logout" viewBox="0 0 24 24"><path d="M10 4H4v16h6"></path><path d="M14 8l4 4-4 4"></path><path d="M8 12h10"></path></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 7.5h3l1.4-2h7.2l1.4 2h3V20H4z"></path><circle cx="12" cy="13.5" r="4"></circle></symbol>
+      <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5l8-3v19M12 8h8v13M2 21h20"></path><path d="M7 7h2M7 11h2M7 15h2M15 11h2M15 15h2"></path></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.5 20 5v6.2c0 5.2-3 8.7-8 10.3-5-1.6-8-5.1-8-10.3V5z"></path><path d="m8.6 11.8 2.2 2.2 4.7-5"></path></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10" width="15" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path><path d="M12 14v3"></path></symbol>
+      <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18h1.4a2.1 2.1 0 0 0 1.3-3.7 1.7 1.7 0 0 1 1-3h2.1A3.2 3.2 0 0 0 21 11c0-4.4-4-8-9-8Z"></path><circle cx="7.5" cy="10" r=".8" fill="currentColor" stroke="none"></circle><circle cx="10" cy="6.8" r=".8" fill="currentColor" stroke="none"></circle><circle cx="14.2" cy="6.8" r=".8" fill="currentColor" stroke="none"></circle></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M9.7 9a2.4 2.4 0 1 1 3.5 2.2c-.8.4-1.2 1-1.2 1.8"></path><path d="M12 17.5h.01"></path></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"></path></symbol>
+      <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V4h8v3M3 12h18M10 12v2h4v-2"></path></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4"></path><path d="m7.5 8.5 4.5-4.5 4.5 4.5"></path><path d="M5 14v6h14v-6"></path></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12.5 5 5L20 6.5"></path></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></symbol>
+      <symbol id="i-medical" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="15" rx="2"></rect><path d="M8 6V3h8v3"></path><path d="M12 10v7M8.5 13.5h7"></path></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3"></path></symbol>
+      <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"></path><path d="M19 13v7H4V5h7"></path></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"></path></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7h.01"></path></symbol>
+      <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"></circle><path d="m11 12 9-9M16 4l4 4M14 6l4 4"></path></symbol>
+      <symbol id="i-device" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2"></rect><path d="M10 18.5h4"></path></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"></path></symbol>
+      <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 1.4 4.2L18 9l-4.6 1.8L12 15l-1.4-4.2L6 9l4.6-1.8z"></path><path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7z"></path></symbol>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <a class="brand" href="home.html" aria-label="Ir para a página inicial do LAG Controller">
+      <svg class="brand-logo" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="7" cy="24" r="4.3" fill="var(--accent)"></circle><circle cx="15" cy="13" r="4.3" fill="var(--accent)"></circle><circle cx="26" cy="7" r="4.3" fill="var(--accent)"></circle><circle cx="18" cy="25" r="4.3" fill="var(--accent)"></circle><circle cx="29" cy="18" r="4.3" fill="var(--accent)"></circle><circle cx="39" cy="13" r="3.6" fill="var(--accent)"></circle><circle cx="29" cy="32" r="4.3" fill="var(--accent)"></circle><circle cx="40" cy="27" r="3.6" fill="var(--accent)"></circle><circle cx="18" cy="39" r="3.6" fill="var(--accent)"></circle><circle cx="40" cy="40" r="2.8" fill="var(--accent)"></circle>
+      </svg>
+      <span><strong>LAG</strong> Controller</span>
+    </a>
+
+    <div class="topbar-center">
+      <label class="global-search">
+        <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+        <input id="globalSearch" type="search" placeholder="Buscar configuração..." autocomplete="off" />
+        <span class="search-key">/</span>
+      </label>
+    </div>
+
+    <nav class="topbar-actions" aria-label="Navegação principal">
+      <a class="topbar-link" href="home.html"><svg class="icon" aria-hidden="true"><use href="#i-home"></use></svg><span>Home</span></a>
+
+      <details class="access-menu">
+        <summary><svg class="icon" aria-hidden="true"><use href="#i-grid"></use></svg><span>Acessos</span></summary>
+        <div class="access-dropdown">
+          <a href="../modules/controladoria/controladoria.html" data-controladoria-only><svg class="icon" aria-hidden="true"><use href="#i-grid"></use></svg>Controladoria</a>
+          <a href="cadastro-medico.html" data-controladoria-only><svg class="icon" aria-hidden="true"><use href="#i-medical"></use></svg>Contrato médicos</a>
+          <a href="../modules/contratacao-medicos/contratacao-medicos.html" data-controladoria-only><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg>Contratação médica</a>
+          <a href="../modules/prontuario-medico/prontuario-medico.html" data-medical-only><svg class="icon" aria-hidden="true"><use href="#i-medical"></use></svg>Área médica</a>
+          <a href="admin-usuarios.html" data-admin-only><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>Administração</a>
+        </div>
+      </details>
+
+      <button class="topbar-button notification-button" type="button" id="notificationButton" aria-label="Notificações"><svg class="icon" aria-hidden="true"><use href="#i-bell"></use></svg><span class="notification-dot"></span></button>
+      <a class="topbar-link is-current" href="perfil.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg><span>Meu perfil</span></a>
+      <button class="topbar-button" type="button" id="logoutButton" aria-label="Sair da conta"><svg class="icon" aria-hidden="true"><use href="#i-logout"></use></svg><span>Sair</span></button>
+      <button class="topbar-button mobile-menu-button" type="button" id="mobileMenuButton" aria-label="Abrir menu"><svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg></button>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <nav class="breadcrumb" aria-label="Caminho da página">
+      <a href="home.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Meu perfil</span>
+    </nav>
+
+    <div class="layout">
+      <section class="profile-hero" aria-labelledby="profileTitle">
+        <div class="profile-cover" id="coverPreview"></div>
+        <div class="profile-main">
+          <div class="avatar-wrap">
+            <span class="avatar-fallback" id="avatarFallback">ML</span>
+            <img id="avatarPreview" src="" alt="Foto do usuário" hidden />
+            <label class="avatar-change" for="fotoInput" title="Alterar foto do perfil" aria-label="Alterar foto do perfil"><svg class="icon" aria-hidden="true"><use href="#i-camera"></use></svg></label>
+          </div>
+
+          <div class="profile-identity">
+            <span class="eyebrow">Perfil profissional</span>
+            <h1 id="profileTitle">Matheus Landucci</h1>
+            <p id="profileEmail">matheus@lag.com.br</p>
+            <div class="profile-meta">
+              <span class="meta-pill"><span class="status-dot"></span>Conta ativa</span>
+              <span class="meta-pill role-pill" id="rolePill">Administrador</span>
+              <span class="meta-pill" id="heroUnit"><svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-pin"></use></svg>Cerquilho</span>
+            </div>
+          </div>
+
+          <div class="hero-completion" id="heroCompletion" style="--completion: 0%" aria-label="Completude do perfil">
+            <div class="completion-copy"><strong id="completionPercent">0%</strong><span>Completo</span></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="settings-nav panel" aria-label="Configurações do perfil">
+        <p class="settings-title">Configurações</p>
+        <div class="settings-links">
+          <button class="settings-link is-active" type="button" data-view="profile" aria-selected="true"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg><span>Perfil</span></button>
+          <button class="settings-link" type="button" data-view="unit" aria-selected="false"><svg class="icon" aria-hidden="true"><use href="#i-building"></use></svg><span>Unidade</span></button>
+          <button class="settings-link" type="button" data-view="permissions" aria-selected="false"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg><span>Permissões</span></button>
+          <button class="settings-link" type="button" data-view="security" aria-selected="false"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg><span>Segurança</span></button>
+          <button class="settings-link" type="button" data-view="appearance" aria-selected="false"><svg class="icon" aria-hidden="true"><use href="#i-palette"></use></svg><span>Aparência</span></button>
+        </div>
+
+        <div class="support-card">
+          <span class="support-icon"><svg class="icon" aria-hidden="true"><use href="#i-help"></use></svg></span>
+          <strong>Precisa de ajuda?</strong>
+          <p>Acesse a central de suporte para resolver dúvidas sobre sua conta.</p>
+          <a href="home.html">Abrir ajuda <svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </div>
+      </aside>
+
+      <section class="content-card panel">
+        <header class="content-header">
+          <div><h2 id="viewTitle">Dados do perfil</h2><p id="viewDescription">Mantenha seus dados pessoais e profissionais atualizados.</p></div>
+          <span class="unsaved-badge" id="unsavedBadge" hidden>Alterações não salvas</span>
+        </header>
+
+        <form id="profileForm" class="profile-form" novalidate>
+          <div class="view-panel" data-panel="profile">
+            <section class="section" id="informacoesPessoais">
+              <div class="section-heading">
+                <div class="section-heading-main">
+                  <span class="section-icon"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg></span>
+                  <div><h3>Informações pessoais</h3><p>Dados usados para identificar e contatar você.</p></div>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span class="field-label">Nome completo <span class="required">*</span></span>
+                  <input class="control" id="nomeCompleto" name="nomeCompleto" type="text" value="Matheus Landucci" placeholder="Seu nome" autocomplete="name" required minlength="3" />
+                  <span class="field-error" id="nomeCompletoError"></span>
+                </label>
+
+                <label class="field">
+                  <span class="field-label">E-mail <span class="field-hint">Gerenciado pelo login</span></span>
+                  <input class="control" type="email" data-profile-email-field value="matheus@lag.com.br" placeholder="E-mail da conta" readonly />
+                </label>
+
+                <label class="field">
+                  <span class="field-label">Telefone</span>
+                  <input class="control" id="telefone" name="telefone" type="tel" value="(15) 99865-4321" placeholder="(00) 00000-0000" autocomplete="tel" inputmode="tel" />
+                  <span class="field-error" id="telefoneError"></span>
+                </label>
+              </div>
+            </section>
+
+            <section class="section" id="dadosProfissionais">
+              <div class="section-heading">
+                <div class="section-heading-main">
+                  <span class="section-icon"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"></use></svg></span>
+                  <div><h3>Dados profissionais</h3><p>Informações exibidas nos módulos internos do sistema.</p></div>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span class="field-label">Cargo</span>
+                  <input class="control" id="cargo" name="cargo" type="text" value="Administrador" placeholder="Ex: Administrador" />
+                </label>
+
+                <label class="field">
+                  <span class="field-label">Setor</span>
+                  <input class="control" id="setor" name="setor" type="text" value="Tecnologia da Informação" placeholder="Ex: Tecnologia da Informação" />
+                </label>
+
+                <label class="field">
+                  <span class="field-label">Cidade da unidade</span>
+                  <span class="control-wrap">
+                    <select class="control" id="cidade" name="cidade" data-city-select>
+                      <option value="Embu das Artes">Embu das Artes</option><option value="Itapeva">Itapeva</option><option value="Tatuí">Tatuí</option><option value="Cerquilho" selected>Cerquilho</option>
+                    </select>
+                    <svg class="icon select-chevron" aria-hidden="true"><use href="#i-chevron"></use></svg>
+                  </span>
+                </label>
+
+                <label class="field full">
+                  <span class="field-label">Bio rápida <span class="field-hint">Máximo de 500 caracteres</span></span>
+                  <span class="control-wrap">
+                    <textarea class="control" id="bio" name="bio" rows="4" maxlength="500" placeholder="Escreva uma pequena descrição sobre sua atuação">Responsável pela gestão da plataforma LAG Controller e administração dos usuários e configurações da unidade.</textarea>
+                    <span class="char-count" id="bioCounter">0/500</span>
+                  </span>
+                </label>
+              </div>
+            </section>
+
+            <section class="section" id="imagemPerfil">
+              <div class="section-heading">
+                <div class="section-heading-main">
+                  <span class="section-icon"><svg class="icon" aria-hidden="true"><use href="#i-camera"></use></svg></span>
+                  <div><h3>Imagem do perfil</h3><p>Personalize sua foto e a capa do perfil.</p></div>
+                </div>
+              </div>
+
+              <div class="upload-grid">
+                <div class="upload-card">
+                  <div class="avatar-mini"><span id="avatarMiniFallback">ML</span><img id="avatarMiniPreview" src="" alt="Prévia da foto" hidden /></div>
+                  <div class="upload-copy"><strong>Foto do perfil</strong><p>JPG, PNG ou WEBP. Recomendado: imagem quadrada.</p><label class="upload-action" for="fotoInput"><svg class="icon" style="width:15px;height:15px" aria-hidden="true"><use href="#i-upload"></use></svg>Alterar foto</label></div>
+                  <input class="file-input" id="fotoInput" type="file" accept="image/jpeg,image/png,image/webp" />
+                </div>
+
+                <div class="upload-card">
+                  <div class="cover-mini" id="coverMiniPreview" aria-hidden="true"></div>
+                  <div class="upload-copy"><strong>Capa do perfil</strong><p>JPG, PNG ou WEBP. Recomendado: 1920 × 480px.</p><label class="upload-action" for="capaInput"><svg class="icon" style="width:15px;height:15px" aria-hidden="true"><use href="#i-upload"></use></svg>Alterar capa</label></div>
+                  <input class="file-input" id="capaInput" type="file" accept="image/jpeg,image/png,image/webp" />
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="view-panel" data-panel="unit" hidden>
+            <section class="section">
+              <div class="section-heading">
+                <div class="section-heading-main">
+                  <span class="section-icon"><svg class="icon" aria-hidden="true"><use href="#i-building"></use></svg></span>
+                  <div><h3>Unidade principal</h3><p>Configure a cidade vinculada ao seu perfil e consulte o status da unidade.</p></div>
+                </div>
+              </div>
+
+              <div class="settings-info-grid">
+                <article class="info-card">
+                  <div class="info-card-head"><span class="info-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg></span><div><h4>Cidade vinculada</h4><p>A unidade selecionada define os dados e indicadores exibidos no sistema.</p></div></div>
+                  <div class="info-card-footer"><span class="value-chip" data-user-city>Cerquilho</span><span class="success-chip value-chip">Ativa</span></div>
+                </article>
+
+                <article class="info-card">
+                  <div class="info-card-head"><span class="info-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg></span><div><h4>Sincronização</h4><p>As alterações de unidade são aplicadas ao menu e aos módulos após salvar.</p></div></div>
+                  <div class="info-card-footer"><span class="value-chip success-chip">Sincronizada</span></div>
+                </article>
+              </div>
+
+              <div class="form-grid" style="margin-top:18px">
+                <label class="field full">
+                  <span class="field-label">Alterar cidade da unidade</span>
+                  <span class="control-wrap">
+                    <select class="control" id="cidadePerfilRapido" data-city-select>
+                      <option value="Embu das Artes">Embu das Artes</option><option value="Itapeva">Itapeva</option><option value="Tatuí">Tatuí</option><option value="Cerquilho" selected>Cerquilho</option>
+                    </select>
+                    <svg class="icon select-chevron" aria-hidden="true"><use href="#i-chevron"></use></svg>
+                  </span>
+                </label>
+              </div>
+            </section>
+          </div>
+
+          <div class="view-panel" data-panel="permissions" id="permissionsPanel" hidden>
+            <section class="section">
+              <div class="section-heading">
+                <div class="section-heading-main">
+                  <span class="section-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg></span>
+                  <div><h3>Permissões da conta</h3><p>Seu nível de acesso é definido por um administrador do sistema.</p></div>
+                </div>
+              </div>
+
+              <div class="settings-info-grid">
+                <article class="info-card"><div class="info-card-head"><span class="info-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg></span><div><h4>Nível de acesso</h4><p>Função aplicada atualmente à sua conta.</p></div></div><div class="info-card-footer"><span class="value-chip" data-current-role>Administrador</span></div></article>
+                <article class="info-card"><div class="info-card-head"><span class="info-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg></span><div><h4>Status de segurança</h4><p>As permissões são verificadas ao entrar em cada módulo.</p></div></div><div class="info-card-footer"><span class="value-chip success-chip">Protegido</span></div></article>
+              </div>
+
+              <div class="permission-list">
+                <div class="permission-item"><div class="permission-copy"><svg class="icon" aria-hidden="true"><use href="#i-grid"></use></svg><div><strong>Painel e indicadores</strong><span>Visualizar e gerenciar informações da unidade.</span></div></div><span class="value-chip success-chip">Acesso completo</span></div>
+                <div class="permission-item"><div class="permission-copy"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg><div><strong>Usuários</strong><span>Cadastrar, editar e definir permissões.</span></div></div><span class="value-chip success-chip">Acesso completo</span></div>
+                <div class="permission-item"><div class="permission-copy"><svg class="icon" aria-hidden="true"><use href="#i-medical"></use></svg><div><strong>Área médica</strong><span>Acesso condicionado à função da conta.</span></div></div><span class="value-chip">Conforme perfil</span></div>
+              </div>
+            </section>
+          </div>
+
+          <div class="view-panel" data-panel="security" id="securityPanel" hidden>
+            <section class="section">
+              <div class="section-heading">
+                <div class="section-heading-main"><span class="section-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg></span><div><h3>Segurança da conta</h3><p>Controle senha, autenticação e sessões conectadas.</p></div></div>
+                <button class="secondary-button" type="button" id="openPasswordModal"><svg class="icon" style="width:15px;height:15px" aria-hidden="true"><use href="#i-key"></use></svg>Alterar senha</button>
+              </div>
+
+              <div class="settings-info-grid">
+                <article class="info-card"><div class="info-card-head"><span class="info-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg></span><div><h4>E-mail da conta</h4><p data-security-email>matheus@lag.com.br</p></div></div><div class="info-card-footer"><span class="value-chip success-chip">Verificado</span></div></article>
+                <article class="info-card"><div class="info-card-head"><span class="info-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-device"></use></svg></span><div><h4>Sessão atual</h4><p>Windows · Chrome · sessão conectada agora.</p></div></div><div class="info-card-footer"><span class="value-chip success-chip">Esta sessão</span></div></article>
+              </div>
+
+              <div style="margin-top:18px">
+                <div class="switch-row"><div class="switch-copy"><strong>Autenticação em duas etapas</strong><p>Adiciona uma verificação extra ao entrar na conta.</p></div><label class="switch"><input id="twoFactorToggle" type="checkbox"><span class="switch-track"></span></label></div>
+                <div class="switch-row"><div class="switch-copy"><strong>Avisos de novo acesso</strong><p>Receba um alerta quando sua conta for acessada em outro dispositivo.</p></div><label class="switch"><input id="loginAlertsToggle" type="checkbox" checked><span class="switch-track"></span></label></div>
+                <div class="switch-row"><div class="switch-copy"><strong>Encerrar outras sessões</strong><p>Desconecta sua conta de todos os dispositivos, exceto este.</p></div><button class="danger-button" type="button" id="endSessionsButton">Encerrar sessões</button></div>
+              </div>
+            </section>
+          </div>
+
+          <div class="view-panel" data-panel="appearance" id="appearancePanel" hidden>
+            <section class="section">
+              <div class="section-heading"><div class="section-heading-main"><span class="section-icon"><svg class="icon" aria-hidden="true"><use href="#i-palette"></use></svg></span><div><h3>Aparência do sistema</h3><p>Personalize o tema, a cor principal e a densidade da interface.</p></div></div></div>
+
+              <div class="appearance-group">
+                <h4>Tema</h4><p>Escolha como o LAG Controller será exibido neste dispositivo.</p>
+                <div class="choice-grid" id="themeChoices">
+                  <label class="choice-card" data-theme-choice="light"><input type="radio" name="theme" value="light"><svg class="icon" aria-hidden="true"><use href="#i-sun"></use></svg><strong>Claro</strong><small>Visual claro e limpo</small></label>
+                  <label class="choice-card" data-theme-choice="dark"><input type="radio" name="theme" value="dark"><svg class="icon" aria-hidden="true"><use href="#i-moon"></use></svg><strong>Escuro</strong><small>Conforto em baixa luz</small></label>
+                  <label class="choice-card" data-theme-choice="system"><input type="radio" name="theme" value="system"><svg class="icon" aria-hidden="true"><use href="#i-monitor"></use></svg><strong>Sistema</strong><small>Segue seu dispositivo</small></label>
+                </div>
+              </div>
+
+              <div class="appearance-group">
+                <h4>Cor de destaque</h4><p>Aplicada em botões, links e elementos ativos.</p>
+                <div class="accent-options" id="accentChoices">
+                  <label class="accent-option" style="--swatch:#00989b" data-accent-choice="teal" title="Turquesa"><input type="radio" name="accent" value="teal"></label>
+                  <label class="accent-option" style="--swatch:#2876ea" data-accent-choice="blue" title="Azul"><input type="radio" name="accent" value="blue"></label>
+                  <label class="accent-option" style="--swatch:#7558e8" data-accent-choice="violet" title="Violeta"><input type="radio" name="accent" value="violet"></label>
+                </div>
+              </div>
+
+              <div class="appearance-group">
+                <h4>Densidade</h4><p>Controla o espaçamento dos campos e cartões.</p>
+                <div class="choice-grid" id="densityChoices" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+                  <label class="choice-card" data-density-choice="comfortable"><input type="radio" name="density" value="comfortable"><svg class="icon" aria-hidden="true"><use href="#i-spark"></use></svg><strong>Confortável</strong><small>Mais espaço entre elementos</small></label>
+                  <label class="choice-card" data-density-choice="compact"><input type="radio" name="density" value="compact"><svg class="icon" aria-hidden="true"><use href="#i-grid"></use></svg><strong>Compacta</strong><small>Mais conteúdo na tela</small></label>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="save-bar" id="profileSaveBar">
+            <div class="save-note"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg><span>As alterações são salvas neste navegador e enviadas ao sistema quando a integração estiver disponível.</span></div>
+            <div class="save-actions"><button class="secondary-button" type="button" id="discardButton">Descartar</button><button class="primary-button" type="submit" id="saveButton"><svg class="icon" style="width:16px;height:16px" aria-hidden="true"><use href="#i-check"></use></svg><span>Salvar perfil</span></button></div>
+          </div>
+        </form>
+      </section>
+
+      <aside class="side-rail">
+        <section class="side-card panel">
+          <div class="side-card-head"><span class="side-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg></span><div><h3>Cidade da unidade</h3><p>Unidade principal associada ao seu perfil.</p></div></div>
+          <div class="unit-summary"><div><strong data-user-city>Cerquilho</strong><span>São Paulo · Brasil</span></div><span class="value-chip success-chip">Ativa</span></div>
+          <div class="side-select"><select class="control" id="cidadeSidebar" data-city-select aria-label="Selecionar cidade da unidade"><option value="Embu das Artes">Embu das Artes</option><option value="Itapeva">Itapeva</option><option value="Tatuí">Tatuí</option><option value="Cerquilho" selected>Cerquilho</option></select><svg class="icon select-chevron" aria-hidden="true"><use href="#i-chevron"></use></svg></div>
+        </section>
+
+        <section class="side-card panel">
+          <div class="side-card-head"><span class="side-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span><div><h3>Perfil completo</h3><p>Preencha os dados essenciais para melhorar sua identificação.</p></div></div>
+          <div class="progress-track"><div class="progress-fill" id="completionBar"></div></div>
+          <div class="completion-list">
+            <div class="completion-item"><span class="completion-label"><span class="mini-check" id="checkName"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Nome completo</span></div>
+            <div class="completion-item"><span class="completion-label"><span class="mini-check" id="checkPhone"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Telefone</span></div>
+            <div class="completion-item"><span class="completion-label"><span class="mini-check" id="checkBio"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Bio profissional</span></div>
+            <div class="completion-item"><span class="completion-label"><span class="mini-check pending" id="checkAvatar"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg></span>Foto do perfil</span></div>
+          </div>
+        </section>
+
+        <section class="side-card panel" data-controladoria-only>
+          <div class="side-card-head"><span class="side-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-medical"></use></svg></span><div><h3>Contratação médica</h3><p>Compartilhe o cadastro com novos profissionais.</p></div></div>
+          <div class="contract-actions">
+            <input id="doctorContractProfileLink" type="text" readonly value="" aria-label="Link do contrato de médicos">
+            <button class="secondary-button" type="button" id="copyDoctorContractProfileLink"><svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-copy"></use></svg>Copiar link</button>
+            <a class="secondary-button" id="openDoctorContractProfileLink" href="cadastro-medico.html" target="_blank" rel="noopener"><svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-external"></use></svg>Abrir</a>
+            <a class="primary-button" href="../modules/contratacao-medicos/contratacao-medicos.html"><svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-user"></use></svg>Ver médicos cadastrados</a>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="modal-backdrop" id="passwordModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="passwordModalTitle">
+      <header class="modal-header"><div><h3 id="passwordModalTitle">Alterar senha</h3><p>Use pelo menos 8 caracteres, com letras e números.</p></div><button class="modal-close" type="button" data-close-modal aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></button></header>
+      <form id="passwordForm">
+        <div class="modal-body">
+          <label class="field"><span class="field-label">Senha atual</span><input class="control" id="currentPassword" type="password" autocomplete="current-password" required></label>
+          <label class="field"><span class="field-label">Nova senha</span><input class="control" id="newPassword" type="password" autocomplete="new-password" minlength="8" required></label>
+          <label class="field"><span class="field-label">Confirmar nova senha</span><input class="control" id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required></label>
+        </div>
+        <footer class="modal-footer"><button class="secondary-button" type="button" data-close-modal>Cancelar</button><button class="primary-button" type="submit">Atualizar senha</button></footer>
+      </form>
+    </section>
+  </div>
+
+  <div class="mobile-drawer" id="mobileDrawer" hidden>
+    <div class="mobile-drawer-head"><a class="brand" href="home.html"><svg class="brand-logo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="7" cy="24" r="4.3" fill="var(--accent)"></circle><circle cx="15" cy="13" r="4.3" fill="var(--accent)"></circle><circle cx="26" cy="7" r="4.3" fill="var(--accent)"></circle><circle cx="18" cy="25" r="4.3" fill="var(--accent)"></circle><circle cx="29" cy="18" r="4.3" fill="var(--accent)"></circle><circle cx="39" cy="13" r="3.6" fill="var(--accent)"></circle></svg><span><strong>LAG</strong> Controller</span></a><button class="modal-close" type="button" id="closeMobileMenu" aria-label="Fechar menu"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></button></div>
+    <nav class="mobile-drawer-links"><a href="home.html"><svg class="icon" aria-hidden="true"><use href="#i-home"></use></svg>Home</a><a href="perfil.html"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg>Meu perfil</a><a href="admin-usuarios.html" data-admin-only><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>Administração</a><button type="button" id="mobileLogoutButton"><svg class="icon" aria-hidden="true"><use href="#i-logout"></use></svg>Sair</button></nav>
+  </div>
+
+  <!-- Mantém a integração existente do seu projeto. O arquivo também possui fallback local. -->
+  <script src="../js/cloud-auth.js?v=edicao-livre-20260722"></script>
+  <script src="../js/perfil.js?v=20260609-perfil1"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const PROFILE_KEY = "lag_profile_v4";
+      const APPEARANCE_KEY = "lag_appearance_v2";
+      const SECURITY_KEY = "lag_security_v1";
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+      const byId = (id) => document.getElementById(id);
+
+      const defaults = {
+        nomeCompleto: "Matheus Landucci",
+        email: "matheus@lag.com.br",
+        telefone: "(15) 99865-4321",
+        cargo: "Administrador",
+        setor: "Tecnologia da Informação",
+        cidade: "Cerquilho",
+        bio: "Responsável pela gestão da plataforma LAG Controller e administração dos usuários e configurações da unidade.",
+        role: "Administrador",
+        avatar: "",
+        cover: ""
+      };
+
+      let initialSnapshot = "";
+      let dirty = false;
+      let activeView = "profile";
+
+      const safeJSON = (value, fallback) => {
+        try { return value ? JSON.parse(value) : fallback; } catch (_) { return fallback; }
+      };
+
+      const createMemoryStorage = () => {
+        const values = new Map();
+        return {
+          getItem: (key) => values.has(key) ? values.get(key) : null,
+          setItem: (key, value) => values.set(key, String(value)),
+          removeItem: (key) => values.delete(key),
+          clear: () => values.clear()
+        };
+      };
+
+      const resolveStorage = (name) => {
+        try {
+          const target = window[name];
+          const probe = `__lag_probe_${Date.now()}`;
+          target.setItem(probe, "1");
+          target.removeItem(probe);
+          return target;
+        } catch (_) {
+          return createMemoryStorage();
+        }
+      };
+
+      const storage = resolveStorage("localStorage");
+      const sessionStore = resolveStorage("sessionStorage");
+
+      const getStoredProfile = () => ({ ...defaults, ...safeJSON(storage.getItem(PROFILE_KEY), {}) });
+      const getAppearance = () => ({ theme: "light", accent: "teal", density: "comfortable", ...safeJSON(storage.getItem(APPEARANCE_KEY), {}) });
+      const getSecurity = () => ({ twoFactor: false, loginAlerts: true, ...safeJSON(storage.getItem(SECURITY_KEY), {}) });
+
+      const toast = (title, message, type = "default", duration = 3800) => {
+        const region = byId("toastRegion");
+        if (!region) return;
+        const item = document.createElement("div");
+        item.className = `toast ${type}`;
+        const icon = type === "success" ? "i-check" : type === "error" ? "i-x" : type === "warning" ? "i-info" : "i-info";
+        item.innerHTML = `<span class="toast-icon"><svg class="icon" style="width:16px;height:16px" aria-hidden="true"><use href="#${icon}"></use></svg></span><div><strong>${title}</strong><p>${message}</p></div>`;
+        region.appendChild(item);
+        window.setTimeout(() => {
+          item.style.opacity = "0";
+          item.style.transform = "translateY(8px)";
+          window.setTimeout(() => item.remove(), 220);
+        }, duration);
+      };
+
+      const escapeHTML = (value) => String(value).replace(/[&<>"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
+
+      const formatPhone = (value) => {
+        const digits = String(value || "").replace(/\D/g, "").slice(0, 11);
+        if (digits.length <= 2) return digits ? `(${digits}` : "";
+        if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+        if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+        return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+      };
+
+      const getInitials = (name) => {
+        const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+        if (!parts.length) return "LC";
+        return `${parts[0][0] || ""}${parts.length > 1 ? parts[parts.length - 1][0] : ""}`.toUpperCase();
+      };
+
+      const currentFormData = () => ({
+        nomeCompleto: byId("nomeCompleto")?.value.trim() || "",
+        email: $("[data-profile-email-field]")?.value.trim() || byId("profileEmail")?.textContent.trim() || "",
+        telefone: byId("telefone")?.value.trim() || "",
+        cargo: byId("cargo")?.value.trim() || "",
+        setor: byId("setor")?.value.trim() || "",
+        cidade: byId("cidade")?.value || "",
+        bio: byId("bio")?.value.trim() || "",
+        role: byId("rolePill")?.textContent.trim() || "Colaborador",
+        avatar: byId("avatarPreview")?.dataset.image || "",
+        cover: byId("coverPreview")?.dataset.image || ""
+      });
+
+      const snapshot = () => JSON.stringify(currentFormData());
+
+      const setDirty = (value = true) => {
+        dirty = value;
+        byId("unsavedBadge").hidden = !value;
+      };
+
+      const updateDirtyState = () => setDirty(snapshot() !== initialSnapshot);
+
+      const setAvatar = (dataUrl) => {
+        const avatar = byId("avatarPreview");
+        const mini = byId("avatarMiniPreview");
+        const fallback = byId("avatarFallback");
+        const miniFallback = byId("avatarMiniFallback");
+        if (avatar) {
+          avatar.dataset.image = dataUrl || "";
+          avatar.src = dataUrl || "";
+          avatar.hidden = !dataUrl;
+        }
+        if (mini) {
+          mini.src = dataUrl || "";
+          mini.hidden = !dataUrl;
+        }
+        if (fallback) fallback.hidden = Boolean(dataUrl);
+        if (miniFallback) miniFallback.hidden = Boolean(dataUrl);
+      };
+
+      const setCover = (dataUrl) => {
+        const cover = byId("coverPreview");
+        const mini = byId("coverMiniPreview");
+        if (cover) {
+          cover.dataset.image = dataUrl || "";
+          cover.style.backgroundImage = dataUrl ? `linear-gradient(110deg, rgba(255,255,255,.12), rgba(0,0,0,.08)), url("${dataUrl}")` : "";
+          cover.style.opacity = dataUrl ? ".45" : ".26";
+        }
+        if (mini) mini.style.backgroundImage = dataUrl ? `url("${dataUrl}")` : "";
+      };
+
+      const syncCities = (city, source = null) => {
+        $$('[data-city-select]').forEach((select) => {
+          if (select !== source && [...select.options].some((option) => option.value === city)) select.value = city;
+        });
+        $$('[data-user-city]').forEach((node) => node.textContent = city || "Não definida");
+        const heroUnit = byId("heroUnit");
+        if (heroUnit) heroUnit.innerHTML = `<svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-pin"></use></svg>${escapeHTML(city || "Não definida")}`;
+      };
+
+      const syncSummary = () => {
+        const name = byId("nomeCompleto")?.value.trim() || "Meu perfil";
+        const email = $("[data-profile-email-field]")?.value.trim() || defaults.email;
+        const role = byId("rolePill")?.textContent.trim() || defaults.role;
+        const initials = getInitials(name);
+
+        if (byId("profileTitle").textContent !== name) byId("profileTitle").textContent = name;
+        if (byId("profileEmail").textContent !== email) byId("profileEmail").textContent = email;
+        if (byId("avatarFallback").textContent !== initials) byId("avatarFallback").textContent = initials;
+        if (byId("avatarMiniFallback").textContent !== initials) byId("avatarMiniFallback").textContent = initials;
+        $$('[data-security-email]').forEach((node) => { if (node.textContent !== email) node.textContent = email; });
+        $$('[data-current-role]').forEach((node) => { if (node.textContent !== role) node.textContent = role; });
+        syncCities(byId("cidade")?.value || defaults.cidade);
+        updateCompletion();
+      };
+
+      const updateCompletion = () => {
+        const data = currentFormData();
+        const checks = {
+          checkName: data.nomeCompleto.length >= 3,
+          checkPhone: data.telefone.replace(/\D/g, "").length >= 10,
+          checkBio: data.bio.length >= 20,
+          checkAvatar: Boolean(data.avatar)
+        };
+        const required = [Boolean(data.nomeCompleto), Boolean(data.email), Boolean(data.cargo), Boolean(data.setor), Boolean(data.cidade), Boolean(data.bio), checks.checkPhone, checks.checkAvatar];
+        const percent = Math.round((required.filter(Boolean).length / required.length) * 100);
+        byId("completionPercent").textContent = `${percent}%`;
+        byId("heroCompletion").style.setProperty("--completion", `${percent}%`);
+        byId("completionBar").style.width = `${percent}%`;
+        Object.entries(checks).forEach(([id, ok]) => byId(id)?.classList.toggle("pending", !ok));
+      };
+
+      const applyProfile = (data) => {
+        const merged = { ...defaults, ...data };
+        byId("nomeCompleto").value = merged.nomeCompleto || "";
+        $("[data-profile-email-field]").value = merged.email || "";
+        byId("telefone").value = formatPhone(merged.telefone || "");
+        byId("cargo").value = merged.cargo || "";
+        byId("setor").value = merged.setor || "";
+        byId("bio").value = merged.bio || "";
+        byId("rolePill").textContent = merged.role || "Colaborador";
+        if ([...byId("cidade").options].some((o) => o.value === merged.cidade)) byId("cidade").value = merged.cidade;
+        setAvatar(merged.avatar || "");
+        setCover(merged.cover || "");
+        updateBioCounter();
+        syncSummary();
+      };
+
+      const updateBioCounter = () => {
+        const bio = byId("bio");
+        const counter = byId("bioCounter");
+        if (bio && counter) counter.textContent = `${bio.value.length}/500`;
+      };
+
+      const validateForm = () => {
+        let valid = true;
+        const name = byId("nomeCompleto");
+        const phone = byId("telefone");
+        const nameError = byId("nomeCompletoError");
+        const phoneError = byId("telefoneError");
+        const phoneDigits = phone.value.replace(/\D/g, "");
+
+        name.classList.remove("is-invalid");
+        phone.classList.remove("is-invalid");
+        nameError.textContent = "";
+        phoneError.textContent = "";
+
+        if (name.value.trim().length < 3) {
+          name.classList.add("is-invalid");
+          nameError.textContent = "Informe um nome com pelo menos 3 caracteres.";
+          valid = false;
+        }
+
+        if (phoneDigits && phoneDigits.length < 10) {
+          phone.classList.add("is-invalid");
+          phoneError.textContent = "Informe um telefone válido com DDD.";
+          valid = false;
+        }
+
+        if (!valid) name.closest(".view-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return valid;
+      };
+
+      const compressImage = (file, maxWidth, maxHeight, quality = .86) => new Promise((resolve, reject) => {
+        if (!file?.type.startsWith("image/")) return reject(new Error("Selecione um arquivo de imagem válido."));
+        if (file.size > 8 * 1024 * 1024) return reject(new Error("A imagem deve ter no máximo 8 MB."));
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("Não foi possível ler a imagem."));
+        reader.onload = () => {
+          const image = new Image();
+          image.onerror = () => reject(new Error("O arquivo de imagem está corrompido."));
+          image.onload = () => {
+            const scale = Math.min(1, maxWidth / image.width, maxHeight / image.height);
+            const width = Math.max(1, Math.round(image.width * scale));
+            const height = Math.max(1, Math.round(image.height * scale));
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d", { alpha: false });
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, width, height);
+            ctx.drawImage(image, 0, 0, width, height);
+            resolve(canvas.toDataURL("image/jpeg", quality));
+          };
+          image.src = String(reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      const setView = (view, shouldScroll = true) => {
+        const titles = {
+          profile: ["Dados do perfil", "Mantenha seus dados pessoais e profissionais atualizados."],
+          unit: ["Configuração da unidade", "Gerencie a cidade principal vinculada à sua conta."],
+          permissions: ["Permissões de acesso", "Consulte os módulos disponíveis para seu perfil."],
+          security: ["Segurança da conta", "Proteja seu acesso e gerencie sessões conectadas."],
+          appearance: ["Aparência", "Personalize o tema e a densidade da interface."]
+        };
+        activeView = titles[view] ? view : "profile";
+        $$('[data-panel]').forEach((panel) => panel.hidden = panel.dataset.panel !== activeView);
+        $$('[data-view]').forEach((button) => {
+          const active = button.dataset.view === activeView;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-selected", String(active));
+        });
+        byId("viewTitle").textContent = titles[activeView][0];
+        byId("viewDescription").textContent = titles[activeView][1];
+        byId("profileSaveBar").hidden = ["permissions", "security"].includes(activeView);
+        if (shouldScroll && window.matchMedia("(max-width: 980px)").matches) $(".content-card")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+
+      const resolvedTheme = (theme) => theme === "system" ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : theme;
+
+      const applyAppearance = (settings, persist = false) => {
+        const theme = ["light", "dark", "system"].includes(settings.theme) ? settings.theme : "light";
+        const accent = ["teal", "blue", "violet"].includes(settings.accent) ? settings.accent : "teal";
+        const density = ["comfortable", "compact"].includes(settings.density) ? settings.density : "comfortable";
+        document.documentElement.dataset.theme = resolvedTheme(theme);
+        document.documentElement.dataset.accent = accent;
+        document.documentElement.dataset.density = density;
+        $$('[data-theme-choice]').forEach((el) => el.classList.toggle("is-selected", el.dataset.themeChoice === theme));
+        $$('[data-accent-choice]').forEach((el) => el.classList.toggle("is-selected", el.dataset.accentChoice === accent));
+        $$('[data-density-choice]').forEach((el) => el.classList.toggle("is-selected", el.dataset.densityChoice === density));
+        const themeRadio = $(`input[name="theme"][value="${theme}"]`); if (themeRadio) themeRadio.checked = true;
+        const accentRadio = $(`input[name="accent"][value="${accent}"]`); if (accentRadio) accentRadio.checked = true;
+        const densityRadio = $(`input[name="density"][value="${density}"]`); if (densityRadio) densityRadio.checked = true;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", resolvedTheme(theme) === "dark" ? "#07111f" : "#f4f8fb");
+        if (persist) storage.setItem(APPEARANCE_KEY, JSON.stringify({ theme, accent, density }));
+      };
+
+      const collectAppearance = () => ({
+        theme: $('input[name="theme"]:checked')?.value || getAppearance().theme,
+        accent: $('input[name="accent"]:checked')?.value || getAppearance().accent,
+        density: $('input[name="density"]:checked')?.value || getAppearance().density
+      });
+
+      const handleSave = async (event) => {
+        event.preventDefault();
+        if (!validateForm()) {
+          setView("profile");
+          toast("Revise os campos", "Existem informações inválidas no formulário.", "error");
+          return;
+        }
+
+        const button = byId("saveButton");
+        const original = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner" aria-hidden="true"></span><span>Salvando...</span>';
+
+        const data = currentFormData();
+        try {
+          storage.setItem(PROFILE_KEY, JSON.stringify(data));
+          storage.setItem(APPEARANCE_KEY, JSON.stringify(collectAppearance()));
+          window.dispatchEvent(new CustomEvent("lag:profile-saved", { detail: data }));
+          await new Promise((resolve) => window.setTimeout(resolve, 550));
+          initialSnapshot = snapshot();
+          setDirty(false);
+          syncSummary();
+          toast("Perfil atualizado", "Suas alterações foram salvas com sucesso.", "success");
+        } catch (error) {
+          toast("Não foi possível salvar", error?.message || "Tente novamente em alguns instantes.", "error");
+        } finally {
+          button.disabled = false;
+          button.innerHTML = original;
+        }
+      };
+
+      const handleLogout = async () => {
+        try {
+          if (typeof window.sairDaConta === "function") {
+            await window.sairDaConta();
+            return;
+          }
+          if (window.CloudAuth && typeof window.CloudAuth.logout === "function") {
+            await window.CloudAuth.logout();
+            return;
+          }
+        } catch (error) {
+          toast("Erro ao sair", error?.message || "Não foi possível encerrar a sessão.", "error");
+          return;
+        }
+        sessionStore.clear();
+        toast("Sessão encerrada", "Redirecionando para a tela de login...", "success", 1200);
+        window.setTimeout(() => { window.location.href = "login.html"; }, 800);
+      };
+
+      const initializeContractLink = () => {
+        const input = byId("doctorContractProfileLink");
+        const open = byId("openDoctorContractProfileLink");
+        if (!input || !open) return;
+        try { input.value = new URL(open.getAttribute("href"), window.location.href).href; } catch (_) { input.value = open.href; }
+      };
+
+      const copyContractLink = async () => {
+        const input = byId("doctorContractProfileLink");
+        if (!input?.value) return toast("Link indisponível", "O endereço de contratação ainda não foi configurado.", "warning");
+        let copied = false;
+        try {
+          await navigator.clipboard.writeText(input.value);
+          copied = true;
+        } catch (_) {
+          input.select();
+          copied = document.execCommand("copy");
+          input.setSelectionRange(0, 0);
+          input.blur();
+        }
+        toast(copied ? "Link copiado" : "Não foi possível copiar", copied ? "O endereço está pronto para ser compartilhado." : "Selecione o campo e copie manualmente.", copied ? "success" : "warning");
+      };
+
+      const openModal = () => {
+        byId("passwordModal").hidden = false;
+        document.body.style.overflow = "hidden";
+        window.setTimeout(() => byId("currentPassword")?.focus(), 30);
+      };
+
+      const closeModal = () => {
+        byId("passwordModal").hidden = true;
+        document.body.style.overflow = "";
+        byId("passwordForm")?.reset();
+      };
+
+      const submitPassword = async (event) => {
+        event.preventDefault();
+        const current = byId("currentPassword").value;
+        const next = byId("newPassword").value;
+        const confirm = byId("confirmPassword").value;
+        if (next.length < 8) return toast("Senha muito curta", "Use pelo menos 8 caracteres.", "error");
+        if (!/[A-Za-z]/.test(next) || !/\d/.test(next)) return toast("Senha fraca", "Inclua pelo menos uma letra e um número.", "error");
+        if (next !== confirm) return toast("Senhas diferentes", "A confirmação precisa ser igual à nova senha.", "error");
+
+        const providers = [window.alterarSenha, window.changePassword, window.CloudAuth?.changePassword].filter((fn) => typeof fn === "function");
+        try {
+          if (providers[0]) await providers[0](current, next);
+          else storage.setItem("lag_password_change_request", JSON.stringify({ requestedAt: new Date().toISOString() }));
+          closeModal();
+          toast("Solicitação registrada", providers[0] ? "Sua senha foi atualizada." : "A interface está pronta; a troca definitiva depende do serviço de autenticação do projeto.", providers[0] ? "success" : "warning", 5200);
+        } catch (error) {
+          toast("Erro ao alterar senha", error?.message || "Confira a senha atual e tente novamente.", "error");
+        }
+      };
+
+      const applyExternalData = () => {
+        const name = byId("nomeCompleto")?.value.trim();
+        const email = byId("profileEmail")?.textContent.trim();
+        const role = byId("rolePill")?.textContent.trim();
+        const external = {};
+        if (name && name !== defaults.nomeCompleto) external.nomeCompleto = name;
+        if (email && email !== "Aguarde um instante." && email.includes("@")) external.email = email;
+        if (role) external.role = role;
+        if (Object.keys(external).length) {
+          const merged = { ...getStoredProfile(), ...external };
+          if (external.email) $("[data-profile-email-field]").value = external.email;
+          if (external.role) $$('[data-current-role]').forEach((node) => node.textContent = external.role);
+          storage.setItem(PROFILE_KEY, JSON.stringify(merged));
+          syncSummary();
+          initialSnapshot = snapshot();
+          setDirty(false);
+        }
+      };
+
+      const init = () => {
+        applyAppearance(getAppearance());
+        applyProfile(getStoredProfile());
+        const security = getSecurity();
+        byId("twoFactorToggle").checked = Boolean(security.twoFactor);
+        byId("loginAlertsToggle").checked = security.loginAlerts !== false;
+        setView("profile", false);
+        initializeContractLink();
+        initialSnapshot = snapshot();
+        setDirty(false);
+
+        byId("profileForm").addEventListener("submit", handleSave);
+        byId("discardButton").addEventListener("click", () => {
+          applyProfile(getStoredProfile());
+          applyAppearance(getAppearance());
+          initialSnapshot = snapshot();
+          setDirty(false);
+          toast("Alterações descartadas", "O formulário voltou para a última versão salva.", "default");
+        });
+
+        $$('[data-view]').forEach((button) => button.addEventListener("click", () => setView(button.dataset.view)));
+        $$('[data-city-select]').forEach((select) => select.addEventListener("change", () => {
+          syncCities(select.value, select);
+          const primary = byId("cidade");
+          if (select !== primary) primary.value = select.value;
+          syncSummary();
+          updateDirtyState();
+        }));
+
+        const tracked = ["nomeCompleto", "telefone", "cargo", "setor", "bio"];
+        tracked.forEach((id) => byId(id)?.addEventListener("input", () => {
+          if (id === "telefone") byId(id).value = formatPhone(byId(id).value);
+          if (id === "bio") updateBioCounter();
+          syncSummary();
+          updateDirtyState();
+        }));
+
+        byId("fotoInput").addEventListener("change", async (event) => {
+          const file = event.target.files?.[0];
+          if (!file) return;
+          try {
+            const dataUrl = await compressImage(file, 900, 900, .88);
+            setAvatar(dataUrl);
+            syncSummary();
+            updateDirtyState();
+            toast("Foto atualizada", "Confira a prévia e clique em Salvar perfil.", "success");
+          } catch (error) { toast("Imagem inválida", error.message, "error"); }
+          event.target.value = "";
+        });
+
+        byId("capaInput").addEventListener("change", async (event) => {
+          const file = event.target.files?.[0];
+          if (!file) return;
+          try {
+            const dataUrl = await compressImage(file, 1920, 620, .84);
+            setCover(dataUrl);
+            updateDirtyState();
+            toast("Capa atualizada", "Confira a prévia e clique em Salvar perfil.", "success");
+          } catch (error) { toast("Imagem inválida", error.message, "error"); }
+          event.target.value = "";
+        });
+
+        byId("copyDoctorContractProfileLink").addEventListener("click", copyContractLink);
+        byId("logoutButton").addEventListener("click", handleLogout);
+        byId("mobileLogoutButton").addEventListener("click", handleLogout);
+        byId("notificationButton").addEventListener("click", () => toast("Tudo em dia", "Você não possui novas notificações.", "success"));
+
+        byId("openPasswordModal").addEventListener("click", openModal);
+        $$('[data-close-modal]').forEach((button) => button.addEventListener("click", closeModal));
+        byId("passwordModal").addEventListener("click", (event) => { if (event.target === byId("passwordModal")) closeModal(); });
+        byId("passwordForm").addEventListener("submit", submitPassword);
+
+        [byId("twoFactorToggle"), byId("loginAlertsToggle")].forEach((toggle) => toggle.addEventListener("change", () => {
+          storage.setItem(SECURITY_KEY, JSON.stringify({ twoFactor: byId("twoFactorToggle").checked, loginAlerts: byId("loginAlertsToggle").checked }));
+          toast("Preferência atualizada", "A configuração de segurança foi salva neste dispositivo.", "success");
+        }));
+
+        byId("endSessionsButton").addEventListener("click", () => {
+          if (!window.confirm("Deseja encerrar todas as outras sessões conectadas?")) return;
+          storage.setItem("lag_sessions_revoked_at", new Date().toISOString());
+          window.dispatchEvent(new CustomEvent("lag:revoke-sessions"));
+          toast("Sessões encerradas", "As demais sessões foram marcadas para desconexão.", "success");
+        });
+
+        $$('input[name="theme"], input[name="accent"], input[name="density"]').forEach((input) => input.addEventListener("change", () => {
+          const settings = collectAppearance();
+          applyAppearance(settings, true);
+          toast("Aparência atualizada", "A preferência foi aplicada e salva.", "success", 2200);
+        }));
+
+        byId("mobileMenuButton").addEventListener("click", () => { byId("mobileDrawer").hidden = false; document.body.style.overflow = "hidden"; });
+        byId("closeMobileMenu").addEventListener("click", () => { byId("mobileDrawer").hidden = true; document.body.style.overflow = ""; });
+
+        document.addEventListener("click", (event) => {
+          $$(".access-menu[open]").forEach((menu) => { if (!menu.contains(event.target)) menu.removeAttribute("open"); });
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "/" && !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) {
+            event.preventDefault();
+            byId("globalSearch").focus();
+          }
+          if (event.key === "Escape") {
+            if (!byId("passwordModal").hidden) closeModal();
+            if (!byId("mobileDrawer").hidden) { byId("mobileDrawer").hidden = true; document.body.style.overflow = ""; }
+          }
+        });
+
+        byId("globalSearch").addEventListener("input", (event) => {
+          const query = event.target.value.trim().toLowerCase();
+          if (!query) return;
+          const match = $$('[data-view]').find((button) => button.textContent.trim().toLowerCase().includes(query));
+          if (match) setView(match.dataset.view, false);
+        });
+
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => {
+          const appearance = getAppearance();
+          if (appearance.theme === "system") applyAppearance(appearance);
+        });
+
+        window.addEventListener("beforeunload", (event) => {
+          if (!dirty) return;
+          event.preventDefault();
+          event.returnValue = "";
+        });
+
+        const observed = [byId("profileEmail"), byId("rolePill")].filter(Boolean);
+        observed.forEach((node) => new MutationObserver(() => {
+          const email = byId("profileEmail").textContent.trim();
+          if (email.includes("@")) $("[data-profile-email-field]").value = email;
+          syncSummary();
+        }).observe(node, { childList: true, characterData: true, subtree: true }));
+
+        window.setTimeout(applyExternalData, 900);
+      };
+
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
+      else init();
+    })();
+  </script>
+</body>
+</html>
