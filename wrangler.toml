@@ -1,0 +1,18 @@
+name = "amorsaudeexp4"
+main = "src/worker.js"
+compatibility_date = "2026-07-28"
+workers_dev = true
+keep_vars = true
+
+[observability]
+enabled = true
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/api", "/pages/login", "/pages/home.html", "/modules/prontuario-medico/prontuario-medico.html", "/"]
+not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "amorsaudeexp4-db"
