@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LAG Controller</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #eefdff;
+      color: #102a43;
+    }
+    .box {
+      background: #ffffff;
+      padding: 28px 34px;
+      border-radius: 22px;
+      box-shadow: 0 20px 55px rgba(16, 42, 67, 0.14);
+      text-align: center;
+    }
+    .box strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: #27aeb8;
+    }
+    .box p {
+      margin: 0;
+      color: #60758c;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <strong>LAG Controller</strong>
+    <p>Abrindo modo de edição livre...</p>
+  </div>
+
+  <script>
+    const HOME_URL = "/pages/home.html";
+    const usuarioAnterior = (() => {
+      try {
+        return JSON.parse(localStorage.getItem("amor_usuario") || "null") || {};
+      } catch {
+        return {};
+      }
+    })();
+
+    function iniciar() {
+      const cidade =
+        usuarioAnterior.cidade ||
+        localStorage.getItem("amorSaudeCidadeSelecionada") ||
+        "Cerquilho";
+
+      const usuarioEditor = {
+        ...usuarioAnterior,
+        id: "editor-livre",
+        uid: "editor-livre",
+        nome: usuarioAnterior.nome || "Editor LAG",
+        nomeCompleto: usuarioAnterior.nomeCompleto || usuarioAnterior.nome || "Editor LAG",
+        nome_completo: usuarioAnterior.nome_completo || usuarioAnterior.nome || "Editor LAG",
+        email: "editor@lag.local",
+        nivelAcesso: "admin",
+        nivel_acesso: "admin",
+        cidade,
+        cargo: usuarioAnterior.cargo || "Administrador",
+        setor: usuarioAnterior.setor || "Edição",
+        ativo: true,
+        authProvider: "edicao-livre"
+      };
+
+      localStorage.setItem("amor_usuario", JSON.stringify(usuarioEditor));
+      localStorage.setItem("amorSaudeUsuario", JSON.stringify(usuarioEditor));
+      localStorage.setItem("usuarioLogado", JSON.stringify(usuarioEditor));
+      localStorage.setItem("amor_nivel_acesso", "admin");
+      localStorage.setItem("nivelAcesso", "admin");
+      localStorage.setItem("amor_email", usuarioEditor.email);
+      localStorage.setItem("usuarioEmail", usuarioEditor.email);
+      localStorage.setItem("amor_cidade", cidade);
+      localStorage.setItem("cidadeSelecionada", cidade);
+      localStorage.setItem("amorSaudeCidadeSelecionada", cidade);
+
+      window.location.replace(HOME_URL);
+    }
+
+    iniciar();
+  </script>
+</body>
+</html>

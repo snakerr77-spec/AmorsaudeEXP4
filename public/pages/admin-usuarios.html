@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5faf9" />
+  <title>Painel Admin | LAG Controller</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --lag-navy: #0c2f47;
+      --lag-navy-soft: #254c61;
+      --lag-teal: #0b9899;
+      --lag-teal-dark: #087b7e;
+      --lag-teal-light: #dff6f3;
+      --lag-blue: #1474d4;
+      --lag-blue-light: #e9f2ff;
+      --lag-red: #ff4e4a;
+      --lag-red-dark: #e63c38;
+      --lag-red-light: #fff0ee;
+      --lag-gold-light: #fff5d7;
+      --lag-purple-light: #f0ebff;
+      --lag-page: #f5faf9;
+      --lag-card: #ffffff;
+      --lag-line: #dce9e8;
+      --lag-muted: #718692;
+      --lag-text: #17374b;
+      --shadow-soft: 0 12px 34px rgba(17, 72, 79, .06);
+      --shadow-card: 0 6px 18px rgba(22, 65, 75, .055);
+      --radius-xl: 25px;
+      --radius-lg: 19px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--lag-text);
+      background:
+        radial-gradient(circle at 5% 4%, rgba(74, 206, 194, .08), transparent 22rem),
+        linear-gradient(180deg, #fbfefd 0%, var(--lag-page) 100%);
+      font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    a,
+    select {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button,
+    select {
+      cursor: pointer;
+    }
+
+    .admin-topbar {
+      position: sticky;
+      z-index: 50;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 74px;
+      padding: 12px clamp(20px, 3.2vw, 54px);
+      border-bottom: 1px solid rgba(199, 218, 218, .72);
+      background: rgba(255, 255, 255, .94);
+      box-shadow: 0 6px 24px rgba(22, 65, 75, .035);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+      color: var(--lag-navy);
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: auto;
+      height: 43px;
+      object-fit: contain;
+    }
+
+    .brand span {
+      font-size: 1.23rem;
+      font-weight: 800;
+      letter-spacing: -.035em;
+    }
+
+    .admin-topbar nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 43px;
+      padding: 0 15px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      color: var(--lag-navy);
+      background: transparent;
+      font-size: .82rem;
+      font-weight: 650;
+      text-decoration: none;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    .admin-nav-link:hover {
+      color: var(--lag-teal-dark);
+      background: var(--lag-teal-light);
+      transform: translateY(-1px);
+    }
+
+    .admin-logout {
+      border: 0;
+    }
+
+    .admin-shell {
+      width: min(1540px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0 48px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: minmax(390px, 1.7fr) repeat(3, minmax(190px, .83fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .access-overview,
+    .metric-card,
+    .communication-compose,
+    .communication-history,
+    .users-manager {
+      border: 1px solid var(--lag-line);
+      background: var(--lag-card);
+      box-shadow: var(--shadow-card);
+    }
+
+    .access-overview {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      grid-template-columns: 158px minmax(0, 1fr);
+      gap: 22px;
+      min-height: 224px;
+      overflow: hidden;
+      padding: 25px;
+      border-color: #a9e2dd;
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 92% 82%, rgba(54, 199, 190, .16), transparent 8.5rem),
+        linear-gradient(135deg, #ebfbf9 0%, #d9f7f4 100%);
+    }
+
+    .access-overview::before,
+    .access-overview::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      border-radius: 50%;
+      background: rgba(62, 199, 191, .08);
+    }
+
+    .access-overview::before {
+      right: 32px;
+      bottom: -55px;
+      width: 150px;
+      height: 150px;
+    }
+
+    .access-overview::after {
+      right: -10px;
+      bottom: 18px;
+      width: 95px;
+      height: 95px;
+    }
+
+    .access-visual {
+      position: relative;
+      display: grid;
+      place-items: center;
+      align-self: center;
+      width: 142px;
+      height: 142px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .72);
+      box-shadow: 0 0 0 11px rgba(54, 194, 186, .09);
+    }
+
+    .access-visual::before {
+      content: "";
+      position: absolute;
+      width: 98px;
+      height: 112px;
+      clip-path: polygon(50% 0, 92% 18%, 88% 72%, 50% 100%, 12% 72%, 8% 18%);
+      background: linear-gradient(150deg, #fff, #dcf8f4);
+      filter: drop-shadow(0 12px 18px rgba(0, 109, 111, .18));
+    }
+
+    .access-visual i {
+      position: relative;
+      z-index: 2;
+      color: var(--lag-teal-dark);
+      font-size: 2.35rem;
+    }
+
+    .access-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .access-copy h1 {
+      margin: 0;
+      color: var(--lag-navy);
+      font-size: clamp(1.8rem, 2.8vw, 2.7rem);
+      font-weight: 750;
+      letter-spacing: -.052em;
+      line-height: 1.05;
+    }
+
+    .access-copy > p {
+      max-width: 390px;
+      margin: 13px 0 17px;
+      color: #587680;
+      font-size: .88rem;
+      line-height: 1.55;
+    }
+
+    .access-mini {
+      display: grid;
+      grid-template-columns: 49px 1fr;
+      gap: 12px;
+      align-items: center;
+      width: fit-content;
+      max-width: 100%;
+      padding-top: 14px;
+      border-top: 1px solid rgba(32, 137, 137, .2);
+    }
+
+    .access-mini-icon {
+      display: grid;
+      place-items: center;
+      width: 49px;
+      height: 49px;
+      border-radius: 14px;
+      color: var(--lag-teal-dark);
+      background: rgba(255, 255, 255, .62);
+      font-size: 1.15rem;
+    }
+
+    .access-mini strong,
+    .access-mini span {
+      display: block;
+    }
+
+    .access-mini strong {
+      margin-bottom: 3px;
+      color: var(--lag-navy);
+      font-size: .83rem;
+    }
+
+    .access-mini span {
+      color: #68808a;
+      font-size: .7rem;
+      line-height: 1.35;
+    }
+
+    .metric-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 224px;
+      padding: 26px 25px;
+      border-radius: var(--radius-xl);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .metric-main {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .metric-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 72px;
+      width: 72px;
+      height: 72px;
+      border-radius: 19px;
+      font-size: 1.9rem;
+    }
+
+    .metric-total .metric-icon {
+      color: var(--lag-teal-dark);
+      background: var(--lag-teal-light);
+    }
+
+    .metric-active .metric-icon {
+      color: var(--lag-blue);
+      background: var(--lag-blue-light);
+    }
+
+    .metric-blocked .metric-icon {
+      color: var(--lag-red);
+      background: var(--lag-red-light);
+    }
+
+    .metric-copy span,
+    .metric-footer {
+      color: var(--lag-navy-soft);
+      font-size: .82rem;
+      font-weight: 650;
+    }
+
+    .metric-copy strong {
+      display: block;
+      margin-top: 5px;
+      color: var(--lag-teal);
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -.06em;
+      line-height: 1;
+    }
+
+    .metric-active .metric-copy strong {
+      color: var(--lag-blue);
+    }
+
+    .metric-blocked .metric-copy strong {
+      color: var(--lag-red);
+    }
+
+    .metric-footer {
+      padding-top: 18px;
+      border-top: 1px solid #edf3f3;
+    }
+
+    .communication-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(370px, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .communication-compose,
+    .communication-history {
+      min-width: 0;
+      border-radius: var(--radius-xl);
+    }
+
+    .communication-compose {
+      display: grid;
+      grid-template-columns: 66px minmax(0, 1fr);
+      gap: 18px;
+      padding: 19px;
+    }
+
+    .communication-main-icon {
+      display: grid;
+      place-items: center;
+      width: 66px;
+      height: 66px;
+      border-radius: 18px;
+      color: #fff;
+      background: linear-gradient(145deg, #11aaa8, #078789);
+      box-shadow: 0 12px 22px rgba(11, 152, 153, .2);
+      font-size: 1.65rem;
+    }
+
+    .communication-form {
+      display: grid;
+      min-width: 0;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .panel-title h2,
+    .panel-title h3 {
+      margin: 0;
+      color: var(--lag-navy);
+      font-size: 1.03rem;
+      font-weight: 750;
+      letter-spacing: -.025em;
+    }
+
+    .panel-title h3 i {
+      margin-right: 9px;
+      color: var(--lag-teal);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .field-row {
+      min-width: 0;
+    }
+
+    .field-row label {
+      display: block;
+      margin: 0 0 7px;
+      color: #5f7784;
+      font-size: .69rem;
+      font-weight: 650;
+    }
+
+    .field-row input,
+    .field-row select,
+    .field-row textarea {
+      display: block;
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 13px;
+      border: 1px solid #d5e1e2;
+      border-radius: 11px;
+      outline: 0;
+      color: var(--lag-text);
+      background: #fff;
+      font-size: .78rem;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .field-row textarea {
+      min-height: 84px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .field-row input:focus,
+    .field-row select:focus,
+    .field-row textarea:focus {
+      border-color: var(--lag-teal);
+      box-shadow: 0 0 0 4px rgba(11, 152, 153, .1);
+    }
+
+    .communication-message-field {
+      margin-top: 12px;
+    }
+
+    .communication-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .communication-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--lag-muted);
+      font-size: .72rem;
+      cursor: pointer;
+    }
+
+    .communication-check input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--lag-teal);
+    }
+
+    .publish-communication,
+    .save-user {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 38px;
+      border: 0;
+      border-radius: 10px;
+      color: #fff;
+      background: linear-gradient(135deg, #11aaa8, #058587);
+      box-shadow: 0 8px 18px rgba(9, 148, 149, .17);
+      font-size: .72rem;
+      font-weight: 750;
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+    .publish-communication {
+      padding: 0 18px;
+    }
+
+    .publish-communication:hover,
+    .save-user:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 11px 23px rgba(9, 148, 149, .24);
+      filter: saturate(1.06);
+    }
+
+    .publish-communication:disabled,
+    .save-user:disabled {
+      cursor: wait;
+      opacity: .6;
+      transform: none;
+    }
+
+    .admin-message {
+      margin: 10px 0 0;
+      color: var(--lag-muted);
+      font-size: .71rem;
+      line-height: 1.4;
+    }
+
+    .admin-message.sucesso {
+      color: #087b5c;
+    }
+
+    .admin-message.erro {
+      color: #c73834;
+    }
+
+    .communication-history {
+      padding: 19px;
+    }
+
+    .communication-history-head button {
+      min-height: 32px;
+      padding: 0 11px;
+      border: 1px solid #d7e4e5;
+      border-radius: 9px;
+      color: var(--lag-teal-dark);
+      background: #fff;
+      font-size: .68rem;
+      font-weight: 700;
+    }
+
+    .communication-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .communication-card {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr) auto;
+      grid-template-areas:
+        "icon title top"
+        "icon text foot";
+      gap: 3px 11px;
+      align-items: center;
+      min-height: 58px;
+      padding: 9px 10px;
+      border: 1px solid #e4eeee;
+      border-radius: 13px;
+      background: #fff;
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    .communication-card:hover {
+      border-color: #bfe1df;
+      background: #fbfefe;
+    }
+
+    .communication-card::before {
+      content: "\f0a1";
+      grid-area: icon;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      color: var(--lag-teal);
+      background: var(--lag-teal-light);
+      font-family: "Font Awesome 6 Free";
+      font-size: .92rem;
+      font-weight: 900;
+    }
+
+    .communication-card-top {
+      grid-area: top;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .communication-card-top > span {
+      display: none;
+    }
+
+    .delete-communication {
+      display: grid;
+      place-items: center;
+      width: 27px;
+      height: 27px;
+      border: 0;
+      border-radius: 8px;
+      color: #a8b5ba;
+      background: transparent;
+    }
+
+    .delete-communication:hover {
+      color: var(--lag-red);
+      background: var(--lag-red-light);
+    }
+
+    .communication-card h4 {
+      grid-area: title;
+      overflow: hidden;
+      margin: 0;
+      color: var(--lag-navy);
+      font-size: .74rem;
+      font-weight: 750;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .communication-card > p {
+      grid-area: text;
+      overflow: hidden;
+      margin: 0;
+      color: var(--lag-muted);
+      font-size: .64rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .communication-card-foot {
+      grid-area: foot;
+      display: grid;
+      justify-items: end;
+      gap: 2px;
+      color: #8b9ba2;
+      font-size: .59rem;
+    }
+
+    .communication-card-foot small:first-child {
+      display: none;
+    }
+
+    .empty-communication {
+      display: grid;
+      place-items: center;
+      min-height: 165px;
+      margin: 0;
+      border: 1px dashed #d7e5e5;
+      border-radius: 13px;
+      color: var(--lag-muted);
+      font-size: .76rem;
+      text-align: center;
+    }
+
+    .users-manager {
+      padding: 13px;
+      border-radius: var(--radius-xl);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(240px, 1.45fr) repeat(3, minmax(135px, .75fr)) auto;
+      gap: 12px;
+      align-items: end;
+      margin: 0;
+      padding: 0 6px 13px;
+    }
+
+    .search-box,
+    .filter-field {
+      display: grid;
+      min-width: 0;
+    }
+
+    .search-box {
+      position: relative;
+      align-self: end;
+    }
+
+    .search-box i {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 15px;
+      color: #78909a;
+      font-size: .8rem;
+      transform: translateY(-50%);
+    }
+
+    .search-box input,
+    .filter-field select {
+      width: 100%;
+      height: 45px;
+      border: 1px solid #d5e2e3;
+      border-radius: 12px;
+      outline: 0;
+      color: var(--lag-text);
+      background: #fff;
+      font-size: .74rem;
+    }
+
+    .search-box input {
+      padding: 0 14px 0 42px;
+    }
+
+    .filter-field > span {
+      margin: 0 0 5px 2px;
+      color: #637985;
+      font-size: .61rem;
+      font-weight: 650;
+    }
+
+    .filter-field select {
+      padding: 0 11px;
+    }
+
+    .search-box input:focus,
+    .filter-field select:focus {
+      border-color: var(--lag-teal);
+      box-shadow: 0 0 0 4px rgba(11, 152, 153, .09);
+    }
+
+    .toolbar-buttons {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .refresh-users-btn,
+    .clear-filters {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 45px;
+      padding: 0 13px;
+      border: 1px solid #cddddd;
+      border-radius: 11px;
+      color: #627b87;
+      background: #fff;
+      font-size: .69rem;
+      font-weight: 700;
+    }
+
+    .refresh-users-btn:hover,
+    .clear-filters:hover {
+      color: var(--lag-teal-dark);
+      border-color: #9cd4d0;
+      background: var(--lag-teal-light);
+    }
+
+    .users-status-message {
+      margin: 0 6px 10px;
+    }
+
+    .users-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px 12px;
+    }
+
+    .user-card {
+      display: grid;
+      grid-template-columns: minmax(185px, 1.35fr) 84px minmax(105px, .7fr) minmax(116px, .82fr) 130px;
+      gap: 9px;
+      align-items: center;
+      min-width: 0;
+      min-height: 78px;
+      padding: 11px 10px 11px 14px;
+      border: 1px solid #e1eaea;
+      border-radius: 15px;
+      background: #fff;
+      box-shadow: 0 3px 10px rgba(20, 70, 76, .025);
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .user-card:hover {
+      z-index: 2;
+      border-color: #b8dcda;
+      box-shadow: 0 9px 22px rgba(20, 70, 76, .075);
+      transform: translateY(-1px);
+    }
+
+    .user-card[hidden] {
+      display: none;
+    }
+
+    .user-card-head {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 11px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border: 1px solid #dce9e8;
+      border-radius: 50%;
+      object-fit: cover;
+      background: linear-gradient(145deg, #e9f7f5, #dff1ff);
+    }
+
+    .user-card:nth-child(4n + 2) .avatar {
+      background: var(--lag-purple-light);
+    }
+
+    .user-card:nth-child(4n + 3) .avatar {
+      background: var(--lag-gold-light);
+    }
+
+    .user-card:nth-child(4n + 4) .avatar {
+      background: var(--lag-red-light);
+    }
+
+    .user-card-head h3 {
+      overflow: hidden;
+      margin: 0 0 4px;
+      color: var(--lag-navy);
+      font-size: .79rem;
+      font-weight: 750;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .user-card-head p {
+      overflow: hidden;
+      margin: 0;
+      color: #81919a;
+      font-size: .62rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .user-card .field-row {
+      min-width: 0;
+    }
+
+    .user-card .field-row label {
+      margin-bottom: 4px;
+      font-size: .57rem;
+    }
+
+    .user-card .field-row select {
+      min-height: 33px;
+      padding: 6px 24px 6px 9px;
+      border-color: transparent;
+      border-radius: 9px;
+      color: var(--lag-teal-dark);
+      background: var(--lag-teal-light);
+      font-size: .62rem;
+      font-weight: 650;
+      text-overflow: ellipsis;
+    }
+
+    .user-card .field-row:nth-of-type(1) select {
+      color: #0a7b61;
+      background: #e3f7ef;
+    }
+
+    .user-card[data-user-active="false"] .field-row:nth-of-type(1) select {
+      color: #c13934;
+      background: var(--lag-red-light);
+    }
+
+    .user-card .field-row:nth-of-type(3) select {
+      color: #526d78;
+      background: #f0f5f5;
+    }
+
+    .user-card .field-row select:hover,
+    .user-card .field-row select:focus {
+      border-color: #9fd5d1;
+      box-shadow: none;
+    }
+
+    .user-meta {
+      display: none;
+      grid-column: 1 / -1;
+      gap: 4px;
+      color: #87989f;
+      font-size: .59rem;
+    }
+
+    .save-user {
+      min-width: 0;
+      min-height: 38px;
+      padding: 0 10px;
+      white-space: nowrap;
+    }
+
+    .user-card[data-user-active="false"] .save-user {
+      background: linear-gradient(135deg, #ff625d, var(--lag-red));
+      box-shadow: 0 8px 18px rgba(255, 78, 74, .16);
+    }
+
+    .no-filter-results {
+      grid-column: 1 / -1;
+      display: none;
+      place-items: center;
+      min-height: 130px;
+      border: 1px dashed #d4e3e3;
+      border-radius: 15px;
+      color: var(--lag-muted);
+      font-size: .8rem;
+    }
+
+    .no-filter-results.is-visible {
+      display: grid;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(11, 152, 153, .2);
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 1300px) {
+      .overview-grid {
+        grid-template-columns: 1.55fr repeat(3, .9fr);
+      }
+
+      .access-overview {
+        grid-template-columns: 118px minmax(0, 1fr);
+      }
+
+      .access-visual {
+        width: 112px;
+        height: 112px;
+      }
+
+      .access-visual::before {
+        width: 75px;
+        height: 86px;
+      }
+
+      .metric-main {
+        display: grid;
+        gap: 12px;
+      }
+
+      .metric-icon {
+        width: 59px;
+        height: 59px;
+        flex-basis: 59px;
+      }
+
+      .metric-copy strong {
+        font-size: 2.55rem;
+      }
+
+      .users-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .user-card {
+        grid-template-columns: minmax(230px, 1.45fr) 96px 150px 160px 145px;
+      }
+    }
+
+    @media (max-width: 1030px) {
+      .overview-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .access-overview {
+        grid-column: 1 / -1;
+      }
+
+      .metric-card {
+        min-height: 175px;
+      }
+
+      .communication-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .search-box {
+        grid-column: 1 / -1;
+      }
+
+      .toolbar-buttons {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+      }
+
+      .user-card {
+        grid-template-columns: minmax(190px, 1.2fr) 88px 125px 135px 135px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .admin-topbar {
+        position: relative;
+        align-items: flex-start;
+        min-height: auto;
+        padding: 16px;
+      }
+
+      .brand img {
+        height: 36px;
+      }
+
+      .brand span {
+        display: none;
+      }
+
+      .admin-topbar nav {
+        gap: 2px;
+      }
+
+      .admin-nav-link {
+        width: 40px;
+        min-height: 40px;
+        padding: 0;
+        font-size: 0;
+      }
+
+      .admin-nav-link i {
+        font-size: .9rem;
+      }
+
+      .admin-shell {
+        width: min(100% - 20px, 620px);
+        padding-top: 10px;
+      }
+
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .access-overview {
+        grid-column: auto;
+        grid-template-columns: 82px 1fr;
+        min-height: 185px;
+        padding: 19px;
+      }
+
+      .access-visual {
+        width: 76px;
+        height: 76px;
+        box-shadow: 0 0 0 7px rgba(54, 194, 186, .09);
+      }
+
+      .access-visual::before {
+        width: 50px;
+        height: 58px;
+      }
+
+      .access-visual i {
+        font-size: 1.4rem;
+      }
+
+      .access-copy h1 {
+        font-size: 1.6rem;
+      }
+
+      .access-copy > p {
+        margin: 8px 0 12px;
+        font-size: .74rem;
+      }
+
+      .access-mini {
+        grid-template-columns: 38px 1fr;
+        gap: 9px;
+        padding-top: 10px;
+      }
+
+      .access-mini-icon {
+        width: 38px;
+        height: 38px;
+      }
+
+      .metric-card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        min-height: 115px;
+        padding: 18px;
+      }
+
+      .metric-main {
+        display: flex;
+      }
+
+      .metric-icon {
+        width: 54px;
+        height: 54px;
+      }
+
+      .metric-copy strong {
+        font-size: 2rem;
+      }
+
+      .metric-footer {
+        max-width: 95px;
+        padding: 0;
+        border: 0;
+        text-align: right;
+      }
+
+      .communication-compose {
+        grid-template-columns: 1fr;
+      }
+
+      .communication-main-icon {
+        width: 52px;
+        height: 52px;
+      }
+
+      .form-grid,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .search-box,
+      .toolbar-buttons {
+        grid-column: auto;
+      }
+
+      .communication-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .publish-communication {
+        width: 100%;
+      }
+
+      .toolbar-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .users-manager {
+        padding: 10px;
+      }
+
+      .user-card {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+        padding: 14px;
+      }
+
+      .user-card-head {
+        grid-column: 1 / -1;
+      }
+
+      .user-card .field-row:nth-of-type(3) {
+        grid-column: 1 / -1;
+      }
+
+      .user-meta {
+        display: grid;
+      }
+
+      .save-user {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .access-overview {
+        grid-template-columns: 1fr;
+      }
+
+      .access-visual {
+        display: none;
+      }
+
+      .communication-card {
+        grid-template-columns: 36px minmax(0, 1fr);
+        grid-template-areas:
+          "icon title"
+          "icon text"
+          "icon foot";
+      }
+
+      .communication-card-top {
+        position: absolute;
+        right: 10px;
+      }
+
+      .communication-card-foot {
+        justify-items: start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="admin-topbar">
+    <a class="brand" href="home.html" aria-label="LAG Controller">
+      <img src="../assets/images/logo-lag.png" alt="LAG Controller" />
+      <span>Painel Admin</span>
+    </a>
+
+    <nav aria-label="Navegação administrativa">
+      <a class="admin-nav-link" href="home.html">
+        <i class="fa-solid fa-house" aria-hidden="true"></i>
+        Home
+      </a>
+      <a class="admin-nav-link" href="perfil.html">
+        <i class="fa-regular fa-user" aria-hidden="true"></i>
+        Meu perfil
+      </a>
+      <button class="admin-nav-link admin-logout" type="button" onclick="sairDaConta()">
+        <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+        Sair
+      </button>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <section class="overview-grid" aria-label="Resumo do controle de acesso">
+      <article class="access-overview">
+        <div class="access-visual" aria-hidden="true">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+
+        <div class="access-copy">
+          <h1>Controle de acesso</h1>
+          <p>Gerencie usuários, permissões e comunicações de forma segura e eficiente.</p>
+
+          <div class="access-mini">
+            <span class="access-mini-icon" aria-hidden="true">
+              <i class="fa-solid fa-users"></i>
+            </span>
+            <span>
+              <strong>Usuários cadastrados</strong>
+              <span>Visão geral do status de acesso dos usuários no sistema.</span>
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="metric-card metric-total">
+        <div class="metric-main">
+          <span class="metric-icon" aria-hidden="true">
+            <i class="fa-solid fa-users"></i>
+          </span>
+          <span class="metric-copy">
+            <span>Total</span>
+            <strong id="statTotal">0</strong>
+          </span>
+        </div>
+        <span class="metric-footer">Usuários cadastrados</span>
+      </article>
+
+      <article class="metric-card metric-active">
+        <div class="metric-main">
+          <span class="metric-icon" aria-hidden="true">
+            <i class="fa-regular fa-user"></i>
+          </span>
+          <span class="metric-copy">
+            <span>Ativos</span>
+            <strong id="statAtivos">0</strong>
+          </span>
+        </div>
+        <span class="metric-footer">Usuários com acesso</span>
+      </article>
+
+      <article class="metric-card metric-blocked">
+        <div class="metric-main">
+          <span class="metric-icon" aria-hidden="true">
+            <i class="fa-solid fa-lock"></i>
+          </span>
+          <span class="metric-copy">
+            <span>Bloqueados</span>
+            <strong id="statBloqueados">0</strong>
+          </span>
+        </div>
+        <span class="metric-footer">Usuários sem acesso</span>
+      </article>
+    </section>
+
+    <section class="communication-layout" id="adminCommunicationCenter">
+      <article class="communication-compose">
+        <span class="communication-main-icon" aria-hidden="true">
+          <i class="fa-regular fa-paper-plane"></i>
+        </span>
+
+        <form class="communication-form" id="communicationForm">
+          <div class="panel-title">
+            <h2>Criar comunicado</h2>
+          </div>
+
+          <div class="form-grid">
+            <div class="field-row">
+              <label for="communicationType">Tipo</label>
+              <select id="communicationType" required>
+                <option value="notificacao">Notificação no sininho</option>
+                <option value="anuncio">Anúncio / notícia na home</option>
+              </select>
+            </div>
+
+            <div class="field-row">
+              <label for="communicationCategory">Categoria</label>
+              <select id="communicationCategory" required>
+                <option value="Aviso">Aviso</option>
+                <option value="Treinamento">Treinamento</option>
+                <option value="Médicos e exames">Médicos e exames</option>
+                <option value="Financeiro">Financeiro</option>
+                <option value="Sistema">Sistema</option>
+                <option value="Urgente">Urgente</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row communication-message-field">
+            <label for="communicationTitle">Título</label>
+            <input id="communicationTitle" type="text" maxlength="80" placeholder="Ex.: Atualização de procedimentos" required />
+          </div>
+
+          <div class="field-row communication-message-field">
+            <label for="communicationMessage">Mensagem</label>
+            <textarea id="communicationMessage" rows="4" maxlength="420" placeholder="Digite sua mensagem aqui..." required></textarea>
+          </div>
+
+          <div class="communication-actions">
+            <label class="communication-check">
+              <input id="communicationImportant" type="checkbox" />
+              <span>Marcar como importante</span>
+            </label>
+
+            <button class="publish-communication" id="publishCommunication" type="submit">
+              <i class="fa-regular fa-paper-plane" aria-hidden="true"></i>
+              Enviar comunicado
+            </button>
+          </div>
+
+          <p class="admin-message communication-message" id="communicationMessageStatus">
+            Preencha os campos para publicar um comunicado.
+          </p>
+        </form>
+      </article>
+
+      <aside class="communication-history">
+        <div class="panel-title communication-history-head">
+          <h3><i class="fa-solid fa-bullhorn" aria-hidden="true"></i>Últimos comunicados</h3>
+          <button id="refreshCommunications" type="button">
+            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+            Atualizar
+          </button>
+        </div>
+
+        <div class="communication-list" id="communicationList">
+          <p class="empty-communication">Carregando comunicados...</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="users-manager">
+      <div class="toolbar">
+        <label class="search-box" aria-label="Buscar usuários">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input id="userSearch" type="search" placeholder="Buscar por nome ou e-mail" />
+        </label>
+
+        <label class="filter-field">
+          <span>Status</span>
+          <select id="adminStatusFilter">
+            <option value="">Todos</option>
+            <option value="true">Ativos</option>
+            <option value="false">Bloqueados</option>
+          </select>
+        </label>
+
+        <label class="filter-field">
+          <span>Permissão</span>
+          <select id="adminRoleFilter">
+            <option value="">Todas</option>
+            <option value="admin">Admin</option>
+            <option value="financeiro">Financeiro</option>
+            <option value="gerencia">Gerência</option>
+            <option value="cdt">CDT</option>
+            <option value="recepcao">Recepção</option>
+            <option value="medico">Médico</option>
+            <option value="colaborador">Colaborador</option>
+          </select>
+        </label>
+
+        <label class="filter-field">
+          <span>Cidade / Unidade</span>
+          <select id="adminCityFilter">
+            <option value="">Todas</option>
+            <option value="Embu das Artes">Embu das Artes</option>
+            <option value="Itapeva">Itapeva</option>
+            <option value="Tatui">Tatui</option>
+            <option value="Cerquilho">Cerquilho</option>
+          </select>
+        </label>
+
+        <div class="toolbar-buttons">
+          <button id="refreshUsers" class="refresh-users-btn" type="button">
+            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+            Atualizar
+          </button>
+          <button id="clearAdminFilters" class="clear-filters" type="button">
+            <i class="fa-solid fa-filter-circle-xmark" aria-hidden="true"></i>
+            Limpar
+          </button>
+        </div>
+      </div>
+
+      <p class="admin-message users-status-message" id="adminMessage">Carregando usuários...</p>
+
+      <section class="users-grid" id="usersGrid"></section>
+      <div class="no-filter-results" id="noFilterResults">Nenhum usuário corresponde aos filtros selecionados.</div>
+    </section>
+  </main>
+
+  <template id="userCardTemplate">
+    <article class="user-card">
+      <div class="user-card-head">
+        <img class="avatar" src="../modules/lag-controller/assets/lobo-parado.png" alt="Foto do usuário" />
+        <div>
+          <h3 data-name>Usuário</h3>
+          <p data-email>email</p>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label>Status</label>
+        <select data-active>
+          <option value="true">Ativo</option>
+          <option value="false">Bloqueado</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <label>Permissão</label>
+        <select data-role>
+          <option value="admin">Admin</option>
+          <option value="financeiro">Financeiro</option>
+          <option value="gerencia">Gerência</option>
+          <option value="cdt">CDT</option>
+          <option value="recepcao">Recepção</option>
+          <option value="medico">Médico</option>
+          <option value="colaborador">Colaborador</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <label>Cidade / Unidade</label>
+        <select data-city>
+          <option value="Embu das Artes">Embu das Artes</option>
+          <option value="Itapeva">Itapeva</option>
+          <option value="Tatui">Tatui</option>
+          <option value="Cerquilho">Cerquilho</option>
+        </select>
+      </div>
+
+      <div class="user-meta">
+        <span data-created>Cadastro: --</span>
+        <span data-last-login>Último login: --</span>
+      </div>
+
+      <button class="save-user" type="button">
+        <i class="fa-solid fa-check" aria-hidden="true"></i>
+        Salvar alterações
+      </button>
+    </article>
+  </template>
+
+  <template id="communicationCardTemplate">
+    <article class="communication-card">
+      <div class="communication-card-top">
+        <span data-communication-type>Notificação</span>
+        <button class="delete-communication" type="button" title="Excluir comunicado" aria-label="Excluir comunicado">
+          <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+        </button>
+      </div>
+      <h4 data-communication-title>Título</h4>
+      <p data-communication-text>Mensagem</p>
+      <div class="communication-card-foot">
+        <small data-communication-category>Aviso</small>
+        <small data-communication-date>Agora</small>
+      </div>
+    </article>
+  </template>
+
+  <script src="../js/cloud-auth.js?v=edicao-livre-20260722"></script>
+  <script type="module" src="../js/firebase-config.js?v=compat-cloudflare-d1"></script>
+  <script type="module" src="../js/admin-usuarios.js?v=cloudflare-d1-corrigido"></script>
+
+  <script>
+    (() => {
+      const usersGrid = document.getElementById("usersGrid");
+      const statusFilter = document.getElementById("adminStatusFilter");
+      const roleFilter = document.getElementById("adminRoleFilter");
+      const cityFilter = document.getElementById("adminCityFilter");
+      const clearButton = document.getElementById("clearAdminFilters");
+      const emptyState = document.getElementById("noFilterResults");
+      let isApplying = false;
+
+      function refreshCardState(card) {
+        const activeSelect = card.querySelector("[data-active]");
+        if (!activeSelect) return;
+        card.dataset.userActive = activeSelect.value;
+      }
+
+      function applyAdminFilters() {
+        if (isApplying || !usersGrid) return;
+        isApplying = true;
+
+        const cards = Array.from(usersGrid.querySelectorAll(".user-card"));
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const activeSelect = card.querySelector("[data-active]");
+          const roleSelect = card.querySelector("[data-role]");
+          const citySelect = card.querySelector("[data-city]");
+
+          refreshCardState(card);
+
+          const matchesStatus = !statusFilter.value || activeSelect?.value === statusFilter.value;
+          const matchesRole = !roleFilter.value || roleSelect?.value === roleFilter.value;
+          const matchesCity = !cityFilter.value || citySelect?.value === cityFilter.value;
+          const visible = matchesStatus && matchesRole && matchesCity;
+
+          card.hidden = !visible;
+          if (visible) visibleCount += 1;
+
+          if (activeSelect && activeSelect.dataset.redesignReady !== "true") {
+            activeSelect.dataset.redesignReady = "true";
+            activeSelect.addEventListener("change", () => {
+              refreshCardState(card);
+              applyAdminFilters();
+            });
+          }
+        });
+
+        emptyState?.classList.toggle("is-visible", cards.length > 0 && visibleCount === 0);
+        isApplying = false;
+      }
+
+      [statusFilter, roleFilter, cityFilter].forEach((filter) => {
+        filter?.addEventListener("change", applyAdminFilters);
+      });
+
+      clearButton?.addEventListener("click", () => {
+        statusFilter.value = "";
+        roleFilter.value = "";
+        cityFilter.value = "";
+        applyAdminFilters();
+      });
+
+      if (usersGrid) {
+        const observer = new MutationObserver(applyAdminFilters);
+        observer.observe(usersGrid, { childList: true, subtree: true });
+      }
+
+      document.addEventListener("DOMContentLoaded", applyAdminFilters);
+      window.addEventListener("usuario-carregado", applyAdminFilters);
+    })();
+  </script>
+</body>
+</html>
