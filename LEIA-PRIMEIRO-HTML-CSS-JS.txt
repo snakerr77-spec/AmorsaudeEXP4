@@ -1,0 +1,21 @@
+LAG CONTROLLER — HTML, CSS E JAVASCRIPT COM INDEX NA RAIZ
+
+Estrutura principal:
+index.html
+assets/
+css/
+js/
+pages/
+modules/
+src/
+database/
+wrangler.toml
+
+Cloudflare:
+Comando da build: deixar vazio
+Comando de implantação: npx wrangler deploy
+Comando de não produção: npx wrangler versions upload
+Caminho/diretório raiz: deixar vazio
+
+O wrangler.toml usa a raiz como diretório de assets.
+O arquivo .assetsignore impede a publicação de arquivos internos.

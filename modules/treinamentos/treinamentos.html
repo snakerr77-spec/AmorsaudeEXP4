@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treinamentos | LAG Controller</title>
+  <link rel="stylesheet" href="treinamentos.css?v=20260526-search-baby1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/lag-global.css?v=lag-controller-20260609">
+</head>
+<body id="topo">
+  <header class="site-header">
+    <div class="container header-wrap">
+      <a href="../../pages/home.html" class="brand" aria-label="Voltar para a home LAG Controller">
+        <img src="../../assets/images/logo-lag.png" alt="LAG Controller">
+      </a>
+
+      <button class="training-menu-toggle" id="trainingMenuToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="trainingNavigation">☰</button>
+
+      <nav class="main-nav" id="trainingNavigation" aria-label="Menu de navegação">
+        <a href="../../pages/home.html">Início</a>
+        <a href="../../pages/home.html#beneficios">Benefícios</a>
+        <a href="../medicos-exames/medicos-exames.html">Médicos e exames</a>
+        <a href="../../pages/home.html#noticias">Notícias</a>
+        <a href="../../pages/home.html#contato">Contato</a>
+      </nav>
+
+      <a href="../../pages/home.html" class="btn-colaborador">← Voltar</a>
+    </div>
+  </header>
+
+  <main class="page-treinamentos">
+    <div class="container">
+      <div class="breadcrumb" aria-label="Caminho da página">
+        <a href="../../pages/home.html">Início</a>
+        <span>›</span>
+        <span>Treinamentos</span>
+      </div>
+
+      <section class="hero-treinamento">
+        <div class="hero-copy">
+          <span class="hero-kicker">Academia interna LAG Controller</span>
+          <h1>Treinamentos</h1>
+          <p>
+            Uma central de aprendizagem para a equipe estudar por módulos, assistir aulas sugeridas,
+            concluir etapas e acompanhar a evolução de cada curso em tempo real.
+          </p>
+
+          <div class="hero-actions">
+            <button type="button" class="btn-primary" data-scroll-target="trilhas">Começar trilhas</button>
+            <button type="button" class="btn-ghost" id="continueLastCourse">Continuar último curso</button>
+          </div>
+        </div>
+
+        <div class="hero-media" aria-hidden="true">
+          <div class="hero-orb orb-1"></div>
+          <div class="hero-orb orb-2"></div>
+          <div class="hero-orb orb-3"></div>
+          <img src="assets/treinamento.png" alt="">
+        </div>
+      </section>
+
+      <section class="training-overview" aria-label="Resumo de progresso dos treinamentos">
+        <article class="overview-card destaque">
+          <span>Progresso geral</span>
+          <strong id="overallProgress">0%</strong>
+          <div class="progress grande"><div class="progress-bar" id="overallProgressBar"></div></div>
+          <small>Atualiza automaticamente conforme as aulas são concluídas.</small>
+        </article>
+
+        <article class="overview-card">
+          <span>Cursos ativos</span>
+          <strong id="totalCourses">0</strong>
+          <small>Todos com aulas internas.</small>
+        </article>
+
+        <article class="overview-card">
+          <span>Aulas concluídas</span>
+          <strong id="totalLessonsDone">0</strong>
+          <small id="totalLessonsText">de 0 aulas.</small>
+        </article>
+
+        <article class="overview-card">
+          <span>Certificados</span>
+          <strong id="totalCertificates">0</strong>
+          <small>Cursos finalizados em 100%.</small>
+        </article>
+      </section>
+
+      <section class="daily-track">
+        <div>
+          <span class="section-label">Plano rápido</span>
+          <h2>Trilha recomendada de hoje</h2>
+          <p>
+            Comece por atendimento, siga para segurança do paciente e finalize com inclusão.
+            O painel guarda seu avanço no navegador, como um mini banco local.
+          </p>
+        </div>
+
+        <div class="daily-steps">
+          <button type="button" data-open-course="boas-praticas">1. Atendimento</button>
+          <button type="button" data-open-course="seguranca-paciente">2. Segurança</button>
+          <button type="button" data-open-course="libras-atendimento">3. Inclusão</button>
+        </div>
+      </section>
+
+      <section class="tabs-section" id="trilhas">
+        <div class="tabs" role="tablist" aria-label="Categorias de treinamentos">
+          <button class="tab is-active" type="button" data-tab="cvortex">Via C-Vortex</button>
+          <button class="tab danger" type="button" data-tab="chamada">Por chamada</button>
+          <button class="tab" type="button" data-tab="presencial">Presencial</button>
+          <button class="tab" type="button" data-tab="libras">Libras</button>
+        </div>
+
+        <div class="content-panel">
+          <div class="tab-panel is-active" id="cvortex">
+            <div class="panel-head">
+              <div class="panel-icon">⌘</div>
+              <div>
+                <h2>Treinamentos via C-Vortex</h2>
+                <p>Cursos digitais com aulas, vídeo sugerido, atividade prática e progresso por etapa.</p>
+              </div>
+            </div>
+            <div class="cards-grid" id="courses-cvortex"></div>
+          </div>
+
+          <div class="tab-panel" id="chamada">
+            <div class="panel-head">
+              <div class="panel-icon">📞</div>
+              <div>
+                <h2>Treinamentos por chamada</h2>
+                <p>Encontros guiados para alinhamento, simulações de atendimento e reforço de processos.</p>
+              </div>
+            </div>
+            <div class="cards-grid" id="courses-chamada"></div>
+          </div>
+
+          <div class="tab-panel" id="presencial">
+            <div class="panel-head">
+              <div class="panel-icon">📍</div>
+              <div>
+                <h2>Treinamentos presenciais</h2>
+                <p>Capacitações dentro da unidade com foco em rotina, recepção, acolhimento e execução.</p>
+              </div>
+            </div>
+            <div class="cards-grid" id="courses-presencial"></div>
+          </div>
+
+          <div class="tab-panel" id="libras">
+            <div class="panel-head">
+              <div class="panel-icon">🤟</div>
+              <div>
+                <h2>Treinamentos de Libras</h2>
+                <p>Aulas para fortalecer acessibilidade, comunicação básica e acolhimento inclusivo.</p>
+              </div>
+            </div>
+            <div class="cards-grid" id="courses-libras"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="lesson-drawer" id="lessonDrawer" aria-hidden="true">
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <aside class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawerCourseTitle">
+      <button class="drawer-close" id="drawerClose" type="button" aria-label="Fechar aulas">×</button>
+
+      <div class="drawer-header">
+        <span id="drawerCategory">Curso</span>
+        <h2 id="drawerCourseTitle">Aulas do curso</h2>
+        <p id="drawerCourseDescription"></p>
+        <div class="progress"><div class="progress-bar" id="drawerProgressBar"></div></div>
+        <small id="drawerProgressText">0% concluído</small>
+      </div>
+
+      <div class="drawer-grid">
+        <nav class="lesson-list" id="lessonList" aria-label="Lista de aulas"></nav>
+
+        <section class="lesson-view">
+          <div class="video-box">
+            <div class="play-symbol">▶</div>
+            <div>
+              <span>Vídeo sugerido</span>
+              <strong id="lessonVideoTitle">Abra uma aula complementar na internet</strong>
+              <a id="lessonVideoLink" href="#" target="_blank" rel="noopener noreferrer">Abrir vídeo de apoio</a>
+            </div>
+          </div>
+
+          <div class="lesson-copy">
+            <span id="lessonDuration">Aula</span>
+            <h3 id="lessonTitle">Selecione uma aula</h3>
+            <p id="lessonContent"></p>
+          </div>
+
+          <div class="lesson-checklist" id="lessonChecklist"></div>
+
+          <div class="quiz-box" id="quizBox">
+            <h4>Mini atividade</h4>
+            <p id="quizQuestion"></p>
+            <div id="quizOptions" class="quiz-options"></div>
+            <small id="quizFeedback"></small>
+          </div>
+
+          <div class="drawer-actions">
+            <button type="button" class="btn-ghost" id="prevLesson">Aula anterior</button>
+            <button type="button" class="btn-primary" id="completeLesson">Concluir aula</button>
+            <button type="button" class="btn-ghost" id="nextLesson">Próxima aula</button>
+          </div>
+        </section>
+      </div>
+    </aside>
+  </div>
+
+  <div class="toast" id="trainingToast"></div>
+  <button class="training-back-top" id="trainingBackToTop" type="button" aria-label="Voltar ao topo">↑</button>
+
+  <script src="treinamentos.js"></script>
+  <script type="module" src="../../js/firebase-config.js?v=20260601-adminfix1"></script>
+</body>
+</html>
