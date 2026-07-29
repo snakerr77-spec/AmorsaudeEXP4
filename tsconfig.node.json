@@ -4,7 +4,9 @@
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "allowJs": true,
+    "checkJs": false,
     "noEmit": true
   },
-  "include": ["vite.config.ts", "src/shims.d.ts"]
+  "include": ["vite.config.js", "src/shims.d.ts"]
 }
