@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LAG Controller | Portal Interno</title>
+  <link rel="stylesheet" href="../css/home.css?v=lag-static-premium-20260729">
+  <link rel="stylesheet" href="/css/lag-global.css?v=lag-controller-20260609">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css?v=lag-controller-20260609" rel="stylesheet">
+</head>
+<body id="topo">
+
+  <header>
+    <div class="container topbar">
+      <button class="home-menu-toggle home-drawer-toggle" id="homeMenuToggle" type="button" aria-label="Abrir menu lateral" aria-expanded="false" aria-controls="homeSideDrawer">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <a class="logo-box" href="#topo" aria-label="Voltar para o início">
+        <img src="../assets/images/logo-lag-sem-fundo.png" alt="Logo LAG Controller">
+      </a>
+
+      <nav class="nav" id="homeNavigation">
+        <a href="#topo">Início</a>
+        <a href="#beneficios">Soluções</a>
+        <a href="../modules/prontuario-medico/prontuario-medico.html" data-medical-only>Área Médica</a>
+        <a href="../modules/treinamentos/treinamentos.html">Treinamentos</a>
+        <a href="../modules/lag-controller/index.html" data-lag-only>Dashboard</a>
+        <a href="../modules/controladoria/controladoria.html" data-controladoria-only>Controladoria</a>
+        <a href="#noticias">Updates</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <div class="home-actions">
+        <div class="home-notify-wrap">
+          <button class="home-notify-btn" id="homeNotificationToggle" type="button" aria-label="Abrir notificações" aria-expanded="false">
+            <i class="fa-regular fa-bell"></i>
+            <span id="homeNotificationCount" style="display:none">0</span>
+          </button>
+
+          <div class="home-notification-panel" id="homeNotificationPanel" aria-hidden="true">
+            <div class="home-notification-head">
+              <div>
+                <strong>Notificações</strong>
+                <small>Atualizações rápidas da plataforma</small>
+              </div>
+              <button type="button" id="homeMarkAllRead">Marcar lidas</button>
+            </div>
+
+            <div class="home-notification-list" id="homeNotificationList">
+              <p class="home-notification-empty">Carregando avisos...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-profile-wrap">
+          <button class="home-profile-btn" id="homeProfileToggle" type="button" aria-label="Abrir menu do perfil" aria-expanded="false">
+            <span class="home-profile-avatar-ring">
+              <img src="../modules/lag-controller/assets/lobo-seguranca.png" alt="Foto do usuário" data-user-avatar>
+            </span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+
+          <div class="home-profile-panel" id="homeProfilePanel" aria-hidden="true">
+            <div class="home-profile-head">
+              <img src="../modules/lag-controller/assets/lobo-seguranca.png" alt="Foto do usuário" data-user-avatar>
+              <div>
+                <strong data-user-name>Usuário</strong>
+                <small data-user-email>email@exemplo.com</small>
+              </div>
+            </div>
+
+            <a class="profile-menu-link controladoria-profile-link" href="../modules/controladoria/controladoria.html" data-controladoria-only>
+              <span><i class="fa-solid fa-folder-open"></i></span>
+              <div>
+                <b>Controladoria</b>
+                <small>Documentos, contratos e informações internas</small>
+              </div>
+            </a>
+
+            <a class="profile-menu-link doctor-contract-profile-link" href="cadastro-medico.html" data-controladoria-only>
+              <span><i class="fa-solid fa-file-signature"></i></span>
+              <div>
+                <b>Link de contratação</b>
+                <small>Gerar e compartilhar cadastro médico</small>
+              </div>
+            </a>
+
+            <a class="profile-menu-link doctor-candidates-profile-link" href="../modules/contratacao-medicos/contratacao-medicos.html" data-controladoria-only>
+              <span><i class="fa-solid fa-user-doctor"></i></span>
+              <div>
+                <b>Candidatos médicos</b>
+                <small>Interesse, análise e acompanhamento</small>
+              </div>
+            </a>
+
+            <a class="profile-menu-link" href="perfil.html">
+              <span><i class="fa-regular fa-user"></i></span>
+              <div>
+                <b>Meu perfil</b>
+                <small>Dados, foto, capa e cidade</small>
+              </div>
+            </a>
+
+            <a class="profile-menu-link users-admin-link" href="admin-usuarios.html" data-admin-only>
+              <span><i class="fa-solid fa-users-gear"></i></span>
+              <div>
+                <b>Painel Admin</b>
+                <small>Usuários, permissões e comunicação</small>
+              </div>
+            </a>
+            <button class="profile-menu-link logout-link" type="button" onclick="sairDaConta()">
+              <span><i class="fa-solid fa-right-from-bracket"></i></span>
+              <div>
+                <b>Sair</b>
+                <small>Encerrar sessão</small>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="home-drawer-overlay" id="homeDrawerOverlay" aria-hidden="true"></div>
+
+  <aside class="home-side-drawer" id="homeSideDrawer" aria-hidden="true" aria-labelledby="homeSideDrawerTitle">
+    <div class="home-drawer-head">
+      <div class="home-drawer-brand">
+        <div>
+          <span>Navegação</span>
+          <h2 id="homeSideDrawerTitle">Mapa do portal</h2>
+        </div>
+      </div>
+      <button class="home-drawer-close" id="homeDrawerClose" type="button" aria-label="Fechar menu lateral">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="home-drawer-user-card">
+      <img src="../modules/lag-controller/assets/lobo-seguranca.png" alt="Foto do usuário" data-user-avatar>
+      <div>
+        <strong data-user-name>Usuário</strong>
+        <small data-user-email>email@exemplo.com</small>
+      </div>
+    </div>
+
+    <div class="home-drawer-content">
+      <section class="home-drawer-section home-drawer-category">
+        <div class="home-drawer-category-title">
+          <span><i class="fa-solid fa-compass"></i></span>
+          <div>
+            <b>Portal</b>
+            <small>Atalhos rápidos da página inicial</small>
+          </div>
+        </div>
+
+        <div class="home-drawer-link-list">
+          <a class="home-drawer-link" href="#topo">
+            <i class="fa-solid fa-house"></i>
+            <div><b>Início</b><small>Visão geral da plataforma</small></div>
+          </a>
+          <a class="home-drawer-link" href="#beneficios">
+            <i class="fa-solid fa-grid-2"></i>
+            <div><b>Soluções</b><small>Acessos principais do ecossistema LAG</small></div>
+          </a>
+          <a class="home-drawer-link" href="#noticias">
+            <i class="fa-regular fa-newspaper"></i>
+            <div><b>Updates</b><small>Comunicados e novidades internas</small></div>
+          </a>
+          <a class="home-drawer-link" href="#contato">
+            <i class="fa-solid fa-headset"></i>
+            <div><b>Contato</b><small>Suporte e acessos do rodapé</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="home-drawer-section home-drawer-category">
+        <div class="home-drawer-category-title">
+          <span><i class="fa-solid fa-briefcase-medical"></i></span>
+          <div>
+            <b>Operação clínica</b>
+            <small>Ferramentas para rotina, pacientes e equipe</small>
+          </div>
+        </div>
+
+        <div class="home-drawer-link-list">
+          <a class="home-drawer-link" href="../modules/medicos-exames/medicos-exames.html">
+            <i class="fa-solid fa-stethoscope"></i>
+            <div><b>Médicos e exames</b><small>Especialidades, horários e preparo</small></div>
+          </a>
+          <a class="home-drawer-link" href="../modules/prontuario-medico/prontuario-medico.html" data-medical-only>
+            <i class="fa-solid fa-file-medical"></i>
+            <div><b>Prontuário médico</b><small>Atendimento, evolução e registros</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="home-drawer-section home-drawer-category">
+        <div class="home-drawer-category-title">
+          <span><i class="fa-solid fa-chart-simple"></i></span>
+          <div>
+            <b>Performance e cursos</b>
+            <small>Painéis, treinamentos e boas práticas</small>
+          </div>
+        </div>
+
+        <div class="home-drawer-link-list">
+          <a class="home-drawer-link" href="../modules/lag-controller/index.html" data-lag-only>
+            <i class="fa-solid fa-chart-line"></i>
+            <div><b>LAG Controller</b><small>Indicadores, rankings e visão operacional</small></div>
+          </a>
+          <a class="home-drawer-link" href="../modules/treinamentos/treinamentos.html">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <div><b>Treinamentos</b><small>Trilhas e progresso da equipe</small></div>
+          </a>
+          <a class="home-drawer-link" href="../modules/curso-boas-praticas/modulo-curso-boas-praticas.html">
+            <i class="fa-solid fa-clipboard-check"></i>
+            <div><b>Boas práticas</b><small>Módulo rápido de atendimento</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="home-drawer-section home-drawer-category">
+        <div class="home-drawer-category-title">
+          <span><i class="fa-solid fa-shield-halved"></i></span>
+          <div>
+            <b>Gestão</b>
+            <small>Admin, financeiro e gerência</small>
+          </div>
+        </div>
+
+        <div class="home-drawer-link-list">
+          <a class="home-drawer-link" href="../modules/controladoria/controladoria.html" data-controladoria-only>
+            <i class="fa-solid fa-folder-open"></i>
+            <div><b>Controladoria</b><small>Contratos, valores e documentos</small></div>
+          </a>
+          <a class="home-drawer-link" href="cadastro-medico.html" data-controladoria-only>
+            <i class="fa-solid fa-file-signature"></i>
+            <div><b>Link de contratação</b><small>Cadastro médico e divulgação</small></div>
+          </a>
+          <a class="home-drawer-link" href="../modules/contratacao-medicos/contratacao-medicos.html" data-controladoria-only>
+            <i class="fa-solid fa-user-doctor"></i>
+            <div><b>Contratação médica</b><small>Candidatos e pipeline</small></div>
+          </a>
+          <a class="home-drawer-link" href="admin-usuarios.html" data-admin-only>
+            <i class="fa-solid fa-users-gear"></i>
+            <div><b>Painel Admin</b><small>Permissões, usuários e avisos</small></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="home-drawer-section home-drawer-category">
+        <div class="home-drawer-category-title">
+          <span><i class="fa-regular fa-id-card"></i></span>
+          <div>
+            <b>Minha conta</b>
+            <small>Dados pessoais e sessão</small>
+          </div>
+        </div>
+
+        <div class="home-drawer-link-list">
+          <a class="home-drawer-link" href="perfil.html">
+            <i class="fa-regular fa-user"></i>
+            <div><b>Meu perfil</b><small>Foto, capa, dados e cidade</small></div>
+          </a>
+          <button class="home-drawer-link home-drawer-logout" type="button" onclick="sairDaConta()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <div><b>Sair da conta</b><small>Encerrar sessão com segurança</small></div>
+          </button>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="heart"><i class="fa-solid fa-bolt"></i></span>
+          experiência interna repensada
+        </div>
+
+        <div class="home-welcome-line">
+          <span>Bem-vindo,</span>
+          <strong data-user-name>Usuário</strong>
+          <i></i>
+          <em data-user-city>Cerquilho</em>
+        </div>
+
+        <h1>Sua clínica em um só <strong>painel.</strong></h1>
+        <p>
+          Acesse rapidamente os módulos que fazem parte da rotina da clínica, acompanhe as áreas
+          liberadas para o seu perfil e mantenha documentos, atendimentos e treinamentos organizados.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="../modules/lag-controller/index.html" class="btn-vermelho" data-lag-only><i class="fa-solid fa-chart-line"></i> Abrir dashboard</a>
+          <a href="../modules/medicos-exames/medicos-exames.html" class="btn-outline"><i class="fa-solid fa-stethoscope"></i> Médicos e exames</a>
+          <a href="../modules/prontuario-medico/prontuario-medico.html" class="btn-medical-home" data-medical-only><i class="fa-solid fa-file-medical"></i> Área médica</a>
+        </div>
+
+        <div class="hero-points">
+          <span>Topbar sincronizada</span>
+          <span>Design LAG Controller</span>
+          <span>Fluxo administrativo</span>
+          <span>Experiência premium</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-bg-circle"></div>
+        <div class="hero-orbit orbit-1"></div>
+        <div class="hero-orbit orbit-2"></div>
+        <div class="hero-dots"></div>
+
+        <div class="floating f1">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <g stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 9v6M5 7v10M19 7v10M22 9v6" />
+              <path d="M7 12h10" />
+            </g>
+          </svg>
+        </div>
+
+        <div class="floating f2">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <path d="M16 18h32v28H16z" stroke="currentColor" stroke-width="4" rx="6"/>
+            <path d="M24 28h16M24 36h10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            <path d="M22 50h20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <div class="floating f3">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <circle cx="21" cy="24" r="7" fill="currentColor"/>
+            <circle cx="42" cy="24" r="7" fill="currentColor" opacity=".92"/>
+            <path d="M10 48c0-8 7-14 15-14s15 6 15 14" fill="currentColor"/>
+            <path d="M27 48c0-7 6-13 14-13s13 6 13 13" fill="currentColor" opacity=".9"/>
+          </svg>
+        </div>
+
+        <div class="floating f4">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <path d="M32 10 8 20l24 10 24-10-24-10Z" fill="currentColor"/>
+            <path d="M18 28v8c0 5 8 9 14 9s14-4 14-9v-8" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="hero-platform"></div>
+
+        <div class="hero-mascot-card">
+          <img src="../modules/lag-controller/assets/lobo-laptop.png" alt="Mascote LAG Controller" class="hero-mascot-img">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container home-main">
+    <section class="home-command-center" aria-label="Resumo da sessão">
+      <article class="home-status-card">
+        <span><i class="fa-solid fa-location-dot"></i></span>
+        <div><small>Unidade ativa</small><strong data-user-city>Cerquilho</strong></div>
+      </article>
+      <article class="home-status-card">
+        <span><i class="fa-solid fa-user-shield"></i></span>
+        <div><small>Perfil de acesso</small><strong data-user-role>Colaborador</strong></div>
+      </article>
+      <article class="home-status-card">
+        <span><i class="fa-solid fa-cloud"></i></span>
+        <div><small>Infraestrutura</small><strong>Cloudflare online</strong></div>
+      </article>
+      <article class="home-status-card">
+        <span><i class="fa-regular fa-calendar"></i></span>
+        <div><small>Hoje</small><strong data-home-date>Atualizando...</strong></div>
+      </article>
+    </section>
+
+    <section class="home-modules-section" id="beneficios">
+      <div class="home-section-head">
+        <div>
+          <span class="home-section-kicker">Acessos rápidos</span>
+          <h2>Escolha o módulo que precisa</h2>
+          <p>Os cards abaixo respeitam as permissões do seu usuário.</p>
+        </div>
+
+        <div class="home-module-tools">
+          <label class="home-module-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="homeModuleSearch" type="search" placeholder="Pesquisar módulo..." autocomplete="off">
+          </label>
+          <div class="home-module-filters" aria-label="Filtrar módulos">
+            <button type="button" class="active" data-home-filter="todos">Todos</button>
+            <button type="button" data-home-filter="clinica">Clínica</button>
+            <button type="button" data-home-filter="gestao">Gestão</button>
+            <button type="button" data-home-filter="capacitacao">Capacitação</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards" id="homeModuleGrid">
+      <article class="card" data-module-card data-module-category="gestao" data-module-search="indicadores dashboard performance ranking lag controller">
+        <div class="card-icon"><i class="fa-solid fa-chart-pie"></i></div>
+        <h4>Indicadores visuais</h4>
+        <p>Dashboard mais claro para acompanhar performance, evolução da equipe e visão rápida da operação.</p>
+        <a href="../modules/lag-controller/index.html" data-lag-only>Abrir dashboard →</a>
+      </article>
+
+      <article class="card" data-module-card data-module-category="clinica" data-module-search="medicos exames especialidades horarios preparo">
+        <div class="card-icon"><i class="fa-solid fa-user-doctor"></i></div>
+        <h4>Médicos e exames</h4>
+        <p>Consulte especialidades, horários, valores, preparo e informações essenciais em um só painel.</p>
+        <a href="../modules/medicos-exames/medicos-exames.html">Explorar central →</a>
+      </article>
+
+      <article class="card" data-module-card data-module-category="capacitacao" data-module-search="treinamentos cursos progresso equipe">
+        <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h4>Treinamentos</h4>
+        <p>Capacitação interna com experiência mais organizada, moderna e simples de acompanhar.</p>
+        <a href="../modules/treinamentos/treinamentos.html">Ver trilhas →</a>
+      </article>
+
+      <article class="card" data-module-card data-module-category="gestao" data-module-search="controladoria documentos contratos financeiro">
+        <div class="card-icon"><i class="fa-solid fa-folder-tree"></i></div>
+        <h4>Controladoria</h4>
+        <p>Área reservada com documentos, contratos, pesquisa rápida e navegação mais profissional.</p>
+        <a href="../modules/controladoria/controladoria.html" data-controladoria-only>Acessar área →</a>
+      </article>
+
+      <article class="card card-area-medicina card-clickable" data-module-card data-module-category="clinica" data-module-search="area medica prontuario pacientes atendimento dor" data-medical-only data-open-url="../modules/prontuario-medico/prontuario-medico.html" role="button" tabindex="0" aria-label="Abrir área médica">
+        <div class="card-icon"><i class="fa-solid fa-file-medical"></i></div>
+        <h4>Área Médica</h4>
+        <p>Prontuário mais direto para abrir atendimentos, marcar dor e acompanhar registros do dia e do mês.</p>
+        <a href="../modules/prontuario-medico/prontuario-medico.html" data-medical-only>Abrir prontuário →</a>
+      </article>
+      </div>
+
+      <div class="home-module-empty" id="homeModuleEmpty" hidden>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <strong>Nenhum módulo encontrado</strong>
+        <span>Tente outro termo ou selecione “Todos”.</span>
+      </div>
+    </section>
+  </main>
+
+  <section class="news-section" id="noticias">
+    <div class="container">
+      <div class="section-heading">
+        <span>Updates internos</span>
+        <h2>Comunicação visual e prática para o time</h2>
+        <p>Recados, lançamentos e melhorias da plataforma apresentados de forma limpa, elegante e fácil de localizar.</p>
+      </div>
+
+      <div class="news-grid" id="homeNewsGrid">
+        <article class="news-card featured">
+          <span class="news-tag">Destaque</span>
+          <h3>Nova identidade LAG Controller aplicada</h3>
+          <p>O portal agora assume um visual mais premium, unificado e profissional para combinar com a marca LAG Controller.</p>
+          <small>Atualizado hoje</small>
+        </article>
+
+        <article class="news-card">
+          <span class="news-tag">Treinamento</span>
+          <h3>Trilhas com progresso mais claro</h3>
+          <p>Os treinamentos ficam mais fáceis de acompanhar, com visual renovado e foco em produtividade.</p>
+          <small>Disponível na área de treinamentos</small>
+        </article>
+
+        <article class="news-card">
+          <span class="news-tag">Operação</span>
+          <h3>Fluxos centralizados</h3>
+          <p>Médicos, exames, prontuário, controladoria e administração integrados em uma navegação mais elegante.</p>
+          <small>Acesso pelo menu principal</small>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="contato">
+    <div class="container footer-top">
+      <div>
+        <div class="footer-logo">
+          <img src="../assets/images/logo-lag.png" alt="Logo LAG Controller">
+        </div>
+        <p>
+          Plataforma interna da LAG Controller com foco em controle, organização visual,
+          experiência de uso e acesso rápido aos módulos principais.
+        </p>
+      </div>
+
+      <div>
+        <h4>Navegação</h4>
+        <a href="#topo">Início</a>
+        <a href="../modules/medicos-exames/medicos-exames.html">Médicos e exames</a>
+        <a href="../modules/prontuario-medico/prontuario-medico.html" data-medical-only>Área médica</a>
+        <a href="../modules/treinamentos/treinamentos.html">Treinamentos</a>
+        <a href="../modules/controladoria/controladoria.html" data-controladoria-only>Controladoria</a>
+        <a href="../modules/curso-boas-praticas/modulo-curso-boas-praticas.html">Boas práticas</a>
+      </div>
+
+      <div>
+        <h4>Plataforma</h4>
+        <a href="../modules/lag-controller/index.html" data-lag-only>LAG Controller</a>
+        <a href="admin-usuarios.html" data-admin-only>Painel admin</a>
+        <a href="perfil.html">Meu perfil</a>
+        <a href="#noticias">Updates</a>
+      </div>
+
+      <div>
+        <h4>Siga-nos</h4>
+        <div class="social">
+          <span>in</span>
+          <span>ig</span>
+          <span>✉</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-copy">
+      © 2026 LAG Controller. Todos os direitos reservados.
+    </div>
+  </footer>
+
+<script src="/js/cloud-auth.js?v=login-seguro-static-20260729"></script>
+<script src="/js/home.js?v=lag-static-premium-20260729"></script>
+</body>
+</html>
