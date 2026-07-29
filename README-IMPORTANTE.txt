@@ -53,3 +53,4 @@ https://amorsaudeexp4.snakerr77.workers.dev/api/debug-bindings
 Tem que mostrar:
 DB: true
 ASSETS: true
+Atualização de implantação Cloudflare.
