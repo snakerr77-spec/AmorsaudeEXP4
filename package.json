@@ -1,0 +1,19 @@
+{
+  "name": "amorsaudeexp4-lag-controller",
+  "version": "2.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "check": "wrangler deploy --dry-run",
+    "deploy": "wrangler deploy",
+    "db:local": "wrangler d1 execute DB --local --file=./database/schema-d1-lag.sql",
+    "db:remote": "wrangler d1 execute DB --remote --file=./database/schema-d1-lag.sql"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "wrangler": "4.115.0"
+  }
+}
