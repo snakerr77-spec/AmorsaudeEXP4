@@ -15,3 +15,4 @@ not_found_handling = "404-page"
 [[d1_databases]]
 binding = "DB"
 database_name = "amorsaudeexp4-db"
+database_id = "d3c0be5c-3170-42e0-9339-ecd1d61974fe"
