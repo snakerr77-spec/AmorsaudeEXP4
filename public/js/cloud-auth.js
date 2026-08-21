@@ -1,4 +1,4 @@
-const API_URL_CLOUD = "https://amorsaudeexp4.snakerr77.workers.dev";
+const API_URL = window.location.origin;
 const LOGIN_URL_CLOUD = "/pages/login.html";
 const HOME_URL_CLOUD = "/pages/home.html";
 
