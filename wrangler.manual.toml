@@ -1,7 +1,7 @@
 # Use este modelo somente se a Cloudflare pedir database_id no deploy.
 # Troque o wrangler.toml por este conteúdo e cole os dados reais do seu banco D1.
 
-name = "amorsaudeexp4"
+name = "amorsaude"
 main = "src/worker.js"
 compatibility_date = "2026-06-29"
 workers_dev = true
@@ -18,5 +18,5 @@ not_found_handling = "404-page"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "COLE_AQUI_O_NOME_DO_BANCO_D1"
-database_id = "COLE_AQUI_O_ID_DO_BANCO_D1"
+database_name = "amorsaudeexp4-db"
+database_id = "d3c0be5c-3170-42e0-9339-ecd1d61974fe"
