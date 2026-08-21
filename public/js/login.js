@@ -7,7 +7,7 @@ const googleLoginBtn = document.getElementById("googleLoginBtn");
 const authMessage = document.getElementById("authMessage");
 const loginCidadeSelect = document.getElementById("loginCidadeSelect");
 
-const API_URL = "https://amorsaudeexp4.snakerr77.workers.dev";
+const API_URL = window.location.origin
 const PAGINA_APOS_LOGIN = "/pages/home.html";
 const PAGINA_LOGIN = "/pages/login.html";
 const CIDADES_LOGIN = ["Embu das Artes", "Itapeva", "Tatui", "Cerquilho"];
