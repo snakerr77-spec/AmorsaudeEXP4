@@ -1,0 +1,38 @@
+INSERT INTO usuarios (
+    id,
+    nome,
+    nome_completo,
+    email,
+    senha,
+    nivel_acesso,
+    cidade,
+    cargo,
+    setor,
+    ativo,
+    createdAt,
+    updatedAt
+)
+VALUES (
+    lower(hex(randomblob(16))),
+    'Matheus',
+    'Matheus',
+    'snakerr77@gmail.com',
+    'Rainhayang@123',
+    'admin',
+    'Cerquilho',
+    'Administrador',
+    'Gestão',
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+)
+ON CONFLICT(email) DO UPDATE SET
+    nome = 'Matheus',
+    nome_completo = 'Matheus',
+    senha = 'SUA_SENHA_AQUI',
+    nivel_acesso = 'admin',
+    cidade = 'Cerquilho',
+    cargo = 'Administrador',
+    setor = 'Gestão',
+    ativo = 1,
+    updatedAt = CURRENT_TIMESTAMP;
