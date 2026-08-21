@@ -1,13 +1,25 @@
-const API_URL = window.location.origin;
+const API_URL_CLOUD = window.location.origin;
+
 const LOGIN_URL_CLOUD = "/pages/login.html";
 const HOME_URL_CLOUD = "/pages/home.html";
 
-const CIDADES_CLOUD = ["Embu das Artes", "Itapeva", "Tatui", "Cerquilho"];
+const CIDADES_CLOUD = [
+  "Embu das Artes",
+  "Itapeva",
+  "Tatui",
+  "Cerquilho"
+];
 
 function normalizarCidadeCloud(cidade) {
   const valor = String(cidade || "").trim();
-  if (valor === "Tatuí") return "Tatui";
-  return CIDADES_CLOUD.includes(valor) ? valor : "Cerquilho";
+
+  if (valor === "Tatuí") {
+    return "Tatui";
+  }
+
+  return CIDADES_CLOUD.includes(valor)
+    ? valor
+    : "Cerquilho";
 }
 
 function normalizarNivelCloud(nivel) {
@@ -24,17 +36,23 @@ function normalizarNivelCloud(nivel) {
     administradora: "admin",
     adm: "admin",
     master: "admin",
+
     financeiro: "financeiro",
     financa: "financeiro",
     financas: "financeiro",
+
     gerencia: "gerencia",
     gerente: "gerencia",
     gerencial: "gerencia",
+
     cdt: "cdt",
+
     recepcao: "recepcao",
     recepcionista: "recepcao",
+
     medico: "medico",
     medica: "medico",
+
     colaborador: "colaborador",
     colaboradora: "colaborador"
   };
@@ -62,7 +80,9 @@ function getUsuarioCloudLocal() {
     localStorage.getItem("amorSaudeUsuario") ||
     localStorage.getItem("usuarioLogado");
 
-  if (!raw) return null;
+  if (!raw) {
+    return null;
+  }
 
   try {
     return JSON.parse(raw);
@@ -72,7 +92,9 @@ function getUsuarioCloudLocal() {
 }
 
 function salvarUsuarioCloudLocal(usuario) {
-  if (!usuario) return null;
+  if (!usuario) {
+    return null;
+  }
 
   const nivel = normalizarNivelCloud(
     usuario.nivel_acesso ||
@@ -89,73 +111,140 @@ function salvarUsuarioCloudLocal(usuario) {
 
   const sessao = {
     ...usuario,
-    uid: usuario.uid || usuario.id || usuario.email || "cloud-user",
+
+    uid:
+      usuario.uid ||
+      usuario.id ||
+      usuario.email ||
+      "cloud-user",
+
     nivelAcesso: nivel,
     nivel_acesso: nivel,
+
     cidade,
+
     authProvider: "cloudflare-d1"
   };
 
-  localStorage.setItem("amor_usuario", JSON.stringify(sessao));
-  localStorage.setItem("amorSaudeUsuario", JSON.stringify(sessao));
-  localStorage.setItem("usuarioLogado", JSON.stringify(sessao));
+  localStorage.setItem(
+    "amor_usuario",
+    JSON.stringify(sessao)
+  );
 
-  localStorage.setItem("amor_nivel_acesso", nivel);
-  localStorage.setItem("nivelAcesso", nivel);
+  localStorage.setItem(
+    "amorSaudeUsuario",
+    JSON.stringify(sessao)
+  );
 
-  localStorage.setItem("amor_cidade", cidade);
-  localStorage.setItem("cidadeSelecionada", cidade);
-  localStorage.setItem("amorSaudeCidadeSelecionada", cidade);
+  localStorage.setItem(
+    "usuarioLogado",
+    JSON.stringify(sessao)
+  );
+
+  localStorage.setItem(
+    "amor_nivel_acesso",
+    nivel
+  );
+
+  localStorage.setItem(
+    "nivelAcesso",
+    nivel
+  );
+
+  localStorage.setItem(
+    "amor_cidade",
+    cidade
+  );
+
+  localStorage.setItem(
+    "cidadeSelecionada",
+    cidade
+  );
+
+  localStorage.setItem(
+    "amorSaudeCidadeSelecionada",
+    cidade
+  );
 
   if (sessao.email) {
-    localStorage.setItem("amor_email", sessao.email);
-    localStorage.setItem("usuarioEmail", sessao.email);
+    localStorage.setItem(
+      "amor_email",
+      sessao.email
+    );
+
+    localStorage.setItem(
+      "usuarioEmail",
+      sessao.email
+    );
   }
 
   window.usuarioLogado = sessao;
+
   return sessao;
 }
 
 function limparSessaoCloud() {
-  [
+  const chaves = [
     "firebaseUser",
     "firebaseAuth",
     "firebaseUID",
+
     "amor_token",
     "amor_token_expira_em",
+
     "amor_email",
     "usuarioEmail",
+
     "amor_usuario",
     "amorSaudeUsuario",
     "usuarioLogado",
+
     "amor_nivel_acesso",
     "nivelAcesso",
+
     "amor_cidade",
     "cidadeSelecionada",
+
     "amorSaudeLogado",
     "isLoggedIn"
-  ].forEach((chave) => localStorage.removeItem(chave));
+  ];
 
-  sessionStorage.removeItem("amorSaudeSessaoAtiva");
+  chaves.forEach((chave) => {
+    localStorage.removeItem(chave);
+  });
+
+  sessionStorage.removeItem(
+    "amorSaudeSessaoAtiva"
+  );
+
   window.usuarioLogado = null;
 }
 
 async function cloudFetch(path, options = {}) {
-  const token = localStorage.getItem("amor_token") || "";
+  const token =
+    localStorage.getItem("amor_token") || "";
+
   const email =
     localStorage.getItem("amor_email") ||
     localStorage.getItem("usuarioEmail") ||
     "";
 
-  const resposta = await fetch(`${API_URL_CLOUD}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-      "x-user-email": email,
-      ...(options.headers || {})
+  const resposta = await fetch(
+    `${API_URL_CLOUD}${path}`,
+    {
+      ...options,
+
+      headers: {
+        "Content-Type": "application/json",
+
+        "Authorization": `Bearer ${token}`,
+
+        "x-user-email": email,
+
+        ...(options.headers || {})
+      }
     }
-  });
+  );
 
   let data = {};
 
@@ -166,14 +255,20 @@ async function cloudFetch(path, options = {}) {
   }
 
   if (!resposta.ok) {
-    throw new Error(data.erro || data.detalhe || "Erro na API Cloudflare.");
+    throw new Error(
+      data.erro ||
+      data.detalhe ||
+      "Erro na API Cloudflare."
+    );
   }
 
   return data;
 }
 
 function preencherUsuarioNaTela(usuario) {
-  if (!usuario) return;
+  if (!usuario) {
+    return;
+  }
 
   const nome =
     usuario.nomeCompleto ||
@@ -182,179 +277,381 @@ function preencherUsuarioNaTela(usuario) {
     usuario.email ||
     "Usuário";
 
-  const email = usuario.email || "";
-  const nivel = normalizarNivelCloud(usuario.nivelAcesso || usuario.nivel_acesso);
-  const cidade = normalizarCidadeCloud(usuario.cidade);
+  const email =
+    usuario.email || "";
 
-  document.querySelectorAll("[data-user-name]").forEach((el) => {
-    el.textContent = nome;
-  });
+  const nivel =
+    normalizarNivelCloud(
+      usuario.nivelAcesso ||
+      usuario.nivel_acesso
+    );
 
-  document.querySelectorAll("[data-user-email]").forEach((el) => {
-    el.textContent = email;
-  });
+  const cidade =
+    normalizarCidadeCloud(
+      usuario.cidade
+    );
 
-  document.querySelectorAll("[data-user-role]").forEach((el) => {
-    el.textContent = rotuloNivelCloud(nivel);
-  });
-
-  document.querySelectorAll("[data-user-city]").forEach((el) => {
-    el.textContent = cidade;
-  });
-
-  document.querySelectorAll("[data-city-select]").forEach((select) => {
-    select.value = cidade;
-
-    if (select.dataset.cloudReady === "true") return;
-
-    select.dataset.cloudReady = "true";
-
-    select.addEventListener("change", () => {
-      const novaCidade = normalizarCidadeCloud(select.value);
-      usuario.cidade = novaCidade;
-      salvarUsuarioCloudLocal(usuario);
-
-      document.querySelectorAll("[data-user-city]").forEach((el) => {
-        el.textContent = novaCidade;
-      });
+  document
+    .querySelectorAll("[data-user-name]")
+    .forEach((el) => {
+      el.textContent = nome;
     });
-  });
 
-  const isAdmin = nivel === "admin";
-  const podeGestao = ["admin", "financeiro", "gerencia"].includes(nivel);
-  const podeMedicina = ["admin", "financeiro", "medico"].includes(nivel);
+  document
+    .querySelectorAll("[data-user-email]")
+    .forEach((el) => {
+      el.textContent = email;
+    });
 
-  document.querySelectorAll("[data-admin-only]").forEach((el) => {
-    el.hidden = !isAdmin;
-  });
+  document
+    .querySelectorAll("[data-user-role]")
+    .forEach((el) => {
+      el.textContent =
+        rotuloNivelCloud(nivel);
+    });
 
-  document.querySelectorAll("[data-controladoria-only]").forEach((el) => {
-    el.hidden = !podeGestao;
-  });
+  document
+    .querySelectorAll("[data-user-city]")
+    .forEach((el) => {
+      el.textContent = cidade;
+    });
 
-  document.querySelectorAll("[data-lag-only]").forEach((el) => {
-    el.hidden = !podeGestao;
-  });
+  document
+    .querySelectorAll("[data-city-select]")
+    .forEach((select) => {
+      select.value = cidade;
 
-  document.querySelectorAll("[data-medical-only]").forEach((el) => {
-    el.hidden = !podeMedicina;
-  });
+      if (
+        select.dataset.cloudReady === "true"
+      ) {
+        return;
+      }
+
+      select.dataset.cloudReady = "true";
+
+      select.addEventListener(
+        "change",
+        () => {
+          const novaCidade =
+            normalizarCidadeCloud(
+              select.value
+            );
+
+          usuario.cidade = novaCidade;
+
+          salvarUsuarioCloudLocal(
+            usuario
+          );
+
+          document
+            .querySelectorAll(
+              "[data-user-city]"
+            )
+            .forEach((el) => {
+              el.textContent =
+                novaCidade;
+            });
+        }
+      );
+    });
+
+  const isAdmin =
+    nivel === "admin";
+
+  const podeGestao = [
+    "admin",
+    "financeiro",
+    "gerencia"
+  ].includes(nivel);
+
+  const podeMedicina = [
+    "admin",
+    "financeiro",
+    "medico"
+  ].includes(nivel);
+
+  document
+    .querySelectorAll("[data-admin-only]")
+    .forEach((el) => {
+      el.hidden = !isAdmin;
+    });
+
+  document
+    .querySelectorAll(
+      "[data-controladoria-only]"
+    )
+    .forEach((el) => {
+      el.hidden = !podeGestao;
+    });
+
+  document
+    .querySelectorAll("[data-lag-only]")
+    .forEach((el) => {
+      el.hidden = !podeGestao;
+    });
+
+  document
+    .querySelectorAll(
+      "[data-medical-only]"
+    )
+    .forEach((el) => {
+      el.hidden = !podeMedicina;
+    });
 }
 
 async function validarSessaoCloudflare() {
-  const token = localStorage.getItem("amor_token");
-  if (!token) return null;
+  const token =
+    localStorage.getItem("amor_token");
 
-  const data = await cloudFetch("/api/me");
-  if (!data?.ok || !data?.usuario) return null;
+  if (!token) {
+    return null;
+  }
 
-  return salvarUsuarioCloudLocal(data.usuario);
+  const data =
+    await cloudFetch("/api/me");
+
+  if (
+    !data?.ok ||
+    !data?.usuario
+  ) {
+    return null;
+  }
+
+  return salvarUsuarioCloudLocal(
+    data.usuario
+  );
 }
 
 async function protegerPaginaCloud() {
-  const path = window.location.pathname;
-  const paginaLogin = path.includes("/pages/login");
+  const path =
+    window.location.pathname;
 
-  if (paginaLogin) return;
+  const paginaLogin =
+    path.includes("/pages/login");
+
+  if (paginaLogin) {
+    return;
+  }
 
   try {
-    let usuario = getUsuarioCloudLocal();
+    let usuario =
+      getUsuarioCloudLocal();
 
     if (!usuario) {
-      usuario = await validarSessaoCloudflare();
+      usuario =
+        await validarSessaoCloudflare();
     } else {
-      usuario = salvarUsuarioCloudLocal(usuario);
+      usuario =
+        salvarUsuarioCloudLocal(
+          usuario
+        );
     }
 
     if (!usuario) {
       limparSessaoCloud();
-      localStorage.setItem("amorSaudeRedirectAfterLogin", path + window.location.search);
-      window.location.href = LOGIN_URL_CLOUD;
+
+      localStorage.setItem(
+        "amorSaudeRedirectAfterLogin",
+        path + window.location.search
+      );
+
+      window.location.href =
+        LOGIN_URL_CLOUD;
+
       return;
     }
 
-    preencherUsuarioNaTela(usuario);
+    preencherUsuarioNaTela(
+      usuario
+    );
 
-    const nivelPagina = normalizarNivelCloud(usuario.nivelAcesso || usuario.nivel_acesso);
-    const requerido = document.body?.dataset.requiredRole;
-    const permitidosRaw = document.body?.dataset.allowedRoles;
-    const permitidos = permitidosRaw
-      ? permitidosRaw.split(",").map((role) => normalizarNivelCloud(role)).filter(Boolean)
-      : [];
+    const nivelPagina =
+      normalizarNivelCloud(
+        usuario.nivelAcesso ||
+        usuario.nivel_acesso
+      );
 
-    if ((requerido && nivelPagina !== normalizarNivelCloud(requerido)) || (permitidos.length && !permitidos.includes(nivelPagina))) {
-      alert("Seu perfil não tem acesso a esta página.");
-      window.location.href = HOME_URL_CLOUD;
+    const requerido =
+      document.body?.dataset.requiredRole;
+
+    const permitidosRaw =
+      document.body?.dataset.allowedRoles;
+
+    const permitidos =
+      permitidosRaw
+        ? permitidosRaw
+            .split(",")
+            .map((role) =>
+              normalizarNivelCloud(role)
+            )
+            .filter(Boolean)
+        : [];
+
+    const semNivelRequerido =
+      requerido &&
+      nivelPagina !==
+        normalizarNivelCloud(
+          requerido
+        );
+
+    const naoPermitido =
+      permitidos.length &&
+      !permitidos.includes(
+        nivelPagina
+      );
+
+    if (
+      semNivelRequerido ||
+      naoPermitido
+    ) {
+      alert(
+        "Seu perfil não tem acesso a esta página."
+      );
+
+      window.location.href =
+        HOME_URL_CLOUD;
+
       return;
     }
 
-    window.dispatchEvent(new CustomEvent("usuario-carregado", {
-      detail: usuario
-    }));
+    window.dispatchEvent(
+      new CustomEvent(
+        "usuario-carregado",
+        {
+          detail: usuario
+        }
+      )
+    );
   } catch (erro) {
-    console.error("Erro ao proteger página com Cloudflare:", erro);
+    console.error(
+      "Erro ao proteger página com Cloudflare:",
+      erro
+    );
+
     limparSessaoCloud();
-    localStorage.setItem("amorSaudeRedirectAfterLogin", path + window.location.search);
-    window.location.href = LOGIN_URL_CLOUD;
+
+    localStorage.setItem(
+      "amorSaudeRedirectAfterLogin",
+      path + window.location.search
+    );
+
+    window.location.href =
+      LOGIN_URL_CLOUD;
   }
 }
 
 async function sairDaContaCloud() {
-  const token = localStorage.getItem("amor_token") || "";
+  const token =
+    localStorage.getItem("amor_token") || "";
 
   try {
-    await fetch(`${API_URL_CLOUD}/api/auth/logout`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`
+    await fetch(
+      `${API_URL_CLOUD}/api/auth/logout`,
+      {
+        method: "POST",
+
+        headers: {
+          "Authorization":
+            `Bearer ${token}`
+        }
       }
-    });
+    );
   } catch (erro) {
-    console.warn("Não foi possível encerrar sessão no servidor:", erro);
+    console.warn(
+      "Não foi possível encerrar sessão no servidor:",
+      erro
+    );
   }
 
   limparSessaoCloud();
-  window.location.href = LOGIN_URL_CLOUD;
+
+  window.location.href =
+    LOGIN_URL_CLOUD;
 }
 
 window.AmorSaudeAPI = {
   API_URL: API_URL_CLOUD,
+
   apiFetch: cloudFetch,
 
   async me() {
-    return await cloudFetch("/api/me");
+    return await cloudFetch(
+      "/api/me"
+    );
   },
 
-  async listar(colecao, busca = "") {
-    const query = busca ? `?busca=${encodeURIComponent(busca)}` : "";
-    return await cloudFetch(`/api/${colecao}${query}`);
+  async listar(
+    colecao,
+    busca = ""
+  ) {
+    const query =
+      busca
+        ? `?busca=${encodeURIComponent(
+            busca
+          )}`
+        : "";
+
+    return await cloudFetch(
+      `/api/${colecao}${query}`
+    );
   },
 
-  async criar(colecao, dados) {
-    return await cloudFetch(`/api/${colecao}`, {
-      method: "POST",
-      body: JSON.stringify(dados)
-    });
+  async criar(
+    colecao,
+    dados
+  ) {
+    return await cloudFetch(
+      `/api/${colecao}`,
+      {
+        method: "POST",
+
+        body:
+          JSON.stringify(dados)
+      }
+    );
   },
 
-  async atualizar(colecao, id, dados) {
-    return await cloudFetch(`/api/${colecao}/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(dados)
-    });
+  async atualizar(
+    colecao,
+    id,
+    dados
+  ) {
+    return await cloudFetch(
+      `/api/${colecao}/${id}`,
+      {
+        method: "PUT",
+
+        body:
+          JSON.stringify(dados)
+      }
+    );
   },
 
-  async excluir(colecao, id) {
-    return await cloudFetch(`/api/${colecao}/${id}`, {
-      method: "DELETE"
-    });
+  async excluir(
+    colecao,
+    id
+  ) {
+    return await cloudFetch(
+      `/api/${colecao}/${id}`,
+      {
+        method: "DELETE"
+      }
+    );
   },
 
   sair: sairDaContaCloud
 };
 
-window.sairDaConta = sairDaContaCloud;
-window.sairDaContaCloud = sairDaContaCloud;
-window.protegerPaginaCloud = protegerPaginaCloud;
+window.sairDaConta =
+  sairDaContaCloud;
 
-document.addEventListener("DOMContentLoaded", protegerPaginaCloud);
+window.sairDaContaCloud =
+  sairDaContaCloud;
+
+window.protegerPaginaCloud =
+  protegerPaginaCloud;
+
+document.addEventListener(
+  "DOMContentLoaded",
+  protegerPaginaCloud
+);
