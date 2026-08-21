@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LAG Controller | Pacientes</title>
+  <link rel="stylesheet" href="/css/lag-global.css?v=pacientes-20260821">
+  <link rel="stylesheet" href="./pacientes.css?v=pacientes-20260821">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-protected-page="true" data-required-role="admin">
+  <header class="patients-topbar">
+    <a class="patients-brand" href="../../pages/home.html" aria-label="Voltar para a homepage">
+      <img src="../../assets/images/logo-lag-sem-fundo.png" alt="LAG Controller">
+    </a>
+    <div class="patients-topbar-actions">
+      <a href="../prontuario-medico/prontuario-medico.html" class="patients-link-secondary">
+        <i class="fa-solid fa-file-medical"></i> Prontuário
+      </a>
+      <a href="../../pages/home.html" class="patients-link-primary">
+        <i class="fa-solid fa-house"></i> Homepage
+      </a>
+    </div>
+  </header>
+
+  <main class="patients-shell">
+    <section class="patients-hero">
+      <div>
+        <span class="patients-eyebrow"><i class="fa-solid fa-user-injured"></i> Central do paciente</span>
+        <h1>Pacientes e prontuários</h1>
+        <p>Localize o paciente, consulte todo o histórico clínico e gere um PDF separado para cada médico responsável.</p>
+      </div>
+      <button type="button" id="patientsRefresh" class="patients-refresh">
+        <i class="fa-solid fa-rotate"></i> Atualizar dados
+      </button>
+    </section>
+
+    <section class="patients-stats" aria-label="Resumo dos prontuários">
+      <article>
+        <span><i class="fa-solid fa-users"></i></span>
+        <div><strong id="patientsTotal">0</strong><small>Pacientes</small></div>
+      </article>
+      <article>
+        <span><i class="fa-solid fa-notes-medical"></i></span>
+        <div><strong id="recordsTotal">0</strong><small>Prontuários</small></div>
+      </article>
+      <article>
+        <span><i class="fa-solid fa-user-doctor"></i></span>
+        <div><strong id="doctorsTotal">0</strong><small>Médicos nos registros</small></div>
+      </article>
+    </section>
+
+    <section class="patients-workspace">
+      <aside class="patients-sidebar">
+        <div class="patients-sidebar-head">
+          <div>
+            <span>Base clínica</span>
+            <h2>Pacientes</h2>
+          </div>
+          <span class="patients-count" id="patientsVisibleCount">0</span>
+        </div>
+
+        <label class="patients-search" for="patientsSearch">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="patientsSearch" type="search" placeholder="Buscar nome, telefone ou nascimento..." autocomplete="off">
+        </label>
+
+        <div class="patients-list" id="patientsList">
+          <div class="patients-loading"><i class="fa-solid fa-spinner fa-spin"></i> Carregando pacientes...</div>
+        </div>
+      </aside>
+
+      <section class="patients-detail" id="patientDetail">
+        <div class="patients-empty">
+          <div class="patients-empty-icon"><i class="fa-solid fa-folder-open"></i></div>
+          <h2>Selecione um paciente</h2>
+          <p>O histórico será organizado por médico e cada profissional terá um PDF próprio para download.</p>
+        </div>
+      </section>
+    </section>
+
+    <p class="patients-status" id="patientsStatus" role="status"></p>
+  </main>
+
+  <script src="/js/cloud-auth.js?v=pacientes-20260821"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="./pacientes.js?v=pacientes-20260821"></script>
+</body>
+</html>
