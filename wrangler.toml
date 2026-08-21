@@ -1,4 +1,4 @@
-name = "amorsaudeexp4"
+name = "amorsaude.snakerr77.workers.dev"
 main = "src/worker.js"
 compatibility_date = "2026-06-29"
 workers_dev = true
